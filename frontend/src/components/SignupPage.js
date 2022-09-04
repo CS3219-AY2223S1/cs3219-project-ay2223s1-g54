@@ -16,6 +16,7 @@ import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
 import {Link} from "react-router-dom";
 
 function SignupPage() {
+    const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -25,10 +26,10 @@ function SignupPage() {
 
     const handleSignup = async () => {
         setIsSignupSuccess(false)
-        const res = await axios.post(URL_USER_SVC, { username, password })
+        const res = await axios.post(URL_USER_SVC, { email, username, password })
             .catch((err) => {
                 if (err.response.status === STATUS_CODE_CONFLICT) {
-                    setErrorDialog('This username already exists')
+                    setErrorDialog('This email/username already exists')
                 } else {
                     setErrorDialog('Please try again later')
                 }
@@ -56,6 +57,14 @@ function SignupPage() {
     return (
         <Box display={"flex"} flexDirection={"column"} width={"30%"}>
             <Typography variant={"h3"} marginBottom={"2rem"}>Sign Up</Typography>
+            <TextField
+                label="email"
+                variant="standard"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                sx={{marginBottom: "1rem"}}
+                autoFocus
+            />
             <TextField
                 label="Username"
                 variant="standard"
