@@ -2,8 +2,13 @@ import { ormCreateUser as _createUser } from '../model/user-orm.js'
 
 export async function createUser(req, res) {
     try {
-        const { email, username, password } = req.body;
-        if (email && username && password) {
+        const { email, username, password , confirmPassword} = req.body;
+        if (email && username && password && confirmPassword) {
+
+            if (password != confirmPassword) {
+                return res.status(400).json({message: 'The passwords you entered do not match!'}); 
+            }
+            
             const resp = await _createUser(email, username, password);
             console.log(resp);
             if (resp.err) {

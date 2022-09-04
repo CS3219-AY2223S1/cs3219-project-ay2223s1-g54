@@ -19,6 +19,7 @@ function SignupPage() {
     const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [dialogTitle, setDialogTitle] = useState("")
     const [dialogMsg, setDialogMsg] = useState("")
@@ -55,16 +56,8 @@ function SignupPage() {
     }
 
     return (
-        <Box display={"flex"} flexDirection={"column"} width={"30%"}>
-            <Typography variant={"h3"} marginBottom={"2rem"}>Sign Up</Typography>
-            <TextField
-                label="email"
-                variant="standard"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                sx={{marginBottom: "1rem"}}
-                autoFocus
-            />
+        <Box display={"flex"} flexDirection={"column"} width={"100%"} alignItems="center">
+            <Typography variant={"h1"} marginBottom={"2rem"}>PeerPrep</Typography>
             <TextField
                 label="Username"
                 variant="standard"
@@ -80,6 +73,22 @@ function SignupPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{marginBottom: "2rem"}}
+            />
+            <TextField
+                label="Confirm password"
+                variant="standard"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                sx={{marginBottom: "2rem"}}
+            />
+            <TextField
+                label="Email address"
+                variant="standard"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                sx={{marginBottom: "1rem"}}
+                autoFocus
             />
             <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
                 <Button variant={"outlined"} onClick={handleSignup}>Sign up</Button>
