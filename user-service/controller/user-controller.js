@@ -9,8 +9,9 @@ export async function createUser(req, res) {
                 return res.status(400).json({message: 'The passwords you entered do not match!'}); 
             }
             const resp = await _createUser(email, username, password);
-            console.log(resp)
-            if (resp.err) {
+            if (resp.err && resp.err.code == "11000") {
+                return res.status(409).json({message: 'User already exists!'});
+            } else if  (resp.err) {
                 return res.status(400).json({message: 'Could not create a new user!'});
             } else {
                 console.log(`Created new user ${username} successfully!`)
