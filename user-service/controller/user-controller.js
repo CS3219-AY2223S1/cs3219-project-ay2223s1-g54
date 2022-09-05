@@ -8,9 +8,8 @@ export async function createUser(req, res) {
             if (password != confirmPassword) {
                 return res.status(400).json({message: 'The passwords you entered do not match!'}); 
             }
-            
             const resp = await _createUser(email, username, password);
-            console.log(resp);
+            console.log(resp)
             if (resp.err) {
                 return res.status(400).json({message: 'Could not create a new user!'});
             } else {

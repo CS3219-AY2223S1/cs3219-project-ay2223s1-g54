@@ -11,7 +11,12 @@ mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-export async function createUser(params) { 
-  return new UserModel(params)
+export async function createUser(params) {
+  try { 
+    return new UserModel(params)
+  } catch (err) {
+    console.log('caught')
+    throw err
+  }
 }
 
