@@ -21,5 +21,5 @@ app.use('/api/matching', router).all((_, res) => {
 })
 
 const httpServer = createServer(app)
-io["init"](httpServer);
+io.init(httpServer);
 httpServer.listen(8001, () => console.log('matching-service listening on port 8001'))
