@@ -15,6 +15,10 @@ export async function createUser(params) {
   return new UserModel(params);
 }
 
+export async function checkUserExists(params) {
+    return UserModel.exists({username: `${params.username}`});
+}
+
 export async function logUserIn(params) {
   UserModel.findOne({
       email: params['email']
