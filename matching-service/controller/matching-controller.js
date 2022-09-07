@@ -18,16 +18,29 @@ export async function createMatchEntry(req, res) {
 
     // delete entry
     console.log('Found match.')
-    console.log(valid_entries[0])
+    const first_valid_entry = { ...valid_entries[0].dataValues };
+    valid_entries[0].destroy();
 
-    const user1_socket_id = valid_entries[0].dataValues['socket_id'];
+    const user1_socket_id = first_valid_entry['socket_id'];
     const user2_socket_id = socket_id;
     console.log(user1_socket_id);
     console.log(user2_socket_id);
 
     // create socket room
+    const user1_socket = io.get().sockets.sockets.get(user1_socket_id);
+    const user2_socket = io.get().sockets.sockets.get(user2_socket_id);
+    const room_id = user1_socket_id + user2_socket_id;
     
+    // ensure both users socket can be communicated by server socket
+    if (!user1_socket || !user2_socket) {
+        io.get().to(user1_socket).to(user2_socket).emit('matchFailure');
+        return res.status(200).json({message: 'not ok!'});
+    }
+    
+    user1_socket.join(room_id);
+    user2_socket.join(room_id);
+    console.log('Created room ' + room_id);
 
-    valid_entries[0].destroy();
+    io.get().sockets.in(room_id).emit('matchSuccess', { room_id });
     return res.status(200).json({message: 'ok'});
 }
