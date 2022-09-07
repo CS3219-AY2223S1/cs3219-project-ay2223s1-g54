@@ -1,27 +1,36 @@
-import { ormCreateUser as _createUser, ormLogInUser as _logUserIn } from '../model/user-orm.js'
+import { 
+    ormCreateUser as _createUser,
+    ormCheckUserExists as _checkUserExists, 
+    ormLogInUser as _logUserIn,      
+} from '../model/user-orm.js'
 
 export async function createUser(req, res) {
     try {
-        const { email, username, password , confirmPassword} = req.body;
-        if (email && username && password && confirmPassword) {
+        const { username, password , confirmPassword, email } = req.body;
 
-            if (password !== confirmPassword) {
-                return res.status(400).json({message: 'The passwords you entered do not match!'}); 
-            }
-            const resp = await _createUser(email, username, password);
-
-            if (resp.err && resp.err.code === 11000) {
-                console.log(`Error Username/Email already exists`);
-                return res.status(409).json({message: 'User already exists!'});
-            } else if  (resp.err) {
-                return res.status(400).json({message: 'Could not create a new user!'});
-            } else {
-                console.log(`Created new user ${username} successfully!`)
-                return res.status(201).json({message: `Created new user ${username} successfully!`});
-            }
-        } else {
-            return res.status(400).json({message: 'Email, Username and/or Password are missing!'});
+        if (!username || !password || !confirmPassword || !email) {
+            console.log('One of the required fields is missing!');
+            return res.status(400).json({message: 'One of the required fields is missing!'});
         }
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({message: 'The passwords you entered do not match!'});
+        }
+
+        // prevent duplicate username creation in controller layer
+        if (await _checkUserExists(username)) {
+            console.log(`The username ${username} already exists!`);
+            return res.status(409).json({message: `The username already exists!`});
+        }
+
+        const newUser = await _createUser(email, username, password);
+        if (newUser.username !== username) {
+            return res.status(400).json({message: 'Could not create a new user'})
+        } else {
+            console.log(`Created new user ${newUser.username} successfully!`)
+            return res.status(201).json({message: `Created new user ${newUser.username} successfully!`});
+        }
+
     } catch (err) {
         return res.status(500).json({message: 'Database failure when creating new user!'})
     }

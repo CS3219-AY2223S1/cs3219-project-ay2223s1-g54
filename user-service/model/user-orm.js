@@ -5,12 +5,11 @@ export async function ormCreateUser(email, username, password) {
 
     try {
         const newUser = await createUser({email, username, password});
-        const resultSave = await newUser.save();
+        const savedUser = newUser.save();
+        return savedUser;
     } catch (err) {
         return {err};
     }
-
-    return true;
 }
 
 export async function ormCheckUserExists(username) {
