@@ -7,12 +7,12 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors()) // config cors so that front-end can use
 app.options('*', cors())
-//import { createMatchEntry } from './controller/matching-controller.js';
+import { createMatchEntry } from './controller/matching-controller.js';
 
 const router = express.Router()
 
 router.get('/', (_, res) => res.send('Hello World from matching-service'))
-//router.post('/', createMatchEntry)
+router.post('/', createMatchEntry)
 
 app.use('/api/matching', router).all((_, res) => {
     res.setHeader('content-type', 'application/json')
