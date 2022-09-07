@@ -5,21 +5,19 @@ import {
 } from "@mui/material";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useNavigate } from 'react-router-dom';
-import { CloseSharpIcon } from '@mui/icons-material/CloseSharp';
+//import { CloseSharpIcon } from '@mui/icons-material/CloseSharp';
 import { io } from 'socket.io-client';
-import 
 
 
 
 function WaitingPage() {
-    const socket = io("http://localhost:8001");
+    //const socket = io("http://localhost:8001");
 
-    socket.emit('match-request', 'email', 'difficulty', new Date().getTime(), socket.io.engine.id);
-    socket.on('match-sucess', () => handleSuccessMatch())
+    //socket.emit('match-request', 'email', 'difficulty', new Date().getTime(), socket.io.engine.id);
+    //socket.on('match-sucess', () => handleSuccessMatch())
 
     const navigate = useNavigate();
     const handleCancel = () => {
-
         navigate("/matching")
     }
 
@@ -52,7 +50,7 @@ function WaitingPage() {
                 </CountdownCircleTimer>
             </Box>
             <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
-                <Button variant={"outlined"} onClick={() => handleCancel()} startIcon={<CloseSharpIcon />} >back</Button>
+                <Button variant={"outlined"} onClick={() => handleCancel()} >back</Button>
             </Box>
         </Box>
 
