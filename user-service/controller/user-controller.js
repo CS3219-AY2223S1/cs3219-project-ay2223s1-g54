@@ -1,15 +1,15 @@
 import { 
     ormCreateUser as _createUser,
     ormCheckUserExists as _checkUserExists, 
-    ormLogInUser as _logUserIn,      
 } from '../model/user-orm.js'
+import UserModel from '../model/user-model.js';
+import bcrypt from 'bcryptjs';
 
 export async function createUser(req, res) {
     try {
         const { username, password , confirmPassword, email } = req.body;
 
         if (!username || !password || !confirmPassword || !email) {
-            console.log('One of the required fields is missing!');
             return res.status(400).json({message: 'One of the required fields is missing!'});
         }
 
@@ -32,28 +32,46 @@ export async function createUser(req, res) {
         }
 
     } catch (err) {
+        console.log(err);
         return res.status(500).json({message: 'Database failure when creating new user!'})
     }
 }
 
 
 export async function loginUser(req, res) {
+
     try {
         const { email, password } = req.body;
-        if (email && password) {
-            
-            const resp = await _logUserIn(email, password);
 
-            if (resp) {
-                return res.status(200).json({message: 'Logged in user successfully!'})
-            } else {
-                return res.status(401).json({message: 'Incorrect Username and/or Password'})
-            }
-
-        } else {
+        if (!email || !password) {
             return res.status(400).json({message: 'Email and/or Password are missing!'});
         }
+        UserModel.find({email: email}).exec().then(
+            result => {
+
+                // Account doesn't exist
+                if (result.length < 1) {
+                    return res.status(401).json({message: 'Email not exist'})
+                }
+                console.log(result)
+                // Todo to verify hashes
+                bcrypt.compare(password, result[0]['password'], (err, result) => {
+                    if (err) {
+                        return {err}
+                    }
+
+                    if (!result) {
+                        console.log("Invalid password");
+                        return res.status(401).json({message: 'Incorrect Username and/or Password'})
+                    }
+
+                    console.log("Password matched");
+                    return res.status(200).json({message: 'Logged in user successfully!'})
+
+                })
+            })
     } catch (err) {
-        return res.status(500).json({message: 'Database failure when logging in existing user!'})
+        console.log(err)
+        return res.status(500).json({message: 'Authentication failure'})
     }
 }
