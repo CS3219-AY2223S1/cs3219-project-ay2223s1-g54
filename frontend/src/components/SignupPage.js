@@ -11,13 +11,15 @@ import {
 } from "@mui/material";
 import {useState} from "react";
 import axios from "axios";
-import {URL_USER_SVC} from "../configs";
+import {URL_USER_SVC_CREATE_USER} from "../configs";
 import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
 import {Link} from "react-router-dom";
 
 function SignupPage() {
+    const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [dialogTitle, setDialogTitle] = useState("")
     const [dialogMsg, setDialogMsg] = useState("")
@@ -25,10 +27,10 @@ function SignupPage() {
 
     const handleSignup = async () => {
         setIsSignupSuccess(false)
-        const res = await axios.post(URL_USER_SVC, { username, password })
+        const res = await axios.post(URL_USER_SVC_CREATE_USER, { email, username, password, confirmPassword})
             .catch((err) => {
                 if (err.response.status === STATUS_CODE_CONFLICT) {
-                    setErrorDialog('This username already exists')
+                    setErrorDialog('This email/username already exists')
                 } else {
                     setErrorDialog('Please try again later')
                 }
@@ -54,8 +56,8 @@ function SignupPage() {
     }
 
     return (
-        <Box display={"flex"} flexDirection={"column"} width={"30%"}>
-            <Typography variant={"h3"} marginBottom={"2rem"}>Sign Up</Typography>
+        <Box display={"flex"} flexDirection={"column"} width={"100%"} alignItems="center">
+            <Typography variant={"h1"} marginBottom={"2rem"}>PeerPrep</Typography>
             <TextField
                 label="Username"
                 variant="standard"
@@ -71,6 +73,22 @@ function SignupPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{marginBottom: "2rem"}}
+            />
+            <TextField
+                label="Confirm password"
+                variant="standard"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                sx={{marginBottom: "2rem"}}
+            />
+            <TextField
+                label="Email address"
+                variant="standard"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                sx={{marginBottom: "1rem"}}
+                autoFocus
             />
             <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
                 <Button variant={"outlined"} onClick={handleSignup}>Sign up</Button>
