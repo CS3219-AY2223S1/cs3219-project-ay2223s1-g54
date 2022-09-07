@@ -1,9 +1,9 @@
 import { createMatchEntry, listValidMatchEntriesByDifficulty } from './repository.js';
 
 //need to separate orm functions from repository to decouple business logic from persistence
-export async function ormCreateMatchEntry(email, difficulty, start_time) {
+export async function ormCreateMatchEntry(email, difficulty, start_time, socket_id) {
     try {
-        await createMatchEntry({email, difficulty, start_time});
+        await createMatchEntry({email, difficulty, start_time, socket_id});
         return true;
     } catch (err) {
         console.log('ERROR: Could not create new match entry');
