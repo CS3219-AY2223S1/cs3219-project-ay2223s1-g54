@@ -12,7 +12,7 @@ import {
 import {useState} from "react";
 import axios from "axios";
 import {URL_USER_SVC_SIGN_IN_USER} from "../configs";
-import {STATUS_CODE_OK} from "../constants";
+import {STATUS_CODE_OK, STATUS_CODE_UNAUTHORIZED, STATUS_CODE_BAD_REQUEST, STATUS_INTERNAL_SERVER_ERROR} from "../constants";
 import {Link} from "react-router-dom";
 
 function LoginPage() {
@@ -28,8 +28,19 @@ function LoginPage() {
         console.log("Attempt to login");
         const res = await axios.post(URL_USER_SVC_SIGN_IN_USER, {email, password})
         .catch((err) => {
-            console.log(err)
-            setErrorDialog('Please try again later')
+            if (err.response.status === STATUS_CODE_BAD_REQUEST) {
+                setErrorDialog('Email and/or Password are missing.')
+                return
+            }
+
+            if (err.response.status === STATUS_CODE_UNAUTHORIZED) {
+                setErrorDialog('Invalid Email/Password')
+                return
+            }
+
+            if (err.response.status === STATUS_INTERNAL_SERVER_ERROR) {
+                setErrorDialog('Please try again later')
+            }
         })
         if (res && res.status === STATUS_CODE_OK) {
             setSuccessDialog('Account successfully logged in')
