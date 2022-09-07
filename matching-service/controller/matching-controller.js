@@ -33,13 +33,14 @@ export async function createMatchEntry(req, res) {
     
     // ensure both users socket can be communicated by server socket
     if (!user1_socket || !user2_socket) {
-        io.to(user1_socket).to(user2_socket).emit('matchFailure');
+        io.get().to(user1_socket).to(user2_socket).emit('matchFailure');
         return res.status(200).json({message: 'not ok!'});
     }
     
     user1_socket.join(room_id);
     user2_socket.join(room_id);
-    
-    io.to(user1_socket).to(user2_socket).emit('matchSuccess', { room_id });
+    console.log('Created room ' + room_id);
+
+    io.get().sockets.in(room_id).emit('matchSuccess', { room_id });
     return res.status(200).json({message: 'ok'});
 }

@@ -7,24 +7,37 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useNavigate } from 'react-router-dom';
 //import { CloseSharpIcon } from '@mui/icons-material/CloseSharp';
 import { io } from 'socket.io-client';
-
-
+import axios from "axios"
+import { useEffect } from "react";
 
 function WaitingPage() {
-    //const socket = io("http://localhost:8001");
+    const initialisePage = async () => {
+        const socket = io("http://localhost:8001");
+        socket.on("connect", async () => {
+            await axios.post("http://localhost:8001/api/matching", {
+                email: "testuser@gmail.com",
+                difficulty: 0,
+                start_time: new Date().getTime(),
+                socket_id: socket.id
+            })
+            //socket.emit('match-request', 'email', 'difficulty', new Date().getTime(), socket.io.engine.id);
+            //socket.on('match-sucess', () => handleSuccessMatch())
+        });
+        socket.on("matchSuccess", async (data) => {
+            console.log("Matched, room id is: " + data.room_id);
+            navigate("/collaboration")
+        })
+    }
 
-    //socket.emit('match-request', 'email', 'difficulty', new Date().getTime(), socket.io.engine.id);
-    //socket.on('match-sucess', () => handleSuccessMatch())
+    useEffect(() => {
+        initialisePage()
+    })
 
     const navigate = useNavigate();
     const handleCancel = () => {
         navigate("/matching")
     }
-
-    const handleSuccessMatch = () => {
-        navigate("/collaboration")
-    }
-
+    
     const renderTime = ({ remainingTime }) => {
         return (
             <div className="timer">
@@ -55,9 +68,6 @@ function WaitingPage() {
         </Box>
 
     )
-
-
-
 }
 
 export default WaitingPage;
