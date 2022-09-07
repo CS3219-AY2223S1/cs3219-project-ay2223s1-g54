@@ -10,7 +10,6 @@ export async function createUser(req, res) {
         const { username, password , confirmPassword, email } = req.body;
 
         if (!username || !password || !confirmPassword || !email) {
-            console.log('One of the required fields is missing!');
             return res.status(400).json({message: 'One of the required fields is missing!'});
         }
 
@@ -33,6 +32,7 @@ export async function createUser(req, res) {
         }
 
     } catch (err) {
+        console.log(err);
         return res.status(500).json({message: 'Database failure when creating new user!'})
     }
 }
