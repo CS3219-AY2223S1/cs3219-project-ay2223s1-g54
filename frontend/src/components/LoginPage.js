@@ -46,6 +46,8 @@ function LoginPage() {
             setSuccessDialog('Account successfully logged in')
             setSignInSuccess(true)
             const { token } = res.data;
+
+            // send email via localStorage
             localStorage.setItem('token', token)
         }
     }

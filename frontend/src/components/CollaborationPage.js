@@ -5,7 +5,7 @@ import {
 } from "@mui/material";
 import {useNavigate} from 'react-router-dom';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
-
+import { useEffect } from "react";
 
 
 function CollaborationPage() {
@@ -13,6 +13,11 @@ function CollaborationPage() {
     const handleCancel = () => {
         navigate("/matching")
     }
+
+    useEffect(() => {
+        if (localStorage.getItem('token') == null)
+            navigate("/login")
+    })
 
     return ( 
         <Box display={"flex"} flexDirection={"column"} width={"90%"}>
