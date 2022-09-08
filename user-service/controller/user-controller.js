@@ -67,10 +67,8 @@ export async function loginUser(req, res) {
                     }
 
                     console.log("Password matched");
-
-                    // Not secure, need to use in .env const priv = process.env.token
-                    const privkey = "supersecret"
-                    const token = jwt.sign({ email }, privkey, { algorithm: "HS256" })
+                    const priv_key = process.env.AUTH_PRIVATE_KEY || 'superIdol';
+                    const token = jwt.sign({ email }, priv_key , { algorithm: "HS256" })
                     res.cookie('token', token, {httpOnly: true})
                     return res.status(200).json({ token })
                 })
