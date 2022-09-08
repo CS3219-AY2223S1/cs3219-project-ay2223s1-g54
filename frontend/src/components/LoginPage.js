@@ -45,6 +45,8 @@ function LoginPage() {
         if (res && res.status === STATUS_CODE_OK) {
             setSuccessDialog('Account successfully logged in')
             setSignInSuccess(true)
+            const { token } = res.data;
+            localStorage.setItem('token', token)
         }
     }
 

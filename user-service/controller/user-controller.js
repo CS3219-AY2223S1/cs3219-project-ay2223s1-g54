@@ -4,6 +4,7 @@ import {
 } from '../model/user-orm.js'
 import UserModel from '../model/user-model.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken'
 
 export async function createUser(req, res) {
     try {
@@ -66,8 +67,10 @@ export async function loginUser(req, res) {
                     }
 
                     console.log("Password matched");
-                    return res.status(200).json({message: 'Logged in user successfully!'})
-
+                    const privkey = "supersecret"
+                    const token = jwt.sign({ email }, privkey, { algorithm: "HS256" })
+                    res.cookie('token', token, {httpOnly: true})
+                    return res.status(200).json({ token })
                 })
             })
     } catch (err) {
