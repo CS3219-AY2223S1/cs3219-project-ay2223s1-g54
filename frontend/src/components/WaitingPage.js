@@ -30,6 +30,9 @@ function WaitingPage() {
     }
 
     useEffect(() => {
+        if (localStorage.getItem('token') == null)
+            navigate("/login")
+
         initialisePage()
     })
 

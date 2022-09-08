@@ -3,10 +3,17 @@ import {
     Button,
     Typography
 } from "@mui/material";
+import { useEffect } from "react";
 import {useNavigate} from 'react-router-dom';
 
 function MatchingPage() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (localStorage.getItem('token') == null)
+            navigate("/login")
+    })
+
     const handleMatch = (difficulty) => {
         navigate("/waiting")
     }

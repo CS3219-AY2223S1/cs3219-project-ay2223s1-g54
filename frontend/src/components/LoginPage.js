@@ -45,6 +45,8 @@ function LoginPage() {
         if (res && res.status === STATUS_CODE_OK) {
             setSuccessDialog('Account successfully logged in')
             setSignInSuccess(true)
+            const { token } = res.data;
+            localStorage.setItem('token', token)
         }
     }
 
@@ -94,7 +96,7 @@ function LoginPage() {
                 </DialogContent>
                 <DialogActions>
                     {isSignInSuccess
-                        ? <Button component={Link} to="/login">Log in</Button>
+                        ? <Button component={Link} to="/matching">Log in</Button>
                         : <Button onClick={closeDialog}>Done</Button>
                     }
                 </DialogActions>
