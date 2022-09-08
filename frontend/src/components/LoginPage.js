@@ -94,7 +94,7 @@ function LoginPage() {
                 </DialogContent>
                 <DialogActions>
                     {isSignInSuccess
-                        ? <Button component={Link} to="/login">Log in</Button>
+                        ? <Button component={Link} to="/matching">Log in</Button>
                         : <Button onClick={closeDialog}>Done</Button>
                     }
                 </DialogActions>
