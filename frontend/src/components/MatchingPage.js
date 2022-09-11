@@ -15,6 +15,7 @@ function MatchingPage() {
     })
 
     const handleMatch = (difficulty) => {
+        localStorage.setItem('difficulty', difficulty);
         navigate("/waiting")
     }
 
