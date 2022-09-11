@@ -15,8 +15,8 @@ function WaitingPage() {
         const socket = io("http://localhost:8001");
         socket.on("connect", async () => {
             await axios.post("http://localhost:8001/api/matching", {
-                email: "testuser@gmail.com",
-                difficulty: 0,
+                email: localStorage.getItem('token')[0],
+                difficulty: localStorage.getItem('difficulty'),
                 start_time: new Date().getTime(),
                 socket_id: socket.id
             })
@@ -40,6 +40,10 @@ function WaitingPage() {
     const handleCancel = () => {
         navigate("/matching")
     }
+
+    const handleFailureMatch = () => {
+        navigate("/matching")
+    }
     
     const renderTime = ({ remainingTime }) => {
         return (
@@ -60,7 +64,7 @@ function WaitingPage() {
                     duration={30}
                     colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
                     colorsTime={[30, 20, 10, 0]}
-                    onComplete={() => handleCancel()}
+                    onComplete={() => handleFailureMatch()}
                 >
                     {renderTime}
                 </CountdownCircleTimer>
