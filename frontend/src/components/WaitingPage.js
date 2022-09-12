@@ -9,12 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import socket from '../socket.js'
 import axios from "axios"
 import { useEffect } from "react";
+import {URI_MATCHING_SVC, URL_MATCHING_SVC} from '../configs.js';
 
 function WaitingPage() {
     const initialisePage = async () => {
-        socket.init("http://localhost:8001")
+        socket.init(URI_MATCHING_SVC)
         socket.get().on("connect", async () => {
-            await axios.post("http://localhost:8001/api/matching", {
+            await axios.post(URL_MATCHING_SVC, {
                 email: localStorage.getItem('token')[0],
                 difficulty: localStorage.getItem('difficulty'),
                 start_time: new Date().getTime(),
