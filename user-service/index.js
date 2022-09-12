@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 
 const app = express();
+const PORT = proces.env.PORT || 8000;
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors()) // config cors so that front-end can use
@@ -20,4 +22,4 @@ app.use('/api/user', router).all((_, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
 })
 
-app.listen(8000, () => console.log('user-service listening on port 8000'));
+app.listen(PORT, () => console.log(`user-service listening on port ${PORT}`));

@@ -6,6 +6,8 @@ import io from './socket.js';
 import { createMatchEntry } from './controller/matching-controller.js';
 
 const app = express();
+const PORT = proces.env.PORT || 8001;
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors()) // config cors so that front-end can use
@@ -29,4 +31,4 @@ io.get().on('connection', (socket) => {
         io.get().sockets.in(room_id).emit('code-event', { newCode })
     });
 })
-httpServer.listen(8001, () => console.log('matching-service listening on port 8001'))
+httpServer.listen(PORT, () => console.log(`matching-service listening on port ${PORT}`))
