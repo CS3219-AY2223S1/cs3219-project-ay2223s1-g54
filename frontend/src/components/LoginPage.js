@@ -10,11 +10,11 @@ import {
     Typography,
     Link
 } from "@mui/material";
-import {useState, Text} from "react";
+import {useState} from "react";
 import axios from "axios";
 import {URL_USER_SVC_SIGN_IN_USER} from "../configs";
 import {STATUS_CODE_OK, STATUS_CODE_UNAUTHORIZED, STATUS_CODE_BAD_REQUEST, STATUS_INTERNAL_SERVER_ERROR} from "../constants";
-import {useNavigate} from "react-router-dom";
+import {Link as LinkRoute, useNavigate} from "react-router-dom";
 
 function LoginPage() {
     const [email, setEmail] = useState("")
@@ -81,7 +81,7 @@ function LoginPage() {
                 variant="standard"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                sx={{marginBottom: "1rem"}}
+                sx={{marginBottom: "2rem"}}
                 autoFocus
             />
             <TextField
@@ -92,7 +92,7 @@ function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{marginBottom: "2rem"}}
             />
-            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
+            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"} sx={{marginBottom: "1rem"}}>
                 <Button variant={"outlined"} onClick={handleLogin}>Sign In</Button>
             </Box>
             <Dialog
@@ -105,12 +105,12 @@ function LoginPage() {
                 </DialogContent>
                 <DialogActions>
                     {isSignInSuccess
-                        ? <Button component={Link} to="/matching">Log in</Button>
+                        ? <Button component={LinkRoute} to="/matching">Log in</Button>
                         : <Button onClick={closeDialog}>Done</Button>
                     }
                 </DialogActions>
             </Dialog>
-            <Link onClick={ () => navigateSignUp()} >Sign up</Link>
+            <Link onClick={ () => navigateSignUp()} >New to PeerPrep? Create an account</Link>
         </Box>
     )
 }

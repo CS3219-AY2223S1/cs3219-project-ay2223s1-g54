@@ -10,11 +10,11 @@ import {
     Typography,
     Link
 } from "@mui/material";
-import {useState, Text} from "react";
+import {useState} from "react";
 import axios from "axios";
 import {URL_USER_SVC_CREATE_USER} from "../configs";
 import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
-import {useNavigate} from "react-router-dom";
+import {Link as LinkRoute, useNavigate} from "react-router-dom";
 
 function SignupPage() {
     const [email, setEmail] = useState("")
@@ -95,10 +95,10 @@ function SignupPage() {
                 variant="standard"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                sx={{marginBottom: "1rem"}}
+                sx={{marginBottom: "2rem"}}
                 autoFocus
             />
-            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
+            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"} sx={{marginBottom: "1rem"}}>
                 <Button variant={"outlined"} onClick={handleSignup}>Sign up</Button>
             </Box>
 
@@ -112,12 +112,12 @@ function SignupPage() {
                 </DialogContent>
                 <DialogActions>
                     {isSignupSuccess
-                        ? <Button component={Link} to="/login">Log in</Button>
+                        ? <Button component={LinkRoute} to="/login">Log in</Button>
                         : <Button onClick={closeDialog}>Done</Button>
                     }
                 </DialogActions>
             </Dialog>
-            <Link onClick={ () => navigateLogIn()} >Sign up</Link>
+            <Link onClick={ () => navigateLogIn()} >Have an account?Sign In</Link>
         </Box>
     )
 }
