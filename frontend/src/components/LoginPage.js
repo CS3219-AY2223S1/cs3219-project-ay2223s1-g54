@@ -7,13 +7,14 @@ import {
     DialogContentText,
     DialogTitle,
     TextField,
-    Typography
+    Typography,
+    Link
 } from "@mui/material";
-import {useState} from "react";
+import {useState, Text} from "react";
 import axios from "axios";
 import {URL_USER_SVC_SIGN_IN_USER} from "../configs";
 import {STATUS_CODE_OK, STATUS_CODE_UNAUTHORIZED, STATUS_CODE_BAD_REQUEST, STATUS_INTERNAL_SERVER_ERROR} from "../constants";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 function LoginPage() {
     const [email, setEmail] = useState("")
@@ -22,6 +23,8 @@ function LoginPage() {
     const [dialogTitle, setDialogTitle] = useState("")
     const [dialogMsg, setDialogMsg] = useState("")
     const [password, setPassword] = useState("")
+
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
         setSignInSuccess(false)
@@ -65,6 +68,10 @@ function LoginPage() {
         setDialogTitle('Error')
         setDialogMsg(msg)
     }
+
+    const navigateSignUp = () => {
+        navigate('/signup')
+    }
     
     return (
         <Box display={"flex"} flexDirection={"column"} width={"100%"} alignItems="center">
@@ -103,6 +110,7 @@ function LoginPage() {
                     }
                 </DialogActions>
             </Dialog>
+            <Link onClick={ () => navigateSignUp()} >Sign up</Link>
         </Box>
     )
 }

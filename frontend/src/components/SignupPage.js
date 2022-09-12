@@ -7,13 +7,14 @@ import {
     DialogContentText,
     DialogTitle,
     TextField,
-    Typography
+    Typography,
+    Link
 } from "@mui/material";
-import {useState} from "react";
+import {useState, Text} from "react";
 import axios from "axios";
 import {URL_USER_SVC_CREATE_USER} from "../configs";
 import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 function SignupPage() {
     const [email, setEmail] = useState("")
@@ -24,6 +25,9 @@ function SignupPage() {
     const [dialogTitle, setDialogTitle] = useState("")
     const [dialogMsg, setDialogMsg] = useState("")
     const [isSignupSuccess, setIsSignupSuccess] = useState(false)
+
+    const navigate = useNavigate();
+
 
     const handleSignup = async () => {
         setIsSignupSuccess(false)
@@ -53,6 +57,10 @@ function SignupPage() {
         setIsDialogOpen(true)
         setDialogTitle('Error')
         setDialogMsg(msg)
+    }
+
+    const navigateLogIn = () => {
+        navigate('/login')
     }
 
     return (
@@ -109,6 +117,7 @@ function SignupPage() {
                     }
                 </DialogActions>
             </Dialog>
+            <Link onClick={ () => navigateLogIn()} >Sign up</Link>
         </Box>
     )
 }
