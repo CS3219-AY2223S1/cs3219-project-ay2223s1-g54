@@ -6,25 +6,26 @@ import {
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useNavigate } from 'react-router-dom';
 //import { CloseSharpIcon } from '@mui/icons-material/CloseSharp';
-import { io } from 'socket.io-client';
+import socket from '../socket.js'
 import axios from "axios"
 import { useEffect } from "react";
 
 function WaitingPage() {
     const initialisePage = async () => {
-        const socket = io("http://localhost:8001");
-        socket.on("connect", async () => {
+        socket.init("http://localhost:8001")
+        socket.get().on("connect", async () => {
             await axios.post("http://localhost:8001/api/matching", {
                 email: localStorage.getItem('token')[0],
                 difficulty: localStorage.getItem('difficulty'),
                 start_time: new Date().getTime(),
-                socket_id: socket.id
+                socket_id: socket.get().id
             })
             //socket.emit('match-request', 'email', 'difficulty', new Date().getTime(), socket.io.engine.id);
             //socket.on('match-sucess', () => handleSuccessMatch())
         });
-        socket.on("matchSuccess", async (data) => {
+        socket.get().on("matchSuccess", async (data) => {
             console.log("Matched, room id is: " + data.room_id);
+            localStorage.setItem('room_id', data.room_id);
             navigate("/collaboration")
         })
     }

@@ -22,5 +22,11 @@ app.use('/api/matching', router).all((_, res) => {
 
 const httpServer = createServer(app)
 io.init(httpServer);
-io.get().on('connection', (socket) => console.log(`New Client connected ${socket.id}`))
+io.get().on('connection', (socket) => {
+    console.log(`New Client connected ${socket.id}`)
+
+    socket.on('code-event1', ({room_id, newCode}) => {
+        io.get().sockets.in(room_id).emit('code-event', { newCode })
+    });
+})
 httpServer.listen(8001, () => console.log('matching-service listening on port 8001'))
