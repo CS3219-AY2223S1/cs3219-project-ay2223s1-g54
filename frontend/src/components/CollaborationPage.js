@@ -1,15 +1,11 @@
 import {
     Box,
-    Button,
-    Typography
+    Button
 } from "@mui/material";
 import {useNavigate} from 'react-router-dom';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 import {useState} from "react";
-import {UnControlled as CodeMirror} from 'react-codemirror2';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/monokai.css';
-import 'codemirror/mode/javascript/javascript.js'
+import Editor from "@monaco-editor/react";
 import socket from '../socket.js'
 
 function CollaborationPage() {
@@ -17,12 +13,6 @@ function CollaborationPage() {
     const navigate = useNavigate();
     const handleCancel = () => {
         navigate("/matching")
-    }
-
-    const options = {
-        lineNumbers: true,
-        mode: 'javascript',
-        theme: 'monokai'
     }
 
     socket.get().on('code-event', ({newCode}) => {
@@ -33,7 +23,7 @@ function CollaborationPage() {
         setCode(newCode)
     }
 
-    const updateCodeInState = (newCode) => {
+    const updateCodeInState = (newCode, event) => {
        setCode(newCode);
        socket.get().emit('code-event1', { room_id: localStorage.getItem('room_id'), newCode });
     };
@@ -41,10 +31,11 @@ function CollaborationPage() {
     return ( 
         <Box display={"flex"} flexDirection={"column"} width={"90%"}>
             <div>
-                <CodeMirror 
-                    value={code} 
-                    onChange={(editor, data, value) => updateCodeInState(value) }
-                    options={options}
+                <Editor
+                    height="80vh"
+                    value={code}
+                    defaultLanguage="javascript"
+                    onChange={updateCodeInState}
                 />
             </div>
             <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
