@@ -4,7 +4,7 @@ import {
 } from "@mui/material";
 import {useNavigate} from 'react-router-dom';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import Editor from "@monaco-editor/react";
 import socket from '../socket.js'
 
@@ -27,6 +27,11 @@ function CollaborationPage() {
        setCode(newCode);
        socket.get().emit('code-event1', { room_id: localStorage.getItem('room_id'), newCode });
     };
+
+    useEffect(() => {
+        if (localStorage.getItem('token') == null)
+            navigate("/login")
+    })
 
     return ( 
         <Box display={"flex"} flexDirection={"column"} width={"90%"}>
