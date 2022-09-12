@@ -5,7 +5,7 @@ export default {
     init: (httpServer) => {
         io = new Server(httpServer, {
             cors: {
-                origin: "http://localhost:3000",
+                origin: "*",
                 methods: ["GET", "POST"]
             },
             // path: "/api/matching/socketio/"
