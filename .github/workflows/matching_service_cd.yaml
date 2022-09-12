@@ -2,7 +2,7 @@ name: Matching Service CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
