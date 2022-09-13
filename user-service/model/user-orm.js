@@ -1,8 +1,8 @@
 import { createUser, deleteUserById, emailExists, usernameExists } from "./repository.js";
 
 //need to separate orm functions from repository to decouple business logic from persistence
-export async function ormCreateUser(email, username, password) {
-  const createdUser = await createUser({ email, username, password });
+export async function ormCreateUser(email, username, passwordHash) {
+  const createdUser = await createUser({ email, username, passwordHash });
   return createdUser;
 }
 
