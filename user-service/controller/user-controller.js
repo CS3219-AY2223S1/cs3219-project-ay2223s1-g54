@@ -10,7 +10,7 @@ import {
 
 const user_controller = express.Router();
 
-user_controller.get("/", apiStatus);
+user_controller.get("/status", apiStatus);
 user_controller.post("/signup", signupUser);
 user_controller.post("/login", loginUser);
 user_controller.post("/logout", logoutUser);
