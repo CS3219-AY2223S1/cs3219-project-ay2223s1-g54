@@ -12,7 +12,11 @@ let db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 export async function createUser(params) {
-  return new UserModel(params);
+  return UserModel.create(params);
+}
+
+export async function deleteUserById(id) {
+  return UserModel.findByIdAndDelete(id);
 }
 
 export async function usernameExists(username) {

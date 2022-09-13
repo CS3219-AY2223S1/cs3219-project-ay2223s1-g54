@@ -1,8 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import UserModel from "../model/user-model.js";
-import { ormCreateUser, ormUsernameExists, ormEmailExists } from "../model/user-orm.js";
+import { ormCreateUser, ormUsernameExists, ormEmailExists, ormDeleteUserById } from "../model/user-orm.js";
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../config.js";
+import { request, response } from "express";
 
 let refreshTokens = [];
 
@@ -39,6 +40,17 @@ export const signupUser = async (req, res) => {
     return res.status(500).json({ message: "Unable to create new user" });
   }
 };
+
+export const deleteUser = async (req, res) => {
+  const decodedToken = jwt.verify(request.token, REFRESH_TOKEN_SECRET);
+
+  if (!req.token || !decodedToken.id) {
+    return res.status(401).json({ error: 'Token missing or invalid' });
+  }
+
+  const deletedUser = await ormDeleteUserById(decodedToken.id);
+  return res.status(204).end();
+}
 
 export const loginUser = async (req, res) => {
   try {
