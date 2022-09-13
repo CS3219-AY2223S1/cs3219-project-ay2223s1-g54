@@ -28,9 +28,9 @@ export const signupUser = async (req, res) => {
     if (emailExists)
       return res.status(409).json({ message: "Email already exists" });
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const createdUser = await ormCreateUser(email, username, hashedPassword);
+    const SALT_ROUNDS = 10;
+    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    const createdUser = await ormCreateUser(email, username, passwordHash);
     if (createdUser.username !== username)
       return res.status(400).json({ message: "Error creating user" });
 
@@ -50,7 +50,7 @@ export const loginUser = async (req, res) => {
     if (result.length <= 0)
       return res.status(401).json({ message: "User does not exist" });
 
-    const hashedPassword = result[0]["password"];
+    const hashedPassword = result[0]["passwordHash"];
     const isCorrectPassword = await bcrypt.compare(password, hashedPassword);
     if (!isCorrectPassword)
       return res.status(401).json({ message: "Incorrect password" });
