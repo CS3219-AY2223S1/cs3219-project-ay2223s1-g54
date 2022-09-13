@@ -17,6 +17,15 @@ let UserModelSchema = new Schema({
     type: String,
     required: true,
   },
+  createdAt: {
+    type: Date,
+    immutable: true,
+    default: () => Date.now()
+  },
+  updatedAt: {
+    type: Date,
+    default: () => Date.now()
+  }
 });
 
 export default mongoose.model("UserModel", UserModelSchema);
