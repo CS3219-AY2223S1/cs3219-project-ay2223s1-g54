@@ -23,4 +23,4 @@ jobs:
           pip install awsebcli
       - name: Deploy to Elastic Beanstalk
         working-directory: ./frontend
-        run: eb deploy Peerprepfrontend-env --timeout 30
+        run: eb deploy Peerprepfrontend-env-0 --timeout 30
