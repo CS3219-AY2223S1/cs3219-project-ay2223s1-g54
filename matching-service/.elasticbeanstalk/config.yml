@@ -1,9 +1,17 @@
 branch-defaults:
-  master:
+  default:
     environment: Peerprepmatchingservice-env
 global:
   application_name: peerprep-matching-service
+  branch: null
   default_ec2_keyname: null
-  default_platform: 64bit Amazon Linux 2 v3.4.19 running Docker
+  default_platform: Docker
   default_region: us-east-2
-  sc: git
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  repository: null
+  sc: null
+  workspace_type: Application
