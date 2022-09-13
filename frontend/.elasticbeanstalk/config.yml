@@ -1,9 +1,9 @@
 branch-defaults:
   master:
-    environment: Peerprepfrontend-env
+    environment: Peerprepfrontend-env-0
 global:
   application_name: peerprep-frontend
   default_ec2_keyname: null
-  default_platform: 64bit Amazon Linux 2 v3.4.19 running Docker
+  default_platform: 64bit Amazon Linux 2 v3.1.4 running ECS
   default_region: us-east-2
   sc: git
