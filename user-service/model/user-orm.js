@@ -1,4 +1,4 @@
-import { createUser, emailExists, usernameExists, emailExists } from "./repository.js";
+import { createUser, emailExists, usernameExists } from "./repository.js";
 
 //need to separate orm functions from repository to decouple business logic from persistence
 export async function ormCreateUser(email, username, password) {
