@@ -15,6 +15,6 @@ export async function createUser(params) {
   return new UserModel(params);
 }
 
-export async function checkUserExists(params) {
-  return UserModel.exists({ username: params.username });
+export async function usernameExists(username) {
+  return UserModel.exists({ username });
 }

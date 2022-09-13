@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import UserModel from "../model/user-model.js";
-import { ormCreateUser, ormCheckUserExists } from "../model/user-orm.js";
+import { ormCreateUser, ormUsernameExists } from "../model/user-orm.js";
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../config.js";
 
 let refreshTokens = [];
@@ -20,8 +20,8 @@ export const signupUser = async (req, res) => {
     if (password !== confirmPassword)
       return res.status(400).json({ message: "Password does not match" });
 
-    const doesUsernameExist = await ormCheckUserExists(username);
-    if (doesUsernameExist)
+    const usernameExists = await ormUsernameExists(username);
+    if (usernameExists)
       return res.status(409).json({ message: "Username already exist" });
 
     const salt = await bcrypt.genSalt(10);
