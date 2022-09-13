@@ -9,9 +9,10 @@ RUN npm run build
 FROM node:16
 
 WORKDIR /app
+COPY --from=builder /app/package.json ./
 COPY --from=builder /app/build ./build
 RUN npm install -g serve
 
 ENV PORT 3000
 EXPOSE 3000
-CMD [ "npm", "serve" ]
+CMD [ "npm", "run", "serve" ]
