@@ -18,3 +18,7 @@ export async function createUser(params) {
 export async function usernameExists(username) {
   return UserModel.exists({ username });
 }
+
+export async function emailExists(email) {
+  return UserModel.exists({ email });
+}
