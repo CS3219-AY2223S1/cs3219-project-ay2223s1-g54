@@ -136,7 +136,7 @@ function SignupPage() {
           )}
         </DialogActions>
       </Dialog>
-      <Link onClick={() => navigateLogIn()}>Have an account?Sign In</Link>
+      <Link onClick={() => navigateLogIn()}>Have an account? Sign In</Link>
     </Box>
   );
 }

@@ -48,7 +48,7 @@ export const signupUser = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
-  const { accessToken } = req.body;
+  const accessToken = req.cookies["accessToken"];
   const decodedToken = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
 
   if (!accessToken || !decodedToken.userId) {
@@ -57,11 +57,13 @@ export const deleteUser = async (req, res) => {
 
   await ormDeleteUserById(decodedToken.userId);
   refreshTokens = refreshTokens.filter((token) => token !== accessToken);
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
   return res.status(204).end();
 };
 
 export const updateUserPassword = async (req, res) => {
-  const { accessToken } = req.body;
+  const accessToken = req.cookies["accessToken"];
 
   const decodedToken = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
 
@@ -110,20 +112,25 @@ export const loginUser = async (req, res) => {
 
     const userId = result[0]["id"];
     const accessTokenObject = await allocateAccessToken(userId);
-    return res.status(200).json({ accessTokenObject });
+    const { accessToken, refreshToken } = accessTokenObject;
+    res.cookie("accessToken", accessToken);
+    res.cookie("refreshToken", refreshToken);
+    return res.status(200).json({ accessToken, refreshToken });
   } catch (err) {
     return res.status(500).json({ message: "Unable to login user" });
   }
 };
 
 export const logoutUser = async (req, res) => {
-  const refreshToken = req.body.refreshToken;
+  const refreshToken = req.cookies["refreshToken"];
   await deallocateAccessToken(refreshToken);
-  res.status(204).json({ message: "User logged out" });
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
+  res.status(202).json({ message: "User logged out" });
 };
 
 export const renewUser = async (req, res) => {
-  const refreshToken = req.body.token;
+  const refreshToken = req.cookies["refreshToken"];
 
   if (refreshToken == null) return res.sendStatus(401).json("");
   if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403).json();

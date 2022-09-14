@@ -7,11 +7,15 @@ import { createMatchEntry } from "./controller/matching-controller.js";
 
 const app = express();
 const PORT = process.env.PORT || 8001;
+const corsObject = {
+  origin: true,
+  credentials: true,
+};
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors()); // config cors so that front-end can use
-app.options("*", cors());
+app.use(cors(corsObject)); // config cors so that front-end can use
+app.options("*", cors(corsObject));
 
 const router = express.Router();
 router.get("/", (_, res) => res.send("Hello World from matching-service"));

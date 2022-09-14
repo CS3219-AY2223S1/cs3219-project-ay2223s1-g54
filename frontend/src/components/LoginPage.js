@@ -31,6 +31,8 @@ function LoginPage() {
 
   const navigate = useNavigate();
 
+  axios.defaults.withCredentials = true;
+
   const handleLogin = async () => {
     setSignInSuccess(false);
     console.log("Attempt to login");
@@ -54,10 +56,6 @@ function LoginPage() {
     if (res && res.status === STATUS_CODE_OK) {
       setSuccessDialog("Account successfully logged in");
       setSignInSuccess(true);
-      const { token } = res.data;
-
-      // send email via localStorage
-      localStorage.setItem("token", token);
     }
   };
 
