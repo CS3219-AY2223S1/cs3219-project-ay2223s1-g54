@@ -2,13 +2,21 @@ import { Box, Button, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { URL_USER_SVC_LOGOUT_USER } from "../configs";
+import Cookies from "universal-cookie";
+import {
+  URL_USER_SVC_LOGOUT_USER,
+  URL_USER_SVC_DELETE_USER,
+  URL_USER_SVC_UPDATE_USER,
+} from "../configs";
 
 function MatchingPage() {
   const navigate = useNavigate();
 
+  const cookies = new Cookies();
+  axios.defaults.withCredentials = true;
+
   useEffect(() => {
-    if (localStorage.getItem("refreshToken") == null) navigate("/login");
+    if (cookies.get("refreshToken") == null) navigate("/login");
   });
 
   const handleMatch = (difficulty) => {
@@ -17,20 +25,16 @@ function MatchingPage() {
   };
 
   const handleLogout = async () => {
-    localStorage.clear();
-    await axios.post(URL_USER_SVC_LOGOUT_USER, {
-      refreshToken: localStorage.getItem("refreshToken"),
-    });
-
+    await axios.post(URL_USER_SVC_LOGOUT_USER);
     navigate("/login");
   };
 
-  const handleDeleteAccount = () => {
-    // Todo
+  const handleDeleteAccount = async () => {
+    await axios.delete(URL_USER_SVC_DELETE_USER);
     navigate("/login");
   };
 
-  const handleUpdatePassword = () => {
+  const handleUpdatePassword = async () => {
     // Todo
   };
 
