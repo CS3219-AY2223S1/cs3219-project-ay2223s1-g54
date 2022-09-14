@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import UserModel from "../model/user-model.js";
-import { ormCreateUser, ormUsernameExists, ormEmailExists, ormDeleteUserById } from "../model/user-orm.js";
+import { ormCreateUser, ormUsernameExists, ormEmailExists, ormDeleteUserById, ormUpdateUserPassword } from "../model/user-orm.js";
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../config.js";
 import { request, response } from "express";
 
@@ -50,6 +50,21 @@ export const deleteUser = async (req, res) => {
 
   const deletedUser = await ormDeleteUserById(decodedToken.id);
   return res.status(204).end();
+}
+
+export const updateUserPassword = async (req, res) => {
+  const decodedToken = jwt.verify(request.token, REFRESH_TOKEN_SECRET);
+
+  if (!req.token || !decodedToken.email) {
+    return res.status(401).json({ error: 'Token missing or invalid' });
+  }
+
+  const { email, oldPassword, newPassword } = req.body;
+  // add compare oldPassword 
+  const SALT_ROUNDS = 10;
+  const newPasswordHash = bcrypt.hash(newPassword, SALT_ROUNDS);
+  const updatedUser = await ormUpdateUserPassword(newPasswordHash);
+  return res.status(200).json({ message: "Password has been updated" });
 }
 
 export const loginUser = async (req, res) => {
