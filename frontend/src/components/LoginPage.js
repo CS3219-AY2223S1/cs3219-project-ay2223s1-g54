@@ -53,11 +53,11 @@ function LoginPage() {
       });
     if (res && res.status === STATUS_CODE_OK) {
       setSuccessDialog("Account successfully logged in");
-      setSignInSuccess(true);
-      const { token } = res.data;
-
+      const { accessToken, refreshToken } = res.data.accessTokenObject;
       // send email via localStorage
-      localStorage.setItem("token", token);
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      setSignInSuccess(true);
     }
   };
 
