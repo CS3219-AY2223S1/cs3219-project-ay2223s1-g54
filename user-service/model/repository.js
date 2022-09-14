@@ -12,9 +12,24 @@ let db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 export async function createUser(params) {
-  return new UserModel(params);
+  return UserModel.create(params);
 }
 
-export async function checkUserExists(params) {
-  return UserModel.exists({ username: params.username });
+export async function deleteUserById(id) {
+  return UserModel.findByIdAndDelete(id);
+}
+
+export async function updateUser(email, passwordHash) {
+  const user = await UserModel.find({ email });
+  user.passwordHash = passwordHash;
+  user.save();
+  return user;
+}
+
+export async function usernameExists(username) {
+  return UserModel.exists({ username });
+}
+
+export async function emailExists(email) {
+  return UserModel.exists({ email });
 }

@@ -1,8 +1,15 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import UserModel from "../model/user-model.js";
-import { ormCreateUser, ormCheckUserExists } from "../model/user-orm.js";
+import {
+  ormCreateUser,
+  ormUsernameExists,
+  ormEmailExists,
+  ormDeleteUserById,
+  ormUpdateUserPassword,
+} from "../model/user-orm.js";
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../config.js";
+import { request, response } from "express";
 
 let refreshTokens = [];
 
@@ -20,13 +27,17 @@ export const signupUser = async (req, res) => {
     if (password !== confirmPassword)
       return res.status(400).json({ message: "Password does not match" });
 
-    const doesUsernameExist = await ormCheckUserExists(username);
-    if (doesUsernameExist)
-      return res.status(409).json({ message: "Username already exist" });
+    const usernameExists = await ormUsernameExists(username);
+    if (usernameExists)
+      return res.status(409).json({ message: "Username already exists" });
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const createdUser = await ormCreateUser(email, username, hashedPassword);
+    const emailExists = await ormEmailExists(email);
+    if (emailExists)
+      return res.status(409).json({ message: "Email already exists" });
+
+    const SALT_ROUNDS = 10;
+    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    const createdUser = await ormCreateUser(email, username, passwordHash);
     if (createdUser.username !== username)
       return res.status(400).json({ message: "Error creating user" });
 
@@ -34,6 +45,33 @@ export const signupUser = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ message: "Unable to create new user" });
   }
+};
+
+export const deleteUser = async (req, res) => {
+  const decodedToken = jwt.verify(request.token, ACCESS_TOKEN_SECRET);
+
+  if (!req.token || !decodedToken.id) {
+    return res.status(401).json({ error: "Token missing or invalid" });
+  }
+
+  const deletedUser = await ormDeleteUserById(decodedToken.id);
+  refreshTokens = refreshTokens.filter((token) => token !== req.token);
+  return res.status(204).end();
+};
+
+export const updateUserPassword = async (req, res) => {
+  const decodedToken = jwt.verify(request.token, ACCESS_TOKEN_SECRET);
+
+  if (!req.token || !decodedToken.email) {
+    return res.status(401).json({ error: "Token missing or invalid" });
+  }
+
+  const { email, oldPassword, newPassword } = req.body;
+  // add compare oldPassword
+  const SALT_ROUNDS = 10;
+  const newPasswordHash = bcrypt.hash(newPassword, SALT_ROUNDS);
+  const updatedUser = await ormUpdateUserPassword(newPasswordHash);
+  return res.status(200).json({ message: "Password has been updated" });
 };
 
 export const loginUser = async (req, res) => {
@@ -46,7 +84,7 @@ export const loginUser = async (req, res) => {
     if (result.length <= 0)
       return res.status(401).json({ message: "User does not exist" });
 
-    const hashedPassword = result[0]["password"];
+    const hashedPassword = result[0]["passwordHash"];
     const isCorrectPassword = await bcrypt.compare(password, hashedPassword);
     if (!isCorrectPassword)
       return res.status(401).json({ message: "Incorrect password" });

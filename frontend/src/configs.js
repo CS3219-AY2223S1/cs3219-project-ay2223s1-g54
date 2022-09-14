@@ -3,7 +3,7 @@ const URI_USER_SVC =
 export const URI_MATCHING_SVC =
   process.env.REACT_APP_URI_MATCHING_SVC || "http://localhost:8001";
 
-const PREFIX_USER_SVC = "/api/user";
+const PREFIX_USER_SVC = "/api/users";
 const PREFIX_MATCHING_SVC = "/api/matching";
 
 const CREATE_USER = "/signup";
