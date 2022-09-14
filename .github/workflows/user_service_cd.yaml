@@ -2,7 +2,7 @@ name: User Service CD
 
 on:
   push:
-    branches: [main]
+    branches: [prod]
 
 jobs:
   deploy:
