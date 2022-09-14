@@ -19,8 +19,8 @@ export async function deleteUserById(id) {
   return UserModel.findByIdAndDelete(id);
 }
 
-export async function updateUser(email, passwordHash) {
-  const user = await UserModel.find({ email });
+export async function updateUser(userId, passwordHash) {
+  const user = await UserModel.findById(userId);
   user.passwordHash = passwordHash;
   user.save();
   return user;
@@ -32,4 +32,9 @@ export async function usernameExists(username) {
 
 export async function emailExists(email) {
   return UserModel.exists({ email });
+}
+
+export async function getPasswordHash(userId) {
+  const user = await UserModel.findById(userId);
+  return user.passwordHash;
 }

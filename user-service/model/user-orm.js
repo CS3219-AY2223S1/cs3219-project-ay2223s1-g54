@@ -1,5 +1,12 @@
 import { updateUserPassword } from "../controller/user-controller-service.js";
-import { createUser, deleteUserById, emailExists, usernameExists } from "./repository.js";
+import {
+  createUser,
+  deleteUserById,
+  emailExists,
+  usernameExists,
+  updateUser,
+  getPasswordHash,
+} from "./repository.js";
 
 //need to separate orm functions from repository to decouple business logic from persistence
 export async function ormCreateUser(email, username, passwordHash) {
@@ -12,8 +19,8 @@ export async function ormDeleteUserById(id) {
   return deletedUser;
 }
 
-export async function ormUpdateUserPassword(email, passwordHash) {
-  const updatedUser = await updateUser(email, passwordHash);
+export async function ormUpdateUserPassword(userId, passwordHash) {
+  const updatedUser = await updateUser(userId, passwordHash);
   return updatedUser;
 }
 
@@ -25,4 +32,9 @@ export async function ormUsernameExists(username) {
 export async function ormEmailExists(email) {
   const exists = await emailExists(email);
   return exists;
+}
+
+export async function ormGetPasswordHash(userId) {
+  const oldPasswordHash = await getPasswordHash(userId);
+  return oldPasswordHash;
 }
