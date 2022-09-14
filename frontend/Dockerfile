@@ -1,7 +1,8 @@
 FROM node:16
 
 WORKDIR /app
-COPY . .
+COPY package*.json ./
+COPY ./build ./build
 
 RUN npm install -g serve
 
