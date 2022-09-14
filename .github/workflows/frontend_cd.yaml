@@ -12,8 +12,8 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       CI: false
-      REACT_APP_URI_USER_SVC: http://peerprepuserservice-env.eba-3ymikmjm.us-east-2.elasticbeanstalk.com/
-      REACT_APP_URI_MATCHING_SVC: http://peerprepmatchingservice-env.eba-nc4i9egp.us-east-2.elasticbeanstalk.com/
+      REACT_APP_URI_USER_SVC: http://peerprepuserservice-env.eba-3ymikmjm.us-east-2.elasticbeanstalk.com
+      REACT_APP_URI_MATCHING_SVC: http://peerprepmatchingservice-env.eba-nc4i9egp.us-east-2.elasticbeanstalk.com
     steps:
       - uses: actions/checkout@v2
       - name: Install Python 3.9
