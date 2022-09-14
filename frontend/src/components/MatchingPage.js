@@ -1,5 +1,5 @@
-import { Box, Button, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "universal-cookie";
@@ -11,6 +11,8 @@ import {
 
 function MatchingPage() {
   const navigate = useNavigate();
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
   const cookies = new Cookies();
   axios.defaults.withCredentials = true;
@@ -35,7 +37,17 @@ function MatchingPage() {
   };
 
   const handleUpdatePassword = async () => {
-    // Todo
+    let msg;
+    try {
+      const response = await axios.put(URL_USER_SVC_UPDATE_USER, {
+        oldPassword,
+        newPassword,
+      });
+      msg = response;
+    } catch (err) {
+      msg = err.response;
+    }
+    alert(msg.data.message);
   };
 
   return (
@@ -96,6 +108,29 @@ function MatchingPage() {
         >
           Delete account
         </Button>
+      </Box>
+      <br />
+      <br />
+      <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
+        <TextField
+          label="Old Password"
+          variant="standard"
+          type="password"
+          value={oldPassword}
+          onChange={(e) => setOldPassword(e.target.value)}
+          sx={{ marginBottom: "2rem" }}
+          autoFocus
+        />
+      </Box>
+      <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
+        <TextField
+          label="New Password"
+          variant="standard"
+          type="password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          sx={{ marginBottom: "2rem" }}
+        />
       </Box>
       <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
         <Button

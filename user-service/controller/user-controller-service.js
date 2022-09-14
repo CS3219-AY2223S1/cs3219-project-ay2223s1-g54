@@ -169,6 +169,6 @@ const deallocateAccessToken = async (refreshToken) => {
 const generateAccessToken = async (userId) => {
   return jwt.sign({ userId }, ACCESS_TOKEN_SECRET, {
     algorithm: "HS256",
-    expiresIn: "10s",
+    expiresIn: "15m",
   });
 };
