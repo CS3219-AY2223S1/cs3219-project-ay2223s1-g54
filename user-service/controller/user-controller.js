@@ -5,8 +5,8 @@ import {
   loginUser,
   logoutUser,
   renewUser,
+  updateUserPassword,
   deleteUser,
-  updateUserPassword
 } from "./user-controller-service.js";
 
 const user_controller = express.Router();
@@ -16,7 +16,7 @@ user_controller.post("/signup", signupUser);
 user_controller.post("/login", loginUser);
 user_controller.post("/logout", logoutUser);
 user_controller.post("/renew", renewUser);
-user_controller.delete("/:id", deleteUser);
-user_controller.post("/:id/password", updateUserPassword);
+user_controller.put("/update", updateUserPassword);
+user_controller.delete("/delete", deleteUser);
 
 export default user_controller;

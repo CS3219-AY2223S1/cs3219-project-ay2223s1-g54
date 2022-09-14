@@ -7,9 +7,9 @@ import {
   ormEmailExists,
   ormDeleteUserById,
   ormUpdateUserPassword,
+  ormGetPasswordHash,
 } from "../model/user-orm.js";
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../config.js";
-import { request, response } from "express";
 
 let refreshTokens = [];
 
@@ -48,29 +48,48 @@ export const signupUser = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
-  const decodedToken = jwt.verify(request.token, ACCESS_TOKEN_SECRET);
+  const { accessToken } = req.body;
+  const decodedToken = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
 
-  if (!req.token || !decodedToken.id) {
-    return res.status(401).json({ error: "Token missing or invalid" });
+  if (!accessToken || !decodedToken.userId) {
+    return res.status(401).json({ error: "Access Token missing or invalid" });
   }
 
-  const deletedUser = await ormDeleteUserById(decodedToken.id);
-  refreshTokens = refreshTokens.filter((token) => token !== req.token);
+  await ormDeleteUserById(decodedToken.userId);
+  refreshTokens = refreshTokens.filter((token) => token !== accessToken);
   return res.status(204).end();
 };
 
 export const updateUserPassword = async (req, res) => {
-  const decodedToken = jwt.verify(request.token, ACCESS_TOKEN_SECRET);
+  const { accessToken } = req.body;
 
-  if (!req.token || !decodedToken.email) {
-    return res.status(401).json({ error: "Token missing or invalid" });
+  const decodedToken = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
+
+  if (!accessToken || !decodedToken.userId) {
+    return res.status(401).json({ error: "Access Token missing or invalid" });
   }
 
-  const { email, oldPassword, newPassword } = req.body;
-  // add compare oldPassword
+  const { oldPassword, newPassword } = req.body;
+
+  if (oldPassword === newPassword) {
+    return res
+      .status(400)
+      .json({ message: "New password cannot be old password" });
+  }
+
+  const oldPasswordHash = await ormGetPasswordHash(decodedToken.userId);
+  const isOldPasswordCorrect = await bcrypt.compare(
+    oldPassword,
+    oldPasswordHash
+  );
+
+  if (!isOldPasswordCorrect) {
+    return res.status(400).json({ message: "Old password incorrect" });
+  }
+
   const SALT_ROUNDS = 10;
-  const newPasswordHash = bcrypt.hash(newPassword, SALT_ROUNDS);
-  const updatedUser = await ormUpdateUserPassword(newPasswordHash);
+  const newPasswordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+  await ormUpdateUserPassword(decodedToken.userId, newPasswordHash);
   return res.status(200).json({ message: "Password has been updated" });
 };
 
@@ -89,7 +108,8 @@ export const loginUser = async (req, res) => {
     if (!isCorrectPassword)
       return res.status(401).json({ message: "Incorrect password" });
 
-    const accessTokenObject = await allocateAccessToken(email);
+    const userId = result[0]["id"];
+    const accessTokenObject = await allocateAccessToken(userId);
     return res.status(200).json({ accessTokenObject });
   } catch (err) {
     return res.status(500).json({ message: "Unable to login user" });
@@ -119,7 +139,7 @@ export const renewUser = async (req, res) => {
 export const renewAccessToken = async (refreshToken) => {
   try {
     const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
-    const accessToken = await generateAccessToken({ email: decoded.email });
+    const accessToken = await generateAccessToken({ userId: decoded.userId });
 
     return accessToken;
   } catch (err) {
@@ -127,9 +147,9 @@ export const renewAccessToken = async (refreshToken) => {
   }
 };
 
-const allocateAccessToken = async (email) => {
-  const accessToken = await generateAccessToken(email);
-  const refreshToken = jwt.sign({ email }, REFRESH_TOKEN_SECRET);
+const allocateAccessToken = async (userId) => {
+  const accessToken = await generateAccessToken(userId);
+  const refreshToken = jwt.sign({ userId }, REFRESH_TOKEN_SECRET);
   refreshTokens.push(refreshToken);
 
   return { accessToken, refreshToken };
@@ -139,8 +159,8 @@ const deallocateAccessToken = async (refreshToken) => {
   refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
 };
 
-const generateAccessToken = async (email) => {
-  return jwt.sign({ email }, ACCESS_TOKEN_SECRET, {
+const generateAccessToken = async (userId) => {
+  return jwt.sign({ userId }, ACCESS_TOKEN_SECRET, {
     algorithm: "HS256",
     expiresIn: "15m",
   });
