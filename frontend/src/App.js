@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LandingPage from "./components/LandingPage";
 import SignupPage from "./components/SignupPage";
 import LoginPage from "./components/LoginPage";
 import MatchingPage from "./components/MatchingPage";
@@ -11,7 +12,7 @@ const App = () => {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<SignupPage />} />
+          <Route exact path="/" element={<LandingPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/matching" element={<MatchingPage />} />
