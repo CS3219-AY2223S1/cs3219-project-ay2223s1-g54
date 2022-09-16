@@ -10,7 +10,6 @@ import {
 } from "../configs";
 
 function MatchingPage() {
-  useEffect(() => {});
   const navigate = useNavigate();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
