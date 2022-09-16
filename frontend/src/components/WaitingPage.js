@@ -27,12 +27,6 @@ function WaitingPage() {
     });
   };
 
-  useEffect(() => {
-    if (localStorage.getItem("token") == null) navigate("/login");
-
-    initialisePage();
-  });
-
   const navigate = useNavigate();
   const handleCancel = () => {
     navigate("/matching");
