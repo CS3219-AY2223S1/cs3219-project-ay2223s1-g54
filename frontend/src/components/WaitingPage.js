@@ -8,6 +8,9 @@ import { useEffect } from "react";
 import { URI_MATCHING_SVC, URL_MATCHING_SVC } from "../configs.js";
 
 function WaitingPage() {
+  useEffect(() => {
+    initialisePage();
+  });
   const initialisePage = async () => {
     socket.init(URI_MATCHING_SVC);
     socket.get().on("connect", async () => {
