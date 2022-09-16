@@ -17,10 +17,6 @@ function MatchingPage() {
   const cookies = new Cookies();
   axios.defaults.withCredentials = true;
 
-  useEffect(() => {
-    if (cookies.get("refreshToken") == null) navigate("/login");
-  });
-
   const handleMatch = (difficulty) => {
     localStorage.setItem("difficulty", difficulty);
     navigate("/waiting");
