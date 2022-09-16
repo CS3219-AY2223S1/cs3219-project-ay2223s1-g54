@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 //import { CloseSharpIcon } from '@mui/icons-material/CloseSharp';
 import socket from "../socket.js";
 import axios from "axios";
@@ -8,11 +9,12 @@ import { useEffect } from "react";
 import { URI_MATCHING_SVC, URL_MATCHING_SVC } from "../configs.js";
 
 function WaitingPage() {
+  const cookies = new Cookies();
   const initialisePage = async () => {
     socket.init(URI_MATCHING_SVC);
     socket.get().on("connect", async () => {
       await axios.post(URL_MATCHING_SVC, {
-        email: localStorage.getItem("token")[0],
+        email: "",
         difficulty: localStorage.getItem("difficulty"),
         start_time: new Date().getTime(),
         socket_id: socket.get().id,
@@ -26,6 +28,11 @@ function WaitingPage() {
       navigate("/collaboration");
     });
   };
+
+  useEffect(() => {
+    if (cookies.get("refreshToken") == null) navigate("/login");
+    initialisePage();
+  });
 
   const navigate = useNavigate();
   const handleCancel = () => {
