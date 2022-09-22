@@ -83,7 +83,6 @@ export const updateUserPassword = async (id, oldPassword, newPassword) => {
   try {
     passwordMatch = await bcrypt.compare(oldPassword, passwordHash);
   } catch (err) {
-    console.log(err);
     return Error(constants.STATUS_INTERNAL_SERVER_ERROR);
   }
 
@@ -102,7 +101,6 @@ export const updateUserPassword = async (id, oldPassword, newPassword) => {
     );
     return updatedUser;
   } catch (err) {
-    console.log(err);
     throw Error(constants.STATUS_INTERNAL_SERVER_ERROR);
   }
 };

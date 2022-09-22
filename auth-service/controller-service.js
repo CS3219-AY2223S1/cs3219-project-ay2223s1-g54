@@ -36,8 +36,13 @@ export const generateAccessToken = async (req, res) => {
   }
 
   const userData = { userId };
-  const accessToken = await _generateAccessToken(userData);
-  const refreshToken = await _generateRefreshToken(userData);
+  let accessToken, refreshToken;
+  try {
+    accessToken = await _generateAccessToken(userData);
+    refreshToken = await _generateRefreshToken(userData);
+  } catch (err) {
+    return res.sendStatus(constants.STATUS_INTERNAL_SERVER_ERROR);
+  }
   refreshTokens.push(refreshToken);
 
   return res.status(constants.STATUS_OK).json({ accessToken, refreshToken });
@@ -53,7 +58,13 @@ export const renewAccessToken = async (req, res) => {
     return res.sendStatus(constants.STATUS_FORBIDDEN);
   }
 
-  const accessToken = await _renewAccessToken(refreshToken);
+  let accessToken;
+  try {
+    accessToken = await _renewAccessToken(refreshToken);
+  } catch (err) {
+    return res.sendStatus(constants.STATUS_INTERNAL_SERVER_ERROR);
+  }
+
   if (!accessToken) {
     return res.sendStatus(constants.STATUS_BAD_REQUEST);
   }
@@ -99,11 +110,7 @@ const _generateRefreshToken = async (payload) => {
 };
 
 const _renewAccessToken = async (refreshToken) => {
-  try {
-    const decoded = jwt.verify(refreshToken, configs.REFRESH_TOKEN_SECRET);
-    const accessToken = await _generateAccessToken({ userId: decoded.userId });
-    return accessToken;
-  } catch (err) {
-    return null;
-  }
+  const decoded = jwt.verify(refreshToken, configs.REFRESH_TOKEN_SECRET);
+  const accessToken = await _generateAccessToken({ userId: decoded.userId });
+  return accessToken;
 };
