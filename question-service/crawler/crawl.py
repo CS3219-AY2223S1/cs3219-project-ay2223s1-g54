@@ -123,12 +123,22 @@ class Crawler:
         if question_object["isPaidOnly"]:
             return None
 
+
+        topicTags = [] 
+        for topicTag in question_object["topicTags"]:
+            topicTags.append({ "name": topicTag["name"], "slug": topicTag["slug"] })
+
+        codeSnippets = [] 
+        for codeSnippet in question_object["codeSnippets"]:
+            codeSnippets.append({ "name": codeSnippet["lang"], "slug": codeSnippet["langSlug"], "code": codeSnippet["code"] })
+
         return {
             "id": question_object["questionId"],
             "title": question_object["title"],
-            "content": question_object["content"],
             "difficulty": question_object["difficulty"],
-            "envInfo": question_object["envInfo"]
+            "topicTags": topicTags,
+            "content": question_object["content"],
+            "codeSnippets": codeSnippets
         }
 
 
