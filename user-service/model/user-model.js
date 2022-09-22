@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 
 var Schema = mongoose.Schema;
@@ -17,24 +16,29 @@ let UserModelSchema = new Schema({
     type: String,
     required: true,
   },
+  refreshToken: {
+    type: String,
+    reqired: false,
+    unique: true,
+  },
   createdAt: {
     type: Date,
     immutable: true,
-    default: () => Date.now()
+    default: () => Date.now(),
   },
   updatedAt: {
     type: Date,
-    default: () => Date.now()
-  }
+    default: () => Date.now(),
+  },
 });
 
-UserModelSchema.set('toJSON', {
+UserModelSchema.set("toJSON", {
   transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-    delete returnedObject.passwordHash
-  }
-})
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+    delete returnedObject.passwordHash;
+  },
+});
 
 export default mongoose.model("UserModel", UserModelSchema);
