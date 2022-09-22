@@ -11,25 +11,22 @@ export const setDefaultResponseHeaders = async (req, res) => {
 
 export const verifyAccessToken = async (req, res) => {
   const { accessToken, userId } = req.body;
-  if (accessToken === null || decodedToken.userId === null) {
-    res.sendStatus(constants.STATUS_BAD_REQUEST);
-    return;
+  if (!accessToken || !decodedToken.userId) {
+    return res.sendStatus(constants.STATUS_BAD_REQUEST);
   }
 
   let decodedToken;
   try {
     decodedToken = jwt.verify(accessToken, configs.ACCESS_TOKEN_SECRET);
   } catch (err) {
-    res.sendStatus(constants.STATUS_GONE);
-    return;
+    return res.sendStatus(constants.STATUS_GONE);
   }
 
   if (decodedToken.userId !== userId) {
-    res.sendStatus(constants.STATUS_BAD_REQUEST);
-    return;
+    return res.sendStatus(constants.STATUS_BAD_REQUEST);
   }
 
-  res.sendStatus(constants.STATUS_OK);
+  return res.sendStatus(constants.STATUS_OK);
 };
 
 export const generateAccessToken = async (req, res) => {
@@ -43,38 +40,35 @@ export const generateAccessToken = async (req, res) => {
   const refreshToken = await _generateRefreshToken(userData);
   refreshTokens.push(refreshToken);
 
-  res.status(constants.STATUS_OK).json({ accessToken, refreshToken });
+  return res.status(constants.STATUS_OK).json({ accessToken, refreshToken });
 };
 
 export const renewAccessToken = async (req, res) => {
   const { refreshToken } = req.body;
   if (!refreshToken) {
-    res.sendStatus(constants.STATUS_BAD_REQUEST);
-    return;
+    return res.sendStatus(constants.STATUS_BAD_REQUEST);
   }
 
   if (!refreshTokens.includes(refreshToken)) {
-    res.sendStatus(constants.STATUS_FORBIDDEN);
-    return;
+    return res.sendStatus(constants.STATUS_FORBIDDEN);
   }
 
   const accessToken = await _renewAccessToken(refreshToken);
-  if (accessToken == null) {
-    res.sendStatus(constants.STATUS_BAD_REQUEST);
-    return;
+  if (!accessToken) {
+    return res.sendStatus(constants.STATUS_BAD_REQUEST);
   }
-  res.status(constants.STATUS_OK).json({ accessToken });
+
+  return res.status(constants.STATUS_OK).json({ accessToken });
 };
 
 export const revokeAccessToken = async (req, res) => {
   const { refreshToken } = req.body;
-  if (refreshToken == null) {
-    res.sendStatus(constants.STATUS_BAD_REQUEST);
-    return;
+  if (!refreshToken) {
+    return res.sendStatus(constants.STATUS_BAD_REQUEST);
   }
 
   refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-  res.sendStatus(constants.STATUS_OK);
+  return res.sendStatus(constants.STATUS_OK);
 };
 
 export const throwInvalidRequest = async (req, res) => {
