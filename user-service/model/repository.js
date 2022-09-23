@@ -1,7 +1,6 @@
-import "dotenv/config";
 import mongoose from "mongoose";
 import UserModel from "./user-model.js";
-import { MONGOGB_URI } from "../config.js";
+import { MONGOGB_URI } from "../configs.js";
 
 mongoose.connect(MONGOGB_URI, {
   useNewUrlParser: true,
@@ -11,30 +10,50 @@ mongoose.connect(MONGOGB_URI, {
 let db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-export async function createUser(params) {
-  return UserModel.create(params);
-}
+export const emailExists = async (email) => {
+  const exists = await UserModel.exists({ email });
+  return exists;
+};
 
-export async function deleteUserById(id) {
-  return UserModel.findByIdAndDelete(id);
-}
+export const usernameExists = async (username) => {
+  const exists = await UserModel.exists({ username });
+  return exists;
+};
 
-export async function updateUser(userId, passwordHash) {
-  const user = await UserModel.findById(userId);
-  user.passwordHash = passwordHash;
-  user.save();
+export const getUserById = async (id) => {
+  const user = await UserModel.findById(id);
   return user;
-}
+};
 
-export async function usernameExists(username) {
-  return UserModel.exists({ username });
-}
+export const getUserByEmail = async (email) => {
+  const user = await UserModel.findOne({ email: email });
+  return user;
+};
 
-export async function emailExists(email) {
-  return UserModel.exists({ email });
-}
+export const createUser = async (email, username, passwordHash) => {
+  const createdUser = await UserModel.create({ email, username, passwordHash });
+  return createdUser;
+};
 
-export async function getPasswordHash(userId) {
-  const user = await UserModel.findById(userId);
-  return user.passwordHash;
-}
+export const updateUser = async (
+  id,
+  email,
+  username,
+  passwordHash,
+  refreshToken
+) => {
+  const updatedUser = await UserModel.findById(id);
+  updatedUser.email = email;
+  updatedUser.username = username;
+  updatedUser.passwordHash = passwordHash;
+  updatedUser.refreshToken = refreshToken;
+  updatedUser.updatedAt = Date.now();
+  console.log(updateUser);
+  await updatedUser.save();
+  return updatedUser;
+};
+
+export const deleteUser = async (id) => {
+  const deletedUser = await UserModel.findByIdAndDelete(id);
+  return deletedUser;
+};
