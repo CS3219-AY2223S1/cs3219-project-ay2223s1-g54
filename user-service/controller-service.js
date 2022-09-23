@@ -7,7 +7,7 @@ export const setDefaultResponseHeaders = async (req, res) => {
 };
 
 export const getUserId = async (req, res) => {
-  const { email } = req.body;
+  const { email } = req.query;
   try {
     const id = await orm.getUserId(email);
     return res.status(constants.STATUS_OK).json({ result: id });
