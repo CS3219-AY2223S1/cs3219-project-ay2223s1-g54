@@ -49,10 +49,19 @@ authController.post("/login", async (req, res) => {
       httpOnly: true,
       path: "/api/auth/renewToken",
     });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      path: "/api/auth/logout",
+    });
+
     return res.status(constants.STATUS_OK).json({ accessToken });
   } catch (err) {
     return res.sendStatus(constants.STATUS_UNAUTHORISED);
   }
+});
+
+authController.post("/logout", checkAuthenticationMiddleware, (req, res) => {
+  res.sendStatus(200);
 });
 
 export default authController;
