@@ -61,7 +61,17 @@ authController.post("/login", async (req, res) => {
 });
 
 authController.post("/logout", checkAuthenticationMiddleware, (req, res) => {
-  res.sendStatus(200);
+  const { refreshToken } = req.cookies;
+  if (!refreshToken) {
+    return res.sendStatus(constants.STATUS_BAD_REQUEST);
+  }
+
+  try {
+    authAxios.post("/revokeToken", { refreshToken });
+    return res.sendStatus(constants.STATUS_OK);
+  } catch (err) {
+    return res.sendStatus(constants.STATUS_INTERNAL_SERVER_ERROR);
+  }
 });
 
 export default authController;
