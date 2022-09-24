@@ -35,18 +35,11 @@ export const createUser = async (email, username, passwordHash) => {
   return createdUser;
 };
 
-export const updateUser = async (
-  id,
-  email,
-  username,
-  passwordHash,
-  refreshToken
-) => {
+export const updateUser = async (id, email, username, passwordHash) => {
   const updatedUser = await UserModel.findById(id);
   updatedUser.email = email;
   updatedUser.username = username;
   updatedUser.passwordHash = passwordHash;
-  updatedUser.refreshToken = refreshToken;
   updatedUser.updatedAt = Date.now();
   console.log(updateUser);
   await updatedUser.save();

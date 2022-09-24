@@ -77,7 +77,7 @@ export const updateUserPassword = async (id, oldPassword, newPassword) => {
     throw Error(constants.STATUS_NOT_FOUND);
   }
 
-  const { email, username, passwordHash, refreshToken } = user;
+  const { email, username, passwordHash } = user;
 
   let passwordMatch;
   try {
@@ -96,8 +96,7 @@ export const updateUserPassword = async (id, oldPassword, newPassword) => {
       id,
       email,
       username,
-      passwordHash,
-      refreshToken
+      passwordHash
     );
     return updatedUser;
   } catch (err) {

@@ -16,11 +16,6 @@ let UserModelSchema = new Schema({
     type: String,
     required: true,
   },
-  refreshToken: {
-    type: String,
-    reqired: false,
-    unique: true,
-  },
   createdAt: {
     type: Date,
     immutable: true,
