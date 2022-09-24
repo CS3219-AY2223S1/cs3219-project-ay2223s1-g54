@@ -21,6 +21,20 @@ userController.post("/", async (req, res) => {
   }
 });
 
+userController.put("/", checkAuthenticationMiddleware, async (req, res) => {
+  const { userId, oldPassword, newPassword } = req.body;
+  if (!userId || !oldPassword || !newPassword) {
+    return res.sendStatus(constants.STATUS_BAD_REQUEST);
+  }
+
+  try {
+    await userAxios.put("/", { id: userId, oldPassword, newPassword });
+    return res.sendStatus(constants.STATUS_OK);
+  } catch (err) {
+    return res.sendStatus(err.response.status);
+  }
+});
+
 userController.delete("/", checkAuthenticationMiddleware, async (req, res) => {
   const { userId } = req.body;
   if (!userId) {

@@ -41,7 +41,7 @@ export const updateUser = async (id, email, username, passwordHash) => {
   updatedUser.username = username;
   updatedUser.passwordHash = passwordHash;
   updatedUser.updatedAt = Date.now();
-  console.log(updateUser);
+
   await updatedUser.save();
   return updatedUser;
 };
