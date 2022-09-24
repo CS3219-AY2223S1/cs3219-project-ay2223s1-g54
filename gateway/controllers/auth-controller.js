@@ -7,6 +7,17 @@ const authController = express.Router();
 const authAxios = await getAxios(configs.AUTH_SERVICE_URI);
 const userAxios = await getAxios(configs.USER_SERVICE_URI);
 
+const setRefreshTokenCookies = async (req, res, refreshToken) => {
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    path: "/api/auth/renewToken",
+  });
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    path: "/api/auth/logout",
+  });
+};
+
 export const checkAuthenticationMiddleware = async (req, res, next) => {
   const accessToken = req.get("Authorization")?.split("Bearer ")[1];
 
@@ -24,6 +35,23 @@ export const checkAuthenticationMiddleware = async (req, res, next) => {
     return res.sendStatus(constants.STATUS_FORBIDDEN);
   }
 };
+
+authController.post("/renewToken", async (req, res) => {
+  const { refreshToken } = req.cookies;
+  if (!refreshToken) {
+    return res.sendStatus(constants.STATUS_BAD_REQUEST);
+  }
+
+  try {
+    const resToken = await authAxios.post("/renewToken", { refreshToken });
+    const { accessToken } = resToken.data;
+
+    setRefreshTokenCookies(req, res, refreshToken);
+    return res.status(constants.STATUS_OK).json({ accessToken });
+  } catch (err) {
+    return res.sendStatus(constants.STATUS_INTERNAL_SERVER_ERROR);
+  }
+});
 
 authController.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -45,14 +73,7 @@ authController.post("/login", async (req, res) => {
     const resToken = await authAxios.post("/generateToken", { userId });
     const { accessToken, refreshToken } = resToken.data;
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      path: "/api/auth/renewToken",
-    });
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      path: "/api/auth/logout",
-    });
+    setRefreshTokenCookies(req, res, refreshToken);
 
     return res.status(constants.STATUS_OK).json({ accessToken });
   } catch (err) {
@@ -60,18 +81,22 @@ authController.post("/login", async (req, res) => {
   }
 });
 
-authController.post("/logout", checkAuthenticationMiddleware, (req, res) => {
-  const { refreshToken } = req.cookies;
-  if (!refreshToken) {
-    return res.sendStatus(constants.STATUS_BAD_REQUEST);
-  }
+authController.post(
+  "/logout",
+  checkAuthenticationMiddleware,
+  async (req, res) => {
+    const { refreshToken } = req.cookies;
+    if (!refreshToken) {
+      return res.sendStatus(constants.STATUS_BAD_REQUEST);
+    }
 
-  try {
-    authAxios.post("/revokeToken", { refreshToken });
-    return res.sendStatus(constants.STATUS_OK);
-  } catch (err) {
-    return res.sendStatus(constants.STATUS_INTERNAL_SERVER_ERROR);
+    try {
+      await authAxios.post("/revokeToken", { refreshToken });
+      return res.sendStatus(constants.STATUS_OK);
+    } catch (err) {
+      return res.sendStatus(constants.STATUS_INTERNAL_SERVER_ERROR);
+    }
   }
-});
+);
 
 export default authController;
