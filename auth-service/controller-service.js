@@ -25,7 +25,8 @@ export const verifyAccessToken = async (req, res) => {
     return res.sendStatus(constants.STATUS_FORBIDDEN);
   }
 
-  return res.sendStatus(constants.STATUS_OK);
+  const result = { userId: decodedToken.userId };
+  return res.status(constants.STATUS_OK).json(result);
 };
 
 export const generateAccessToken = async (req, res) => {

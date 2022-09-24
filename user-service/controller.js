@@ -7,7 +7,7 @@ controller.all(service.setDefaultResponseHeaders);
 controller.get("/", service.getUserId);
 controller.post("/", service.createUser);
 controller.put("/", service.updateUserPassword);
-controller.delete("/", service.deleteUser);
+controller.delete("/:id", service.deleteUser);
 controller.post("/verify", service.verifyUser);
 controller.all(service.throwInvalidRequest);
 

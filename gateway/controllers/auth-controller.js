@@ -26,7 +26,10 @@ export const checkAuthenticationMiddleware = async (req, res, next) => {
   }
 
   try {
-    await authAxios.post("/verifyToken", { accessToken });
+    const resVerify = await authAxios.post("/verifyToken", { accessToken });
+    const { userId } = resVerify.data;
+
+    req.body.userId = userId;
     next();
   } catch (err) {
     if (err.response.status === constants.STATUS_GONE) {
