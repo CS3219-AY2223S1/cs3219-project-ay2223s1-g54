@@ -7,7 +7,7 @@ export const setDefaultResponseHeaders = async (req, res) => {
 };
 
 export const getUserId = async (req, res) => {
-  const { email } = req.body;
+  const { email } = req?.query;
   try {
     const id = await orm.getUserId(email);
     return res.status(constants.STATUS_OK).json({ result: id });
@@ -17,7 +17,7 @@ export const getUserId = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  const { email, username, password } = req.body;
+  const { email, username, password } = req?.body;
   try {
     await orm.createUser(email, username, password);
     return res.sendStatus(constants.STATUS_OK);
@@ -27,7 +27,7 @@ export const createUser = async (req, res) => {
 };
 
 export const updateUserPassword = async (req, res) => {
-  const { id, oldPassword, newPassword } = req.body;
+  const { id, oldPassword, newPassword } = req?.body;
   try {
     await orm.updateUserPassword(id, oldPassword, newPassword);
     return res.sendStatus(constants.STATUS_OK);
@@ -37,7 +37,7 @@ export const updateUserPassword = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req?.params;
   try {
     await orm.deleteUser(id);
     return res.sendStatus(constants.STATUS_OK);
@@ -47,7 +47,7 @@ export const deleteUser = async (req, res) => {
 };
 
 export const verifyUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req?.body;
   try {
     const match = await orm.verifyUser(email, password);
     return res.status(constants.STATUS_OK).json({ result: match });

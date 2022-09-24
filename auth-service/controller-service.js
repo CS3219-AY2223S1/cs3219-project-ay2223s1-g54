@@ -10,8 +10,8 @@ export const setDefaultResponseHeaders = async (req, res) => {
 };
 
 export const verifyAccessToken = async (req, res) => {
-  const { accessToken, userId } = req.body;
-  if (!accessToken || !decodedToken.userId) {
+  const { accessToken } = req.body;
+  if (!accessToken) {
     return res.sendStatus(constants.STATUS_BAD_REQUEST);
   }
 
@@ -19,14 +19,14 @@ export const verifyAccessToken = async (req, res) => {
   try {
     decodedToken = jwt.verify(accessToken, configs.ACCESS_TOKEN_SECRET);
   } catch (err) {
-    return res.sendStatus(constants.STATUS_GONE);
+    if (err.name === "TokenExpiredError")
+      return res.sendStatus(constants.STATUS_GONE);
+    // JsonWebTokenError
+    return res.sendStatus(constants.STATUS_FORBIDDEN);
   }
 
-  if (decodedToken.userId !== userId) {
-    return res.sendStatus(constants.STATUS_BAD_REQUEST);
-  }
-
-  return res.sendStatus(constants.STATUS_OK);
+  const result = { userId: decodedToken.userId };
+  return res.status(constants.STATUS_OK).json(result);
 };
 
 export const generateAccessToken = async (req, res) => {
