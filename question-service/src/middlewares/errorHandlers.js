@@ -1,4 +1,4 @@
-import * as statusCodes from "../enums/statusCodes.js";
+import * as statusCodes from "../constants/statusCodes.js";
 
 export const catchAllErrorHandler = async (err, req, res, next) => {
   if (!err) {

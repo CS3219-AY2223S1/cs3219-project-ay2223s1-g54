@@ -1,25 +1,28 @@
-import * as difficultyIndex from "../enums/difficultyIndex.js";
+import * as responseMessages from "../constants/responseMessages.js";
+import { difficultyEnum } from "../constants/difficultyEnum.js";
 import { QuestionModel } from "../db/models/Question.js";
-import { NoQuestionEntries } from "../exceptions/NoQuestionEnties.js";
+import { NoQuestionEntries } from "../exceptions/NoQuestionEntries.js";
 
 export const getRandomQuestion = async (index) => {
+  const isEasy = index === difficultyEnum.Easy;
+  const isMedium = index === difficultyEnum.Medium;
+  const isHard = index === difficultyEnum.Hard;
+
   let difficulty = null;
-  if (index === difficultyIndex.EASY) {
-    difficulty = "Easy";
-  } else if (index === difficultyIndex.MEDIUM) {
-    difficulty = "Medium";
-  } else if (index === difficultyIndex.HARD) {
-    difficulty = "Hard";
+  if (isEasy || isMedium || isHard) {
+    difficulty = Object.keys(difficultyEnum).find(
+      (key) => difficultyEnum[key] === index
+    );
   }
 
   const searchCondition = {};
   if (difficulty) {
-    searchCondition["difficulty"] = difficulty;
+    searchCondition.difficulty = difficulty;
   }
 
   const questionCount = await QuestionModel.count(searchCondition);
   if (questionCount <= 0) {
-    throw new NoQuestionEntries();
+    throw new NoQuestionEntries(responseMessages.NO_DATABASE_ENTRIES);
   }
 
   const randomIndex = Math.floor(Math.random() * questionCount);

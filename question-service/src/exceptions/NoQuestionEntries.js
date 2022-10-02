@@ -1,4 +1,4 @@
-import * as statusCodes from "../enums/statusCodes.js";
+import * as statusCodes from "../constants/statusCodes.js";
 
 export class NoQuestionEntries extends Error {
   constructor(message) {
