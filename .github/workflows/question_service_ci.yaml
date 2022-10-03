@@ -23,8 +23,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
-        working-directory: ./question-service
+        working-directory: ./backend/question-service
         run: npm ci
       - name: Run Tests
-        working-directory: ./question-service
+        working-directory: ./backend/question-service
         run: npm test
