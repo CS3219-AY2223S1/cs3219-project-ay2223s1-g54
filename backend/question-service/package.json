@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "nodemon",
     "start": "node src/index.js",
-    "test": "jest --verbose"
+    "test": "jest --verbose --runInBand"
   },
   "dependencies": {
     "cors": "^2.8.5",

@@ -1,10 +1,5 @@
 import * as userService from "../../src/services/userService.js";
 import { dbInit, dbTerminate } from "../../src/db/setup.js";
-import { IdenticalPassword } from "../../src/exceptions/IdenticalPassword.js";
-import { InformationExists } from "../../src/exceptions/InformationExists.js";
-import { PasswordNotMatch } from "../../src/exceptions/PasswordNotMatch.js";
-import { RepositoryFailure } from "../../src/exceptions/RepositoryFailure.js";
-import { UserNotFound } from "../../src/exceptions/UserNotFound.js";
 
 describe("User Service", () => {
   beforeAll(async () => {

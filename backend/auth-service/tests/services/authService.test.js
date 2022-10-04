@@ -1,6 +1,4 @@
 import * as authService from "../../src/services/authService";
-import { TokenVerficationFailure } from "../../src/exceptions/TokenVerficationFailure";
-import { TokenGenerationFailure } from "../../src/exceptions/TokenGenerationFailure";
 
 describe("Auth Service", () => {
   let accessToken, refreshToken;
@@ -19,7 +17,7 @@ describe("Auth Service", () => {
         refreshToken = tokens.refreshToken;
       };
 
-      expect(f).not.toThrow(TokenGenerationFailure);
+      await expect(f()).resolves.not.toThrow();
     });
   });
 
@@ -29,7 +27,7 @@ describe("Auth Service", () => {
         await authService.verifyAccessToken(accessToken, userId);
       };
 
-      expect(f).not.toThrow(TokenVerficationFailure);
+      await expect(f()).resolves.not.toThrow();
     });
   });
 
@@ -40,7 +38,7 @@ describe("Auth Service", () => {
         expect(accessToken).not.toBeNull();
       };
 
-      expect(f).not.toThrow(TokenGenerationFailure);
+      await expect(f()).resolves.not.toThrow();
     });
   });
 });
