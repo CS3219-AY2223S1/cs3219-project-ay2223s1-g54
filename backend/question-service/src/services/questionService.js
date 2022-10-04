@@ -1,6 +1,6 @@
 import * as responseMessages from "../constants/responseMessages.js";
 import { difficultyEnum } from "../constants/difficultyEnum.js";
-import { QuestionModel } from "../db/models/Question.js";
+import { QuestionModel } from "../db/models/question.js";
 import { NoQuestionEntries } from "../exceptions/NoQuestionEntries.js";
 
 export const getRandomQuestion = async (index) => {
