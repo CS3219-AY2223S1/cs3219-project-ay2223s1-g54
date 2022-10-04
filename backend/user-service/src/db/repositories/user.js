@@ -1,14 +1,4 @@
-import mongoose from "mongoose";
-import UserModel from "./user-model.js";
-import { MONGOGB_URI } from "../configs.js";
-
-mongoose.connect(MONGOGB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-let db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
+import { UserModel } from "../models/user.js";
 
 export const emailExists = async (email) => {
   const exists = await UserModel.exists({ email });
@@ -20,8 +10,8 @@ export const usernameExists = async (username) => {
   return exists;
 };
 
-export const getUserById = async (id) => {
-  const user = await UserModel.findById(id);
+export const getUserById = async (userId) => {
+  const user = await UserModel.findById(userId);
   return user;
 };
 
@@ -35,8 +25,8 @@ export const createUser = async (email, username, passwordHash) => {
   return createdUser;
 };
 
-export const updateUser = async (id, email, username, passwordHash) => {
-  const updatedUser = await UserModel.findById(id);
+export const updateUser = async (userId, email, username, passwordHash) => {
+  const updatedUser = await UserModel.findById(userId);
   updatedUser.email = email;
   updatedUser.username = username;
   updatedUser.passwordHash = passwordHash;
@@ -46,7 +36,7 @@ export const updateUser = async (id, email, username, passwordHash) => {
   return updatedUser;
 };
 
-export const deleteUser = async (id) => {
-  const deletedUser = await UserModel.findByIdAndDelete(id);
+export const deleteUser = async (userId) => {
+  const deletedUser = await UserModel.findByIdAndDelete(userId);
   return deletedUser;
 };

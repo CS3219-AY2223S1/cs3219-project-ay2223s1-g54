@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
-var Schema = mongoose.Schema;
-let UserModelSchema = new Schema({
+const Schema = mongoose.Schema;
+let UserSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -27,7 +27,7 @@ let UserModelSchema = new Schema({
   },
 });
 
-UserModelSchema.set("toJSON", {
+UserSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
@@ -36,4 +36,5 @@ UserModelSchema.set("toJSON", {
   },
 });
 
-export default mongoose.model("UserModel", UserModelSchema);
+const UserModel = mongoose.model("UserModel", UserSchema);
+export { UserModel };
