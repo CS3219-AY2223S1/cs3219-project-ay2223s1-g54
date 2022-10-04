@@ -1,17 +1,17 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
-import * as statusCodes from "./constants/statusCodes.js";
-import { difficultyEnum } from "./constants/difficultyEnum.js";
-import { getRandomQuestion } from "./services/questionService.js";
+import * as statusCodes from "../constants/statusCodes.js";
+import { difficultyEnum } from "../constants/difficultyEnum.js";
+import { getRandomQuestion } from "../services/questionService.js";
 
-const questionRoute = express.Router();
+const questionRoutes = express.Router();
 
-questionRoute.all((req, res) => {
+questionRoutes.all((req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
 });
 
-questionRoute.get(
+questionRoutes.get(
   "/",
   asyncHandler(async (req, res) => {
     const question = await getRandomQuestion(difficultyEnum.Any);
@@ -19,7 +19,7 @@ questionRoute.get(
   })
 );
 
-questionRoute.get(
+questionRoutes.get(
   "/easy",
   asyncHandler(async (req, res) => {
     const question = await getRandomQuestion(difficultyEnum.Easy);
@@ -27,7 +27,7 @@ questionRoute.get(
   })
 );
 
-questionRoute.get(
+questionRoutes.get(
   "/medium",
   asyncHandler(async (req, res) => {
     const question = await getRandomQuestion(difficultyEnum.Medium);
@@ -35,7 +35,7 @@ questionRoute.get(
   })
 );
 
-questionRoute.get(
+questionRoutes.get(
   "/hard",
   asyncHandler(async (req, res) => {
     const question = await getRandomQuestion(difficultyEnum.Hard);
@@ -43,4 +43,4 @@ questionRoute.get(
   })
 );
 
-export { questionRoute };
+export { questionRoutes };

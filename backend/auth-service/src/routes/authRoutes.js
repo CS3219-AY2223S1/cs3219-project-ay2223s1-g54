@@ -1,19 +1,19 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
-import * as responseMessages from "./constants/responseMessages.js";
-import * as statusCodes from "./constants/statusCodes.js";
-import * as authService from "./services/authService.js";
-import { MalformedRequest } from "./exceptions/MalformedRequest.js";
+import * as responseMessages from "../constants/responseMessages.js";
+import * as statusCodes from "../constants/statusCodes.js";
+import * as authService from "../services/authService.js";
+import { MalformedRequest } from "../exceptions/MalformedRequest.js";
 
-const authRoute = express.Router();
+const authRoutes = express.Router();
 let refreshTokens = [];
 
-authRoute.all((req, res) => {
+authRoutes.all((req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
 });
 
-authRoute.post(
+authRoutes.post(
   "/generate",
   asyncHandler(async (req, res) => {
     const { userId } = req.body;
@@ -28,7 +28,7 @@ authRoute.post(
   })
 );
 
-authRoute.post(
+authRoutes.post(
   "/verify",
   asyncHandler(async (req, res) => {
     const { accessToken, userId } = req.body;
@@ -45,7 +45,7 @@ authRoute.post(
   })
 );
 
-authRoute.post(
+authRoutes.post(
   "/renew",
   asyncHandler(async (req, res) => {
     const { refreshToken } = req.body;
@@ -62,7 +62,7 @@ authRoute.post(
   })
 );
 
-authRoute.post(
+authRoutes.post(
   "/revoke",
   asyncHandler(async (req, res) => {
     const { refreshToken } = req.body;
@@ -75,4 +75,4 @@ authRoute.post(
   })
 );
 
-export { authRoute };
+export { authRoutes };
