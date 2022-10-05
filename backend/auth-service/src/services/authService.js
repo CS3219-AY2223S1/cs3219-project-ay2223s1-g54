@@ -28,7 +28,7 @@ export const generateTokens = async (userId) => {
   return { accessToken, refreshToken };
 };
 
-export const verifyAccessToken = async (accessToken, userId) => {
+export const verifyAccessToken = async (accessToken) => {
   let decodedToken;
   try {
     decodedToken = jwt.verify(accessToken, configs.ACCESS_TOKEN_SECRET);
@@ -39,9 +39,8 @@ export const verifyAccessToken = async (accessToken, userId) => {
     throw new TokenVerficationFailure(responseMessages.TOKEN_COMPROMISED);
   }
 
-  if (decodedToken.userId !== userId) {
-    throw new TokenVerficationFailure(responseMessages.TOKEN_COMPROMISED);
-  }
+  const userId = decodedToken.userId;
+  return { userId };
 };
 
 export const renewAccessToken = async (refreshToken) => {

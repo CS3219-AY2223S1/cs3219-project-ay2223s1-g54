@@ -31,17 +31,13 @@ authRoutes.post(
 authRoutes.post(
   "/verify",
   asyncHandler(async (req, res) => {
-    const { accessToken, userId } = req.body;
+    const { accessToken } = req.body;
     if (!accessToken) {
       throw new MalformedRequest(responseMessages.MISSING_ACCESS_TOKEN_FIELD);
     }
 
-    if (!userId) {
-      throw new MalformedRequest(responseMessages.MISSING_USER_ID_FIELD);
-    }
-
-    await authService.verifyAccessToken(accessToken, userId);
-    return res.sendStatus(statusCodes.OK);
+    const { userId } = await authService.verifyAccessToken(accessToken);
+    return res.status(statusCodes.OK).json({ userId });
   })
 );
 
