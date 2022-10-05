@@ -5,5 +5,9 @@ export const MISSING_PASSWORD_FIELD = "The password field is missing";
 export const MISSING_NEW_PASSWORD_FIELD = "The new password field is missing";
 export const MISSING_REFRESH_TOKEN_COOKIE =
   "The refreshToken cookie is missing";
+export const MISSING_ACCESS_TOKEN_HEADER =
+  "The accessToken Authorization header is missing";
+export const EXPIRED_ACCESS_TOKEN_HEADER =
+  "The accessToken Authorization header has expired";
 
 export const INVALID_CREDENTIALS = "The credentials supplied were incorrect";

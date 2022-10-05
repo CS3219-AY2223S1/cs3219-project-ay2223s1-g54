@@ -3,6 +3,7 @@ import "dotenv/config";
 export const ENV = process.env.ENV || "PROD";
 export const PORT = process.env.PORT || 8000;
 
+export const FRONTEND_URI = process.env.FRONTEND_URI || "http://localhost:3000";
 export const AUTH_SERVICE_URI =
   process.env.AUTH_SERVICE_URI || "http://localhost:8001";
 export const USER_SERVICE_URI =

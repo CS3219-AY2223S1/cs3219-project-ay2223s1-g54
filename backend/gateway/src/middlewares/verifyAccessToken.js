@@ -1,12 +1,15 @@
 import * as configs from "../configs.js";
+import * as responseMessages from "../constants/responseMessages.js";
 import * as statusCodes from "../constants/statusCodes.js";
+import { ExpiredAccessToken } from "../exceptions/ExpiredAccessToken.js";
+import { MissingAccessToken } from "../exceptions/MissingAccessToken.js";
 import { getAxios } from "../utils/axios.js";
 
 export const verifyAccessToken = async (req, res, next) => {
   const accessToken = req.get("Authorization")?.split("Bearer ")[1];
 
   if (!accessToken) {
-    return res.sendStatus(statusCodes.BAD_REQUEST);
+    throw new MissingAccessToken(responseMessages.MISSING_ACCESS_TOKEN_HEADER);
   }
 
   try {
@@ -19,9 +22,11 @@ export const verifyAccessToken = async (req, res, next) => {
   } catch (err) {
     if (err.response) {
       if (err.response.status === statusCodes.GONE) {
-        return res.sendStatus(statusCodes.GONE);
+        throw new ExpiredAccessToken(
+          responseMessages.EXPIRED_ACCESS_TOKEN_HEADER
+        );
       }
     }
-    return res.sendStatus(statusCodes.FORBIDDEN);
+    throw new UnknownError(err.message);
   }
 };
