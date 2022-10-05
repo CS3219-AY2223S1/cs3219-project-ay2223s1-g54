@@ -13,7 +13,6 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import { URL_USER_SVC_CREATE_USER } from "../configs";
-import { STATUS_CODE_CONFLICT, STATUS_CODE_CREATED } from "../constants";
 import { Link as LinkRoute, useNavigate } from "react-router-dom";
 
 function SignupPage() {
@@ -30,24 +29,30 @@ function SignupPage() {
 
   const handleSignup = async () => {
     setIsSignupSuccess(false);
-    const res = await axios
-      .post(URL_USER_SVC_CREATE_USER, {
+
+    if (password !== confirmPassword) {
+      setErrorDialog("Validation Error", "Password fields must match");
+      return;
+    }
+
+    try {
+      await axios.post(URL_USER_SVC_CREATE_USER, {
         email,
         username,
         password,
-        confirmPassword,
-      })
-      .catch((err) => {
-        if (err.response.status === STATUS_CODE_CONFLICT) {
-          setErrorDialog("This email/username already exists");
-        } else {
-          setErrorDialog("Please try again later");
-        }
       });
-    if (res && res.status === STATUS_CODE_CREATED) {
-      setSuccessDialog("Account successfully created");
-      setIsSignupSuccess(true);
+    } catch (err) {
+      if (err?.response?.data?.error) {
+        const { name, message } = err.response.data.error;
+        setErrorDialog(name, message);
+        return;
+      }
+      setErrorDialog("Unknown Error", "Please try again later");
+      return;
     }
+    setSuccessDialog("Account successfully created");
+
+    setIsSignupSuccess(true);
   };
 
   const closeDialog = () => setIsDialogOpen(false);
@@ -58,9 +63,9 @@ function SignupPage() {
     setDialogMsg(msg);
   };
 
-  const setErrorDialog = (msg) => {
+  const setErrorDialog = (title, msg) => {
     setIsDialogOpen(true);
-    setDialogTitle("Error");
+    setDialogTitle(title);
     setDialogMsg(msg);
   };
 
