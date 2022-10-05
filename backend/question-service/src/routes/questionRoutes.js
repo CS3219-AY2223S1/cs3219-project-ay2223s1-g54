@@ -6,11 +6,6 @@ import { getRandomQuestion } from "../services/questionService.js";
 
 const questionRoutes = express.Router();
 
-questionRoutes.all((req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-});
-
 questionRoutes.get(
   "/",
   asyncHandler(async (req, res) => {

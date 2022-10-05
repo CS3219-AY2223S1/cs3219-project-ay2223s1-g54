@@ -8,11 +8,6 @@ import { MalformedRequest } from "../exceptions/MalformedRequest.js";
 const authRoutes = express.Router();
 let refreshTokens = [];
 
-authRoutes.all((req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-});
-
 authRoutes.post(
   "/generate",
   asyncHandler(async (req, res) => {

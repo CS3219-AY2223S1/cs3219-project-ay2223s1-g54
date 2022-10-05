@@ -7,11 +7,6 @@ import { MalformedRequest } from "../exceptions/MalformedRequest.js";
 
 const userRoutes = express.Router();
 
-userRoutes.all((req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-});
-
 userRoutes.get(
   "/",
   asyncHandler(async (req, res) => {
