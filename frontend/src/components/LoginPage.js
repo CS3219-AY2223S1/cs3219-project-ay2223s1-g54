@@ -13,7 +13,8 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import { URL_AUTH_SVC_LOGIN_USER } from "../configs";
-import { Link as LinkRoute, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -21,12 +22,19 @@ function LoginPage() {
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
   const [password, setPassword] = useState("");
+  const { setAuth } = useAuth();
 
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      await axios.post(URL_AUTH_SVC_LOGIN_USER, { email, password });
+      const res = await axios.post(URL_AUTH_SVC_LOGIN_USER, {
+        email,
+        password,
+      });
+      const { accessToken } = res.data;
+      setAuth(accessToken);
+      navigate("/matching");
     } catch (err) {
       if (err?.response?.data?.error) {
         const { name, message } = err.response.data.error;
@@ -36,7 +44,6 @@ function LoginPage() {
       setErrorDialog("Unknown Error", "Please try again later");
       return;
     }
-    navigate("/matching");
   };
 
   const closeDialog = () => setIsDialogOpen(false);
