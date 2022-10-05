@@ -13,10 +13,10 @@ export const axiosDecorator = (func) => {
       const result = await func.apply(this, args);
       return result;
     } catch (err) {
-      if (err.response.data) {
+      if (err.response.status && err.response.data) {
         const { name, message } = err.response.data.error;
         throw new MicroServiceError(
-          err.response.statusCodes,
+          err.response.status,
           `[${name}] ${message}`
         );
       }
