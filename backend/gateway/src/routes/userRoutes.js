@@ -9,7 +9,7 @@ import { verifyAccessToken } from "../middlewares/verifyAccessToken.js";
 const userRoutes = express.Router();
 
 userRoutes.post(
-  "/",
+  "/create",
   asyncHandler(async (req, res) => {
     const { email, username, password } = req.body;
     if (!email) {
@@ -25,8 +25,8 @@ userRoutes.post(
   })
 );
 
-userRoutes.put(
-  "/",
+userRoutes.post(
+  "/update",
   asyncHandler(verifyAccessToken),
   asyncHandler(async (req, res) => {
     const { userId, oldPassword, newPassword } = req.body;
@@ -43,8 +43,8 @@ userRoutes.put(
   })
 );
 
-userRoutes.delete(
-  "/",
+userRoutes.post(
+  "/delete",
   asyncHandler(verifyAccessToken),
   asyncHandler(async (req, res) => {
     const { userId } = req.body;
