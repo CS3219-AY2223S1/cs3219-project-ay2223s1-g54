@@ -11,10 +11,10 @@ import {
   Link,
 } from "@mui/material";
 import { useState } from "react";
-import axios from "axios";
 import { URL_AUTH_SVC_LOGIN_USER } from "../configs";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { usePublicAxios } from "../hooks/useAxios";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -23,17 +23,18 @@ function LoginPage() {
   const [dialogMsg, setDialogMsg] = useState("");
   const [password, setPassword] = useState("");
   const { setAuth } = useAuth();
+  const axiosPublic = usePublicAxios();
 
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post(URL_AUTH_SVC_LOGIN_USER, {
+      const res = await axiosPublic.post(URL_AUTH_SVC_LOGIN_USER, {
         email,
         password,
       });
       const { accessToken } = res.data;
-      setAuth(accessToken);
+      setAuth({ accessToken });
       navigate("/matching");
     } catch (err) {
       if (err?.response?.data?.error) {
