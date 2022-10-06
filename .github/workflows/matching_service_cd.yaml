@@ -22,7 +22,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install awsebcli
       - name: Deploy to Elastic Beanstalk
-        working-directory: ./matching-service
+        working-directory: ./backend/matching-service
         run: |
           npm install
           eb deploy --timeout 30
