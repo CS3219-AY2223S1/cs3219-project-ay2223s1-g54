@@ -13,11 +13,10 @@ import {
   Container,
   CssBaseline,
 } from "@mui/material";
-import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 import axios from "axios";
 import { URL_USER_SVC_CREATE_USER } from "../configs";
-import { Link as LinkRoute, useNavigate } from "react-router-dom";
+import { Link as LinkRoute } from "react-router-dom";
 
 function SignupPage() {
   const [email, setEmail] = useState("");
@@ -29,7 +28,6 @@ function SignupPage() {
   const [dialogMsg, setDialogMsg] = useState("");
   const [isSignupSuccess, setIsSignupSuccess] = useState(false);
 
-  // const navigate = useNavigate();
   const handleSignup = async () => {
     setIsSignupSuccess(false);
 
@@ -37,7 +35,6 @@ function SignupPage() {
       setErrorDialog("Validation Error", "Password fields must match");
       return;
     }
-    // alert(password);
     try {
       await axios.post(URL_USER_SVC_CREATE_USER, {
         email,
@@ -66,29 +63,11 @@ function SignupPage() {
     setDialogMsg(msg);
   };
 
-  // const handleEmailField =
   const setErrorDialog = (title, msg) => {
     setIsDialogOpen(true);
     setDialogTitle(title);
     setDialogMsg(msg);
   };
-
-  const useStyles = makeStyles((theme) => ({
-    paper: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    form: {
-      width: "100%",
-      marginTop: theme.spacing(1),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-  }));
-
-  const classes = useStyles();
 
   return (
     <Grid
@@ -110,78 +89,91 @@ function SignupPage() {
       >
         <Container component="main" maxWidth="xs">
           <CssBaseline />
-          <div className={classes.paper}>
+          <div>
             <Typography component="h1" variant="h2" sx={{ mt: 2 }}>
               PeerPrep
             </Typography>
-            <form className={classes.form} noValidate onSubmit={handleSignup}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                label="email"
-                autoFocus
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                label="Username"
-                autoComplete="username"
-                autoFocus
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                label="Confirm password"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                sx={{ mt: 2 }}
-              >
-                Sign Up
-              </Button>
-              <Grid container sx={{ mt: 1 }}>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="/login" variant="body2">
-                    {"Already have an account? Sign In"}
-                  </Link>
-                </Grid>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="email"
+              autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Username"
+              autoComplete="username"
+              autoFocus
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Confirm password"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+              onClick={handleSignup}
+            >
+              Sign Up
+            </Button>
+            <Grid container sx={{ mt: 1 }}>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
               </Grid>
-            </form>
+              <Grid item>
+                <Link href="/login" variant="body2">
+                  {"Already have an account? Sign In"}
+                </Link>
+              </Grid>
+            </Grid>
           </div>
         </Container>
       </Box>
+      <Dialog open={isDialogOpen} onClose={closeDialog}>
+        <DialogTitle>{dialogTitle}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{dialogMsg}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          {isSignupSuccess ? (
+            <Button component={LinkRoute} to="/login">
+              Log in
+            </Button>
+          ) : (
+            <Button onClick={closeDialog}>Done</Button>
+          )}
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 }
