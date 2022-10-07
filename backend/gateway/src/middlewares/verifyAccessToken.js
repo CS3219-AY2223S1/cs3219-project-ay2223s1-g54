@@ -1,8 +1,10 @@
 import * as configs from "../configs.js";
 import * as responseMessages from "../constants/responseMessages.js";
 import * as statusCodes from "../constants/statusCodes.js";
+import { CompromisedAccessToken } from "../exceptions/CompromisedAccessToken.js";
 import { ExpiredAccessToken } from "../exceptions/ExpiredAccessToken.js";
 import { MissingAccessToken } from "../exceptions/MissingAccessToken.js";
+import { UnknownError } from "../exceptions/UnknownError.js";
 import { getAxios } from "../utils/axios.js";
 
 export const verifyAccessToken = async (req, res, next) => {
@@ -26,6 +28,9 @@ export const verifyAccessToken = async (req, res, next) => {
           responseMessages.EXPIRED_ACCESS_TOKEN_HEADER
         );
       }
+      throw new CompromisedAccessToken(
+        responseMessages.COMPROMISED_ACCESS_TOKEN_HEADER
+      );
     }
     throw new UnknownError(err.message);
   }
