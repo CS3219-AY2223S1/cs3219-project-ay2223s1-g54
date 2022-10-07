@@ -3,9 +3,10 @@ import { findMatch } from "../services/matchService.js";
 const registerMatchHandlers = async (io, pubClient, subClient) => {
   const defaultParams = [io, pubClient, subClient];
 
-  subClient.subscribe("findMatch", (difficulty, userId) =>
-    findMatchEvent(defaultParams, difficulty, userId)
-  );
+  subClient.subscribe("findMatch", async (data) => {
+    const { difficulty, userId } = JSON.parse(data);
+    await findMatchEvent(defaultParams, difficulty, userId);
+  });
 };
 
 const findMatchEvent = async (defaultParams, difficulty, userId) => {
@@ -17,7 +18,9 @@ const findMatchEvent = async (defaultParams, difficulty, userId) => {
   }
 
   const { userId1, userId2 } = matchEntry;
-  pubClient.publish("createSocketRoom", [userId1, userId2]);
+
+  const data = JSON.stringify({ difficulty, userId1, userId2 });
+  await pubClient.publish("createSocketRoom", data);
 };
 
 export { registerMatchHandlers };

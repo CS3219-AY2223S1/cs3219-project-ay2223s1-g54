@@ -1,6 +1,6 @@
-import { app } from "./app.js";
+import { httpServer } from "./app.js";
 import { PORT } from "./configs.js";
 
-app.listen(PORT, async () => {
+httpServer.listen(PORT, async () => {
   console.log(`gateway listening at port ${PORT}`);
 });

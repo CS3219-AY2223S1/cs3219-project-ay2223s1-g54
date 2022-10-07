@@ -1,37 +1,19 @@
+import { useEffect } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
-//import { CloseSharpIcon } from '@mui/icons-material/CloseSharp';
-import socket from "../socket.js";
-import axios from "axios";
-import { useEffect } from "react";
-import { URI_MATCHING_SVC, URL_MATCHING_SVC } from "../configs.js";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 function WaitingPage() {
-  const cookies = new Cookies();
-  const initialisePage = async () => {
-    socket.init(URI_MATCHING_SVC);
-    socket.get().on("connect", async () => {
-      await axios.post(URL_MATCHING_SVC, {
-        email: "",
-        difficulty: localStorage.getItem("difficulty"),
-        start_time: new Date().getTime(),
-        socket_id: socket.get().id,
-      });
-      //socket.emit('match-request', 'email', 'difficulty', new Date().getTime(), socket.io.engine.id);
-      //socket.on('match-sucess', () => handleSuccessMatch())
-    });
-    socket.get().on("matchSuccess", async (data) => {
-      console.log("Matched, room id is: " + data.room_id);
-      localStorage.setItem("room_id", data.room_id);
-      navigate("/collaboration");
-    });
-  };
+  const location = useLocation();
+  const { auth } = useAuth();
+  const { userId, socket } = auth;
 
   useEffect(() => {
-    if (cookies.get("refreshToken") == null) navigate("/login");
-    initialisePage();
+    socket.emit("findMatch", {
+      difficulty: location.state.difficulty,
+      userId,
+    });
   });
 
   const navigate = useNavigate();

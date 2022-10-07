@@ -1,5 +1,5 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as configs from "../configs";
 import { useAuth } from "../hooks/useAuth";
@@ -9,12 +9,31 @@ function MatchingPage() {
   const navigate = useNavigate();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
+  const { userId, socket } = auth;
   const privateAxios = usePrivateAxios();
 
+  useEffect(() => {
+    // component mount, add event handlers
+    socket.on("connect", () => {
+      console.log("connected to gateway");
+      socket.emit("clientConnected", { socketId: socket.id, userId });
+    });
+
+    socket.on("disconnect", () => {
+      console.log("disconnected to gateway");
+      socket.emit("clientDisconnected", { userId });
+    });
+
+    // component unmount, remove event handlers
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+    };
+  });
+
   const handleMatch = (difficulty) => {
-    localStorage.setItem("difficulty", difficulty);
-    navigate("/waiting");
+    navigate("/waiting", { state: { difficulty } });
   };
 
   const handleLogout = async () => {
