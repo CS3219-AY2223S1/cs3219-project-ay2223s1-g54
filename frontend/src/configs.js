@@ -1,5 +1,5 @@
 const URI_GATEWAY =
-  process.env.REACT_APP_URI_GATEWAY || "http://localhost:8010";
+  process.env.REACT_APP_URI_GATEWAY || "http://localhost:8000";
 
 const PREFIX_AUTH_SVC = "/auth";
 const PREFIX_USER_SVC = "/user";

@@ -2,12 +2,12 @@ import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { useState, useEffect } from "react";
-import Cookies from "universal-cookie";
+// import Cookies from "universal-cookie";
 import Editor from "@monaco-editor/react";
 import socket from "../socket.js";
 
 function CollaborationPage() {
-  const cookies = new Cookies();
+  // const cookies = new Cookies();
   const [code, setCode] = useState("");
   const navigate = useNavigate();
   const handleCancel = () => {
@@ -31,7 +31,7 @@ function CollaborationPage() {
   };
 
   useEffect(() => {
-    if (cookies.get("refreshToken") == null) navigate("/login");
+    // if (cookies.get("refreshToken") == null) navigate("/login");
   });
 
   return (
