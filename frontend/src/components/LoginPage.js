@@ -11,8 +11,10 @@ import {
   Link,
 } from "@mui/material";
 import { useState } from "react";
-import { URL_AUTH_SVC_LOGIN_USER } from "../configs";
 import { useNavigate } from "react-router-dom";
+import { decodeToken } from "react-jwt";
+import { io } from "socket.io-client";
+import { URI_GATEWAY, URL_AUTH_SVC_LOGIN_USER } from "../configs";
 import { useAuth } from "../hooks/useAuth";
 import { usePublicAxios } from "../hooks/useAxios";
 
@@ -34,7 +36,9 @@ function LoginPage() {
         password,
       });
       const { accessToken } = res.data;
-      setAuth({ accessToken });
+      const { userId } = decodeToken(accessToken);
+      const socket = io(URI_GATEWAY);
+      setAuth({ accessToken, userId, socket });
       navigate("/matching");
     } catch (err) {
       if (err?.response?.data?.error) {
