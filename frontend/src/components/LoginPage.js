@@ -20,6 +20,7 @@ import {
   STATUS_INTERNAL_SERVER_ERROR,
 } from "../constants";
 import { Link as LinkRoute, useNavigate } from "react-router-dom";
+import ChatComponent from "./ChatComponent";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -84,6 +85,7 @@ function LoginPage() {
       width={"100%"}
       alignItems="center"
     >
+      <ChatComponent />
       <Typography variant={"h1"} marginBottom={"2rem"}>
         PeerPrep
       </Typography>
