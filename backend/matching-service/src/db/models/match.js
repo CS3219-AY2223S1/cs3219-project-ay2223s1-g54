@@ -1,0 +1,28 @@
+import mongoose from "mongoose";
+
+const Schema = mongoose.Schema;
+let MatchSchema = new Schema({
+  difficulty: {
+    type: Number,
+    required: true,
+  },
+  userId1: {
+    type: String,
+    required: true,
+  },
+  userId2: {
+    type: String,
+  },
+  createdAt: {
+    type: Date,
+    immutable: true,
+    default: () => Date.now(),
+  },
+  updatedAt: {
+    type: Date,
+    default: () => Date.now(),
+  },
+});
+
+const MatchModel = mongoose.model("MatchModel", MatchSchema);
+export { MatchModel };
