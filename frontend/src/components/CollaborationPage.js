@@ -17,7 +17,37 @@ function CollaborationPage() {
   const { roomId, difficulty, userId1, userId2, questionSet } =
     location.state.collabData;
 
+  const updateLanguage = (event) => {
+    socket.emit("sendLanguage", { roomId, language: event.target.value });
+  };
+
+  const updateCode = (code) => {
+    socket.emit("sendCurrentCode", { roomId, code });
+  };
+
+  const leaveRoom = () => {
+    socket.emit("sendLeaveRoom", { roomId });
+  };
+
   useEffect(() => {
+    socket.on("receiveLanguage", ({ language }) => {
+      for (const programmingLanguage of programmingLanguages) {
+        if (programmingLanguage.slug === language) {
+          updateCode(programmingLanguage.code);
+        }
+      }
+      setLanguageOption(language);
+    });
+
+    socket.on("receiveCurrentCode", ({ code }) => {
+      setCode(code);
+    });
+
+    socket.on("receiveLeaveRoom", () => {
+      alert("This session will be closing");
+      navigate("/matching");
+    });
+
     const getQuestion = async () => {
       const question = questionSet[0];
       const { codeSnippets, content } = question;
@@ -46,36 +76,6 @@ function CollaborationPage() {
       socket.off("receiveLeaveRoom");
     };
   }, []);
-
-  socket.on("receiveLanguage", ({ language }) => {
-    for (const programmingLanguage of programmingLanguages) {
-      if (programmingLanguage.slug === language) {
-        updateCode(programmingLanguage.code);
-      }
-    }
-    setLanguageOption(language);
-  });
-
-  socket.on("receiveCurrentCode", ({ code }) => {
-    setCode(code);
-  });
-
-  socket.on("receiveLeaveRoom", () => {
-    alert("This session will be closing");
-    navigate("/matching");
-  });
-
-  const updateLanguage = (event) => {
-    socket.emit("sendLanguage", { roomId, language: event.target.value });
-  };
-
-  const updateCode = (code) => {
-    socket.emit("sendCurrentCode", { roomId, code });
-  };
-
-  const leaveRoom = () => {
-    socket.emit("sendLeaveRoom", { roomId });
-  };
 
   return (
     <Box display="flex" flexDirection="column" width="90%">
@@ -113,7 +113,7 @@ function CollaborationPage() {
       <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
         <Button
           variant={"outlined"}
-          onClick={leaveRoom}
+          onClick={(e) => leaveRoom()}
           startIcon={<CloseSharpIcon />}
         >
           back
