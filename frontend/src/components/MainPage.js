@@ -1,33 +1,22 @@
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  TextField,
   Typography,
-  Link,
   Grid,
   CssBaseline,
   Container,
-  IconButton,
 } from "@mui/material";
-import SettingsIcon from "@mui/icons-material/Settings";
+import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { useEffect, useState } from "react";
-import * as configs from "../configs";
+import { useEffect } from "react";
+import SettingsMenu from "./SettingsMenu";
 import { usePrivateAxios } from "../hooks/useAxios";
 
 function MainPage() {
   const navigate = useNavigate();
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
   const { auth, setAuth } = useAuth();
   const { userId, socket } = auth;
-  const privateAxios = usePrivateAxios();
 
   useEffect(() => {
     // component mount, add event handlers
@@ -52,34 +41,6 @@ function MainPage() {
     navigate("/waiting", { state: { difficulty } });
   };
 
-  const handleLogout = async () => {
-    await privateAxios.post(configs.URL_AUTH_SVC_LOGOUT_USER);
-    setAuth({});
-    navigate("/login");
-  };
-
-  const handleDeleteAccount = async () => {
-    await privateAxios.post(configs.URL_USER_SVC_DELETE_USER);
-    setAuth({});
-    navigate("/login");
-  };
-
-  const handleUpdatePassword = async () => {
-    try {
-      await privateAxios.post(configs.URL_USER_SVC_UPDATE_USER, {
-        oldPassword,
-        newPassword,
-      });
-      alert("Success");
-    } catch (err) {
-      if (err?.response?.data?.error) {
-        const { name, message } = err.response.data.error;
-        alert(`${name}::${message}`);
-        return;
-      }
-      alert("Error::Please try again later");
-    }
-  };
   return (
     <Grid
       container
@@ -92,17 +53,14 @@ function MainPage() {
           <Typography
             variant={"h2"}
             align={"left"}
-            marginBottom={"2rem"}
             marginTop={"2rem"}
             marginLeft={"2rem"}
           >
-            Hi User, it is time to prepare for interview!
+            Hi, it is time to prepare for interview!
           </Typography>
         </Grid>
-        <Grid item xs={2} marginBottom={"2rem"} marginTop={"2rem"}>
-          <IconButton onClick={() => alert("Hello")}>
-            <SettingsIcon sx={{ fontSize: 50 }}></SettingsIcon>
-          </IconButton>
+        <Grid item xs={2}>
+          <SettingsMenu />
         </Grid>
       </Grid>
       <Grid

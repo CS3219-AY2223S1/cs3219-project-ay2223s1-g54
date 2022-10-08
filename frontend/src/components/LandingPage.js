@@ -1,11 +1,4 @@
-import {
-  Container,
-  Box,
-  Button,
-  Typography,
-  Grid,
-  styled,
-} from "@mui/material";
+import { Box, Button, Typography, Grid, styled } from "@mui/material";
 import { teal, cyan } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 import landingPageImage from "../landingpage.png";
