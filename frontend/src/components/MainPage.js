@@ -19,46 +19,90 @@ function MainPage() {
 
   return (
     <Grid
+      width="100vw"
+      height="100vh"
       container
       spacing={0}
       direction="row"
-      style={{ minHeight: "100vh", background: "#F1DDBF" }}
+      style={{ background: "#F1DDBF" }}
     >
       <Grid container spacing={0}>
-        <Grid item xs={10}>
+        <Grid item xs={11}>
           <Typography
             variant={"h2"}
             align={"left"}
             marginTop={"2rem"}
-            marginLeft={"2rem"}
+            marginLeft={"5rem"}
+            marginBottom={"2rem"}
+            textAlign="center"
           >
             Hi, it is time to prepare for interview!
           </Typography>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={1}>
           <SettingsMenu />
         </Grid>
       </Grid>
       <Grid
+        width="100%"
+        height="100%"
         container
-        spacing={0}
-        direction="column"
+        spacing={20}
+        direction="row"
         alignItems="center"
         justifyContent="center"
+        padding="20px"
       >
-        <Grid item xs={12}>
+        <Grid item xs={5}>
           <Box
             sx={{
-              width: 500,
-              height: 350,
+              width: "100%",
+              height: "100%",
               borderRadius: 3,
               background: "white",
               boxShadow: "0 6px 6px hsl(0deg 0% 0% / 0.3)",
               alignItems: "center",
-              justifyContent: "center",
+              padding: "20px",
             }}
           >
-            <Container component="main" maxWidth="xs">
+            <Container
+              component="main"
+              maxWidth="xs"
+              width="100%"
+              height="100%"
+            >
+              <CssBaseline />
+              <div>
+                <Typography
+                  component="h1"
+                  variant="h2"
+                  sx={{ mt: 2 }}
+                  textAlign="center"
+                >
+                  History
+                </Typography>
+              </div>
+            </Container>
+          </Box>
+        </Grid>
+        <Grid item xs={6}>
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              borderRadius: 3,
+              background: "white",
+              boxShadow: "0 6px 6px hsl(0deg 0% 0% / 0.3)",
+              alignItems: "center",
+              padding: "20px",
+            }}
+          >
+            <Container
+              component="main"
+              maxWidth="xs"
+              width="100%"
+              height="100%"
+            >
               <CssBaseline />
               <div>
                 <Typography
