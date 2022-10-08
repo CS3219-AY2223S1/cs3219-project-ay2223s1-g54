@@ -20,6 +20,12 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
     );
 
     socket.on(
+      "sendLanguage",
+      async ({ roomId, language }) =>
+        await sendLanguage(defaultParams, roomId, language)
+    );
+
+    socket.on(
       "sendCurrentCode",
       async ({ roomId, code }) =>
         await sendCollaborationCode(defaultParams, roomId, code)
@@ -46,6 +52,12 @@ const findMatchEvent = async (defaultParams, difficulty, userId) => {
   const [io, pubClient, subClient] = defaultParams;
   const data = JSON.stringify({ difficulty, userId });
   await pubClient.publish("findMatch", data);
+};
+
+const sendLanguage = async (defaultParams, roomId, language) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId, language });
+  await pubClient.publish("sendLanguage", data);
 };
 
 const sendCollaborationCode = async (defaultParams, roomId, code) => {

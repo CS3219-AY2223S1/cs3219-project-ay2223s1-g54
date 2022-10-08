@@ -9,7 +9,6 @@ function CollaborationPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [code, setCode] = useState("");
-  const [languageIndex, setLanguageIndex] = useState("");
   const [programmingLanguages, setProgrammingLanguages] = useState([]);
   const [languageOption, setLanguageOption] = useState("");
   const [questionContent, setQuestionContent] = useState("");
@@ -19,15 +18,6 @@ function CollaborationPage() {
     location.state.collabData;
 
   useEffect(() => {
-    socket.on("receiveCurrentCode", ({ code }) => {
-      setCode(code);
-    });
-
-    socket.on("receiveLeaveRoom", () => {
-      alert("This session will be closing");
-      navigate("/matching");
-    });
-
     const getQuestion = async () => {
       const question = questionSet[0];
       const { codeSnippets, content } = question;
@@ -44,7 +34,7 @@ function CollaborationPage() {
       }
 
       setProgrammingLanguages(languages);
-      setLanguageIndex(languages[0].slug);
+      setLanguageOption(languages[0].slug);
       setCode(languages[0].code);
       setQuestionContent(content);
     };
@@ -57,12 +47,34 @@ function CollaborationPage() {
     };
   }, []);
 
-  const handleCancel = () => {
-    socket.emit("sendLeaveRoom", { roomId });
+  socket.on("receiveLanguage", ({ language }) => {
+    for (const programmingLanguage of programmingLanguages) {
+      if (programmingLanguage.slug === language) {
+        updateCode(programmingLanguage.code);
+      }
+    }
+    setLanguageOption(language);
+  });
+
+  socket.on("receiveCurrentCode", ({ code }) => {
+    setCode(code);
+  });
+
+  socket.on("receiveLeaveRoom", () => {
+    alert("This session will be closing");
+    navigate("/matching");
+  });
+
+  const updateLanguage = (event) => {
+    socket.emit("sendLanguage", { roomId, language: event.target.value });
   };
 
   const updateCode = (code) => {
     socket.emit("sendCurrentCode", { roomId, code });
+  };
+
+  const leaveRoom = () => {
+    socket.emit("sendLeaveRoom", { roomId });
   };
 
   return (
@@ -72,17 +84,9 @@ function CollaborationPage() {
         <Box display={"flex"} flexDirection="column" width="100%">
           <Box display={"flex"} flexDirection="column" width="150px">
             <Select
-              value={languageIndex}
+              value={languageOption}
               label="Language"
-              onChange={(e) => {
-                for (const programmingLanguage of programmingLanguages) {
-                  if (programmingLanguage.slug === e.target.value) {
-                    updateCode(programmingLanguage.code);
-                  }
-                }
-                setLanguageIndex(e.target.value);
-                setLanguageOption(e.target.value);
-              }}
+              onChange={updateLanguage}
             >
               {programmingLanguages.map((programmingLanguage) => {
                 return (
@@ -109,7 +113,7 @@ function CollaborationPage() {
       <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
         <Button
           variant={"outlined"}
-          onClick={() => handleCancel()}
+          onClick={leaveRoom}
           startIcon={<CloseSharpIcon />}
         >
           back
