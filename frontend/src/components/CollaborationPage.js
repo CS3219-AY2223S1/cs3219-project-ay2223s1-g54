@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Button, Select, MenuItem } from "@mui/material";
+import { Box, Button, Select, MenuItem, Typography } from "@mui/material";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
@@ -8,6 +8,8 @@ import { useAuth } from "../hooks/useAuth";
 function CollaborationPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [questionTitle, setQuestionTitle] = useState("");
+  const [questionDifficulty, setQuestionDifficulty] = useState("");
   const [code, setCode] = useState("");
   const [programmingLanguages, setProgrammingLanguages] = useState([]);
   const [languageOption, setLanguageOption] = useState("");
@@ -50,7 +52,7 @@ function CollaborationPage() {
 
     const getQuestion = async () => {
       const question = questionSet[0];
-      const { codeSnippets, content } = question;
+      const { title, difficulty, codeSnippets, content } = question;
 
       const languages = [];
       for (const codeSnippet of codeSnippets) {
@@ -64,6 +66,8 @@ function CollaborationPage() {
       }
 
       setProgrammingLanguages(languages);
+      setQuestionTitle(title);
+      setQuestionDifficulty(difficulty);
       setLanguageOption(languages[0].slug);
       setCode(languages[0].code);
       setQuestionContent(content);
@@ -80,7 +84,17 @@ function CollaborationPage() {
   return (
     <Box display="flex" flexDirection="column" width="90%">
       <Box display="flex" flexDirection="row" width="100%">
-        <div dangerouslySetInnerHTML={{ __html: questionContent }} />
+        <Box display="flex" flexDirection="column" width="100%">
+          <Box display="flex" flexDirection="row" width="100%">
+            <Typography variant="button" margin="20px">
+              Question Title: <strong>{questionTitle}</strong>
+            </Typography>
+            <Typography variant="button" margin="20px">
+              Difficulty: <strong>{questionDifficulty}</strong>
+            </Typography>
+          </Box>
+          <div dangerouslySetInnerHTML={{ __html: questionContent }} />
+        </Box>
         <Box display={"flex"} flexDirection="column" width="100%">
           <Box display={"flex"} flexDirection="column" width="150px">
             <Select
