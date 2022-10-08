@@ -1,0 +1,23 @@
+{
+  "name": "collaboration-service",
+  "author": "",
+  "license": "ISC",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@socket.io/redis-adapter": "^7.2.0",
+    "dotenv": "^16.0.3",
+    "redis": "^4.3.1",
+    "socket.io": "^4.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
