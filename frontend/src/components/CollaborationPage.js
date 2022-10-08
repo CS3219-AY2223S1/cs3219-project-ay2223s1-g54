@@ -1,16 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Button, InputLabel, Select, MenuItem } from "@mui/material";
+import { Box, Button, Select, MenuItem } from "@mui/material";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { useState, useEffect } from "react";
-// import Cookies from "universal-cookie";
 import Editor from "@monaco-editor/react";
 import { useAuth } from "../hooks/useAuth";
 
 function CollaborationPage() {
-  // const cookies = new Cookies();
-  const [code, setCode] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const [code, setCode] = useState("");
   const [languageIndex, setLanguageIndex] = useState("");
   const [programmingLanguages, setProgrammingLanguages] = useState([]);
   const [languageOption, setLanguageOption] = useState("");
@@ -23,6 +21,11 @@ function CollaborationPage() {
   useEffect(() => {
     socket.on("receiveCurrentCode", ({ code }) => {
       setCode(code);
+    });
+
+    socket.on("receiveLeaveRoom", () => {
+      alert("This session will be closing");
+      navigate("/matching");
     });
 
     const getQuestion = async () => {
@@ -42,18 +45,20 @@ function CollaborationPage() {
 
       setProgrammingLanguages(languages);
       setLanguageIndex(languages[0].slug);
+      setCode(languages[0].code);
       setQuestionContent(content);
     };
 
     getQuestion(difficulty);
 
     return () => {
-      socket.off("getSynchronisedCode");
+      socket.off("receiveCurrentCode");
+      socket.off("receiveLeaveRoom");
     };
   }, []);
 
   const handleCancel = () => {
-    navigate("/matching");
+    socket.emit("sendLeaveRoom", { roomId });
   };
 
   const updateCode = (code) => {
