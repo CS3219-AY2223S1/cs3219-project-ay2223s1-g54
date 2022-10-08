@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Button, InputLabel, Select, MenuItem } from "@mui/material";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
+import { useState, useEffect } from "react";
+// import Cookies from "universal-cookie";
 import Editor from "@monaco-editor/react";
 import { useAuth } from "../hooks/useAuth";
 
 function CollaborationPage() {
+  // const cookies = new Cookies();
+  const [code, setCode] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const [code, setCode] = useState("");
   const [languageIndex, setLanguageIndex] = useState("");
   const [programmingLanguages, setProgrammingLanguages] = useState([]);
   const [languageOption, setLanguageOption] = useState("");
