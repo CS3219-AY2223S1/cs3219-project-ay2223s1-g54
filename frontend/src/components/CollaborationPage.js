@@ -4,6 +4,7 @@ import { Box, Button, InputLabel, Select, MenuItem } from "@mui/material";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import Editor from "@monaco-editor/react";
 import { useAuth } from "../hooks/useAuth";
+import ChatComponent from "./ChatComponent";
 
 function CollaborationPage() {
   const navigate = useNavigate();
@@ -90,6 +91,7 @@ function CollaborationPage() {
             />
           </div>
         </Box>
+        //<ChatComponent />
       </Box>
       <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
         <Button

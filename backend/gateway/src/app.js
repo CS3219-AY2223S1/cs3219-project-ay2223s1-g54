@@ -10,6 +10,7 @@ import { registerConnectionHandlers } from "./events/connectionEvents.js";
 import { registerMatchHandlers } from "./events/matchEvents.js";
 import { gatewayRoutes } from "./routes/gatewayRoutes.js";
 import { catchAllErrorHandler } from "./middlewares/errorHandlers.js";
+import { registerCommunicationHandlers } from "./events/communicationEvents.js";
 
 const app = express();
 const httpServer = createServer(app);
@@ -31,7 +32,7 @@ await subClient.connect();
 io.adapter(createAdapter(pubClient, subClient));
 registerConnectionHandlers(io, pubClient, subClient);
 registerMatchHandlers(io, pubClient, subClient);
-//TODO
+registerCommunicationHandlers(io, pubClient, subClient);
 
 
 export { httpServer };

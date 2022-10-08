@@ -17,7 +17,6 @@ import { io } from "socket.io-client";
 import { URI_GATEWAY, URL_AUTH_SVC_LOGIN_USER } from "../configs";
 import { useAuth } from "../hooks/useAuth";
 import { usePublicAxios } from "../hooks/useAxios";
-import ChatComponent from "./ChatComponent";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -52,6 +51,7 @@ function LoginPage() {
         setErrorDialog(name, message);
         return;
       }
+      alert(err);
       setErrorDialog("Unknown Error", "Please try again later");
       return;
     }
@@ -76,7 +76,6 @@ function LoginPage() {
       width={"100%"}
       alignItems="center"
     >
-      <ChatComponent />
       <Typography variant={"h1"} marginBottom={"2rem"}>
         PeerPrep
       </Typography>

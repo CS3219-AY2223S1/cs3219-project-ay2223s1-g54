@@ -6,16 +6,18 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import MessageComponent from "./MessageComponent.js";
-//import socket from "../socket.js";
+import { useAuth } from "../hooks/useAuth";
 
 function ChatComponent() {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
+  const { auth } = useAuth();
+  const { socket } = auth;
 
-  // socket.get().on("receieveMessage", ({ message }) => {
-  //   //update the event
-  //   updateMessageList(message);
-  // });
+  socket.on("receieveMessage", ({ message }) => {
+    //update the event
+    updateMessageList(message);
+  });
 
   const updateMessageList = (message) => {
     setMessageList((list) => [...list, message]);
@@ -33,7 +35,7 @@ function ChatComponent() {
         time: time,
       };
       // TODO
-      // socket.get().emit("sendMessage", messageData);
+      socket.get().emit("sendMessage", messageData);
       updateMessageList(messageData);
       setMessage("");
     }
