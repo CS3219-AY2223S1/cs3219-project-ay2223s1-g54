@@ -32,50 +32,51 @@ function CollaborationPage() {
   };
 
   useEffect(() => {
-    socket.on("receiveLanguage", ({ language }) => {
-      for (const programmingLanguage of programmingLanguages) {
-        if (programmingLanguage.slug === language) {
-          updateCode(programmingLanguage.code);
-        }
-      }
-      setLanguageOption(language);
-    });
-
-    socket.on("receiveCurrentCode", ({ code }) => {
-      setCode(code);
-    });
-
-    socket.on("receiveLeaveRoom", () => {
-      alert("This session will be closing");
-      navigate("/matching");
-    });
-
-    const getQuestion = async () => {
+    const setupStates = async () => {
       const question = questionSet[0];
       const { title, difficulty, codeSnippets, content } = question;
 
-      const languages = [];
+      let programmingLanguages = [];
       for (const codeSnippet of codeSnippets) {
         const { slug, name, code } = codeSnippet;
-        const language = {
+        const programmingLanguage = {
           slug,
           name,
           code,
         };
-        languages.push(language);
+        programmingLanguages.push(programmingLanguage);
       }
 
-      setProgrammingLanguages(languages);
+      setProgrammingLanguages(programmingLanguages);
       setQuestionTitle(title);
       setQuestionDifficulty(difficulty);
-      setLanguageOption(languages[0].slug);
-      setCode(languages[0].code);
+      setLanguageOption(programmingLanguages[0].slug);
+      setCode(programmingLanguages[0].code);
       setQuestionContent(content);
+
+      socket.on("receiveLanguage", ({ language }) => {
+        for (const programmingLanguage of programmingLanguages) {
+          if (programmingLanguage.slug === language) {
+            updateCode(programmingLanguage.code);
+          }
+        }
+        setLanguageOption(language);
+      });
+
+      socket.on("receiveCurrentCode", ({ code }) => {
+        setCode(code);
+      });
+
+      socket.on("receiveLeaveRoom", () => {
+        alert("This session will be closing");
+        navigate("/matching");
+      });
     };
 
-    getQuestion(difficulty);
+    setupStates(difficulty);
 
     return () => {
+      socket.off("receiveLanguage");
       socket.off("receiveCurrentCode");
       socket.off("receiveLeaveRoom");
     };
