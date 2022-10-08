@@ -10,6 +10,10 @@ function WaitingPage() {
   const { userId, socket } = auth;
 
   useEffect(() => {
+    socket.on("readyForCollab", (collabData) => {
+      navigate("/collaboration", { state: { collabData } });
+    });
+
     socket.emit("findMatch", {
       difficulty: location.state.difficulty,
       userId,

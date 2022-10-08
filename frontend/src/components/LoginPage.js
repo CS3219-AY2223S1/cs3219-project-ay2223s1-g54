@@ -37,7 +37,12 @@ function LoginPage() {
       });
       const { accessToken } = res.data;
       const { userId } = decodeToken(accessToken);
+
       const socket = io(URI_GATEWAY);
+      socket.on("connect", () => {
+        socket.emit("clientConnected", { socketId: socket.id, userId });
+      });
+
       setAuth({ accessToken, userId, socket });
       navigate("/matching");
     } catch (err) {
