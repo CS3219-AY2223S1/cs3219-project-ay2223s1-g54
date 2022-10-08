@@ -18,6 +18,12 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
       async ({ difficulty, userId }) =>
         await findMatchEvent(defaultParams, difficulty, userId)
     );
+
+    socket.on(
+      "sendCurrentCode",
+      async ({ roomId, code }) =>
+        await sendCollaborationCode(defaultParams, roomId, code)
+    );
   });
 };
 
@@ -35,6 +41,12 @@ const findMatchEvent = async (defaultParams, difficulty, userId) => {
   const [io, pubClient, subClient] = defaultParams;
   const data = JSON.stringify({ difficulty, userId });
   await pubClient.publish("findMatch", data);
+};
+
+const sendCollaborationCode = async (defaultParams, roomId, code) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId, code });
+  await pubClient.publish("sendCurrentCode", data);
 };
 
 export { registerConnectionHandlers };

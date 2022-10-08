@@ -19,6 +19,10 @@ function CollaborationPage() {
     location.state.collabData;
 
   useEffect(() => {
+    socket.on("receiveCurrentCode", ({ code }) => {
+      setCode(code);
+    });
+
     const getQuestion = async () => {
       const question = questionSet[0];
       const { codeSnippets, content } = question;
@@ -40,14 +44,18 @@ function CollaborationPage() {
     };
 
     getQuestion(difficulty);
+
+    return () => {
+      socket.off("getSynchronisedCode");
+    };
   }, []);
 
   const handleCancel = () => {
     navigate("/matching");
   };
 
-  const updateCode = (newCode) => {
-    setCode(newCode);
+  const updateCode = (code) => {
+    socket.emit("sendCurrentCode", { roomId, code });
   };
 
   return (
@@ -86,7 +94,7 @@ function CollaborationPage() {
               height="80vh"
               value={code}
               language={languageOption}
-              // onChange={() => {}}
+              onChange={updateCode}
             />
           </div>
         </Box>
