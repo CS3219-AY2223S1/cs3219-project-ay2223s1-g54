@@ -1,23 +1,18 @@
 import {
   Box,
   Button,
-  Typography,
   TextField,
-  Grid,
-  listItemClasses,
-  MenuItem,
+  Grid
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import Cookies from "universal-cookie";
-import socket from "../socket.js";
 import MessageComponent from "./MessageComponent.js";
+//import socket from "../socket.js";
 
 function ChatComponent() {
-  const cookies = new Cookies();
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
 
-  // socket.get().on("code-event", ({ message }) => {
+  // socket.get().on("receieveMessage", ({ message }) => {
   //   //update the event
   //   updateMessageList(message);
   // });
@@ -27,21 +22,21 @@ function ChatComponent() {
   };
 
   const sendMessage = () => {
-    // TODO
-    // socket.get().emit("code-event1", {
-    //   room_id: localStorage.getItem("room_id"),
-    //   name: "", //TODO
-    //   message: "",
-    //   time: "",
-    // });
-    updateMessageList({
-      room_id: localStorage.getItem("room_id"),
-      message_id: messageList.length,
-      name: "", //TODO
-      message: message,
-      time: "",
-    });
-    setMessage("");
+    if (message !== "") {
+      const current = new Date();
+      const time = current.getHours() + ':' + current.getMinutes();
+      const messageData = {
+        roomId: localStorage.getItem("room_id"),
+        messageId: messageList.length,
+        name: "Jerome", //TODO
+        message: message,
+        time: time,
+      };
+      // TODO
+      // socket.get().emit("sendMessage", messageData);
+      updateMessageList(messageData);
+      setMessage("");
+    }
   };
 
   return (
@@ -50,31 +45,58 @@ function ChatComponent() {
       sx={{
         height: "50%",
         width: "30%",
+        border: "1px solid",
+        borderColor: "grey.300",
+        borderRadius: 3,
+        maxHeight: 400,
+        flexDirection: "column",
+        justifyContent: "center",
       }}
     >
-      <Box className="message-box" sx={{ flexGrow: 1 }}>
+      <Box
+        className="message-box"
+        sx={{
+          justifyContent: "center",
+          height: 300,
+          maxHeight: "75%",
+          overflow: "auto",
+        }}
+      >
         <Grid>
           <ul>
             {messageList.map((message) => {
               return (
-                <MessageComponent key={message.message_id} data={message} />
+                <MessageComponent key={message.messageId} data={message} />
               );
             })}
           </ul>
         </Grid>
       </Box>
-      <Box className="message-input" sx={{ flexDirection: "row" }}>
-        <TextField
-          label="Type Message"
-          variant="standard"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          sx={{ marginBottom: "2rem" }}
-          multiline
-        />
-        <Button variant={"outlined"} onClick={sendMessage}>
-          Send
-        </Button>
+      <Box
+        className="message-input"
+        sx={{
+          flexDirection: "row",
+          justifyContent: "center",
+          m: 0.5,
+          p: 1,
+        }}
+      >
+          <TextField
+            label="Type Message"
+            variant="standard"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            sx={{ width: "80%" }}
+            multiline
+          />
+
+          <Button
+            variant={"outlined"}
+            onClick={sendMessage}
+            sx={{ width: "10%" }}
+          >
+            Send
+          </Button>
       </Box>
     </Box>
   );

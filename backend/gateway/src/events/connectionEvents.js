@@ -18,6 +18,12 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
       async ({ difficulty, userId }) =>
         await findMatchEvent(defaultParams, difficulty, userId)
     );
+
+    socket.on(
+      "sendMessage",
+      async ({ roomId, messageId, name, message, time }) =>
+        await sendMessageEvent(defaultParams, roomId, messageId, name, message, time) //todo
+    );
   });
 };
 
@@ -35,6 +41,13 @@ const findMatchEvent = async (defaultParams, difficulty, userId) => {
   const [io, pubClient, subClient] = defaultParams;
   const data = JSON.stringify({ difficulty, userId });
   await pubClient.publish("findMatch", data);
+};
+
+//TODO handle frontent to gateway
+const sendMessageEvent = async (defaultParams, roomId, messageId, name, message, time) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId, messageId, name, message, time });
+  await pubClient.publish("sendMessage", data);
 };
 
 export { registerConnectionHandlers };

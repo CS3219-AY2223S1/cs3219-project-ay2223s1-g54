@@ -19,8 +19,13 @@ function MessageComponent({data}) {
             color: 'grey.800',
             border: '1px solid',
             borderColor: 'grey.300',
+            m: 1,
+            p: 0.5
           }}>
-            <Box sx={{ flexDirection: "row" }}>
+            <Box sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}>
                 <Typography>
                     {name}
                 </Typography>
