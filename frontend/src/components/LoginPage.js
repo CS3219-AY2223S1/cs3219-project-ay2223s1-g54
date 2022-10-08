@@ -9,6 +9,9 @@ import {
   TextField,
   Typography,
   Link,
+  Grid,
+  CssBaseline,
+  Container,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -69,41 +72,81 @@ function LoginPage() {
   };
 
   return (
-    <Box
-      display={"flex"}
-      flexDirection={"column"}
-      width={"100%"}
+    <Grid
+      container
+      spacing={0}
+      direction="column"
       alignItems="center"
+      justifyContent="center"
+      style={{ minHeight: "100vh", background: "#F1DDBF" }}
     >
-      <Typography variant={"h1"} marginBottom={"2rem"}>
-        PeerPrep
-      </Typography>
-      <TextField
-        label="Email address"
-        variant="standard"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        sx={{ marginBottom: "2rem" }}
-        autoFocus
-      />
-      <TextField
-        label="Password"
-        variant="standard"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        sx={{ marginBottom: "2rem" }}
-      />
       <Box
-        display={"flex"}
-        flexDirection={"row"}
-        justifyContent={"flex-end"}
-        sx={{ marginBottom: "1rem" }}
+        sx={{
+          width: 500,
+          height: 400,
+          borderRadius: 3,
+          background: "white",
+          boxShadow: "0 6px 6px hsl(0deg 0% 0% / 0.3)",
+        }}
       >
-        <Button variant={"outlined"} onClick={handleLogin}>
-          Sign In
-        </Button>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <div>
+            <Typography
+              component="h1"
+              variant="h2"
+              sx={{ mt: 2 }}
+              textAlign="center"
+            >
+              PeerPrep
+            </Typography>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="email"
+              autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+              onClick={handleLogin}
+            >
+              Login
+            </Button>
+            <Grid container sx={{ mt: 1 }}>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="/Signup" variant="body2">
+                  {"New to PeerPrep? Create an account"}
+                </Link>
+              </Grid>
+            </Grid>
+          </div>
+        </Container>
       </Box>
+
       <Dialog open={isDialogOpen} onClose={closeDialog}>
         <DialogTitle>{dialogTitle}</DialogTitle>
         <DialogContent>
@@ -113,10 +156,7 @@ function LoginPage() {
           <Button onClick={closeDialog}>Done</Button>
         </DialogActions>
       </Dialog>
-      <Link onClick={() => navigateSignUp()}>
-        New to PeerPrep? Create an account
-      </Link>
-    </Box>
+    </Grid>
   );
 }
 
