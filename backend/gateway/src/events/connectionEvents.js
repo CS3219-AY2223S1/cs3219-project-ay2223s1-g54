@@ -65,6 +65,7 @@ const sendMessageEvent = async (defaultParams, roomId, messageId, name, message,
   const [io, pubClient, subClient] = defaultParams;
   const data = JSON.stringify({ roomId, messageId, name, message, time });
   await pubClient.publish("sendMessage", data);
+};
 
 const sendLanguage = async (defaultParams, roomId, language) => {
   const [io, pubClient, subClient] = defaultParams;

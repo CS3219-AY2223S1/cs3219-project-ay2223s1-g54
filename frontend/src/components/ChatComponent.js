@@ -1,23 +1,24 @@
-import {
-  Box,
-  Button,
-  TextField,
-  Grid
-} from "@mui/material";
+import { useLocation } from "react-router-dom";
+import { Box, Button, TextField, Grid } from "@mui/material";
 import { useState, useEffect } from "react";
 import MessageComponent from "./MessageComponent.js";
 import { useAuth } from "../hooks/useAuth";
 
 function ChatComponent() {
+  const location = useLocation();
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
   const { auth } = useAuth();
   const { socket } = auth;
+  const { roomId, difficulty, userId1, userId2, questionSet } =
+    location.state.collabData;
 
-  socket.on("receieveMessage", ({ message }) => {
-    //update the event
-    updateMessageList(message);
-  });
+  useEffect(() => {
+    socket.on("receiveMessage", ({ message }) => {
+      //update the event
+      updateMessageList(message);
+    });
+  }, []);
 
   const updateMessageList = (message) => {
     setMessageList((list) => [...list, message]);
@@ -26,16 +27,16 @@ function ChatComponent() {
   const sendMessage = () => {
     if (message !== "") {
       const current = new Date();
-      const time = current.getHours() + ':' + current.getMinutes();
+      const time = current.getHours() + ":" + current.getMinutes();
       const messageData = {
-        roomId: localStorage.getItem("room_id"),
+        roomId: roomId,
         messageId: messageList.length,
         name: "Jerome", //TODO
         message: message,
         time: time,
       };
       // TODO
-      socket.get().emit("sendMessage", messageData);
+      socket.emit("sendMessage", messageData);
       updateMessageList(messageData);
       setMessage("");
     }
@@ -83,22 +84,22 @@ function ChatComponent() {
           p: 1,
         }}
       >
-          <TextField
-            label="Type Message"
-            variant="standard"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            sx={{ width: "80%" }}
-            multiline
-          />
+        <TextField
+          label="Type Message"
+          variant="standard"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          sx={{ width: "80%" }}
+          multiline
+        />
 
-          <Button
-            variant={"outlined"}
-            onClick={sendMessage}
-            sx={{ width: "10%" }}
-          >
-            Send
-          </Button>
+        <Button
+          variant={"outlined"}
+          onClick={sendMessage}
+          sx={{ width: "10%" }}
+        >
+          Send
+        </Button>
       </Box>
     </Box>
   );

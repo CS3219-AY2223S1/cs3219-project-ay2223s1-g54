@@ -124,7 +124,7 @@ function CollaborationPage() {
             />
           </div>
         </Box>
-        //<ChatComponent />
+        <ChatComponent />
       </Box>
       <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
         <Button
