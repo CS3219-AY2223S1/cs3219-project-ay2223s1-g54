@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import * as configs from "../configs.js";
 import * as responseMessages from "../constants/responseMessages.js";
+import { ExpiredAccessToken } from "../exceptions/ExpiredAccessToken.js";
 import { TokenGenerationFailure } from "../exceptions/TokenGenerationFailure.js";
 import { TokenVerficationFailure } from "../exceptions/TokenVerficationFailure.js";
 
@@ -34,7 +35,7 @@ export const verifyAccessToken = async (accessToken) => {
     decodedToken = jwt.verify(accessToken, configs.ACCESS_TOKEN_SECRET);
   } catch (err) {
     if (err.name === "TokenExpiredError")
-      throw new TokenVerficationFailure(responseMessages.TOKEN_EXPIRED);
+      throw new ExpiredAccessToken(responseMessages.TOKEN_EXPIRED);
     // JsonWebTokenError (compromised)
     throw new TokenVerficationFailure(responseMessages.TOKEN_COMPROMISED);
   }
