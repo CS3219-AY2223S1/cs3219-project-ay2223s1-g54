@@ -1,6 +1,14 @@
-import { Container, Box, Button, Typography, Grid } from "@mui/material";
+import {
+  Container,
+  Box,
+  Button,
+  Typography,
+  Grid,
+  styled,
+} from "@mui/material";
+import { teal, cyan } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
-import landingPageImage from "../landingpage.jpg";
+import landingPageImage from "../landingpage.png";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -11,6 +19,22 @@ const LandingPage = () => {
   const handleLogin = () => {
     navigate("/login");
   };
+
+  const SignUpColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(teal[500]),
+    backgroundColor: teal[500],
+    "&:hover": {
+      backgroundColor: teal[700],
+    },
+  }));
+
+  const LoginColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(cyan[500]),
+    backgroundColor: cyan[500],
+    "&:hover": {
+      backgroundColor: cyan[700],
+    },
+  }));
 
   return (
     <Grid
@@ -37,15 +61,18 @@ const LandingPage = () => {
           <Typography
             variant="caption"
             align="center"
-            fontSize={"24px"}
+            fontSize={"20px"}
             sx={{ width: "35%", margin: "20px" }}
+            justify="flex-end"
           >
-            PeerPrep is an interview preparation platform and a peer matching
-            system where students can find peers to practice whiteboard-style
-            interview questions together.
+            PeerPrep is the best interview preparation platform and a peer
+            matching system where everyone such as yourself can find peers to
+            practice whiteboard-style interview coding questions together. Sign
+            up now to expand your algorithm knowledge and prepare for technical
+            interviews.
           </Typography>
           <Box>
-            <Button
+            <SignUpColorButton
               sx={{ marginRight: "5px" }}
               variant="outlined"
               onClick={handleSignUp}
@@ -54,8 +81,8 @@ const LandingPage = () => {
               <Typography variant="button" display="block" gutterBottom>
                 Sign Up
               </Typography>
-            </Button>
-            <Button
+            </SignUpColorButton>
+            <LoginColorButton
               sx={{ marginLeft: "5px" }}
               variant="contained"
               onClick={handleLogin}
@@ -64,7 +91,7 @@ const LandingPage = () => {
               <Typography variant="button" display="block" gutterBottom>
                 Login
               </Typography>
-            </Button>
+            </LoginColorButton>
           </Box>
         </Box>
       </Grid>

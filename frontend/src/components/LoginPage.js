@@ -87,7 +87,12 @@ function LoginPage() {
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <div>
-            <Typography component="h1" variant="h2" sx={{ mt: 2 }}>
+            <Typography
+              component="h1"
+              variant="h2"
+              sx={{ mt: 2 }}
+              textAlign="center"
+            >
               PeerPrep
             </Typography>
             <TextField
