@@ -90,6 +90,8 @@ const LandingPage = () => {
       </Grid>
       <Grid item xs={6}>
         <img src={landingPageImage} alt="horse" />
+        {/* Image credits: */}
+        {/* <a href="http://www.freepik.com">Designed by Freepik</a> */}
       </Grid>
     </Grid>
   );
