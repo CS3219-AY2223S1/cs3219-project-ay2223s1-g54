@@ -1,3 +1,5 @@
+import * as questionService from "../services/questionService.js";
+
 const registerMatchHandlers = async (io, pubClient, subClient) => {
   const defaultParams = [io, pubClient, subClient];
 
@@ -26,10 +28,24 @@ const createRoomSockets = async (
   socket1.join(roomId);
   socket2.join(roomId);
 
+  // prepare 2 questions for both users
+  const questionSet = [];
+  for (let i = 0; i < 2; i++) {
+    let question;
+    if (difficulty == 1) {
+      question = await questionService.getEasyQuestion();
+    } else if (difficulty == 1) {
+      question = await questionService.getMediumQuestion();
+    } else if (difficulty == 1) {
+      question = await questionService.getHardQuestion();
+    } else {
+      question = await questionService.getAnyQuestion();
+    }
+    questionSet.push(question);
+  }
+
   // ping for collaboration
-  const collabData = { difficulty, userId1, userId2 };
-  // TODO: include question info in collabData
-  console.log("readyForCollab", { difficulty, userId1, userId2, roomId });
+  const collabData = { roomId, difficulty, userId1, userId2, questionSet };
   io.sockets.in(roomId).emit("readyForCollab", collabData);
 };
 
