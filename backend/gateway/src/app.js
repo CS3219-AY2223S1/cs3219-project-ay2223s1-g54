@@ -8,6 +8,7 @@ import { createAdapter } from "@socket.io/redis-adapter";
 import { REDIS_URI, corsOptions, ioOptions } from "./configs.js";
 import { registerConnectionHandlers } from "./events/connectionEvents.js";
 import { registerMatchHandlers } from "./events/matchEvents.js";
+import { registerCollaborationHandlers } from "./events/collaborationEvents.js";
 import { gatewayRoutes } from "./routes/gatewayRoutes.js";
 import { catchAllErrorHandler } from "./middlewares/errorHandlers.js";
 import { registerCommunicationHandlers } from "./events/communicationEvents.js";
@@ -33,6 +34,6 @@ io.adapter(createAdapter(pubClient, subClient));
 registerConnectionHandlers(io, pubClient, subClient);
 registerMatchHandlers(io, pubClient, subClient);
 registerCommunicationHandlers(io, pubClient, subClient);
-
+registerCollaborationHandlers(io, pubClient, subClient);
 
 export { httpServer };

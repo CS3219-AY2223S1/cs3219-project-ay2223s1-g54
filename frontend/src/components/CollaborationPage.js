@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Button, InputLabel, Select, MenuItem } from "@mui/material";
+import { Box, Button, Select, MenuItem, Typography } from "@mui/material";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
+import { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import { useAuth } from "../hooks/useAuth";
 import ChatComponent from "./ChatComponent";
@@ -9,8 +9,9 @@ import ChatComponent from "./ChatComponent";
 function CollaborationPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [questionTitle, setQuestionTitle] = useState("");
+  const [questionDifficulty, setQuestionDifficulty] = useState("");
   const [code, setCode] = useState("");
-  const [languageIndex, setLanguageIndex] = useState("");
   const [programmingLanguages, setProgrammingLanguages] = useState([]);
   const [languageOption, setLanguageOption] = useState("");
   const [questionContent, setQuestionContent] = useState("");
@@ -19,10 +20,40 @@ function CollaborationPage() {
   const { roomId, difficulty, userId1, userId2, questionSet } =
     location.state.collabData;
 
+  const updateLanguage = (event) => {
+    socket.emit("sendLanguage", { roomId, language: event.target.value });
+  };
+
+  const updateCode = (code) => {
+    socket.emit("sendCurrentCode", { roomId, code });
+  };
+
+  const leaveRoom = () => {
+    socket.emit("sendLeaveRoom", { roomId });
+  };
+
   useEffect(() => {
+    socket.on("receiveLanguage", ({ language }) => {
+      for (const programmingLanguage of programmingLanguages) {
+        if (programmingLanguage.slug === language) {
+          updateCode(programmingLanguage.code);
+        }
+      }
+      setLanguageOption(language);
+    });
+
+    socket.on("receiveCurrentCode", ({ code }) => {
+      setCode(code);
+    });
+
+    socket.on("receiveLeaveRoom", () => {
+      alert("This session will be closing");
+      navigate("/matching");
+    });
+
     const getQuestion = async () => {
       const question = questionSet[0];
-      const { codeSnippets, content } = question;
+      const { title, difficulty, codeSnippets, content } = question;
 
       const languages = [];
       for (const codeSnippet of codeSnippets) {
@@ -36,39 +67,41 @@ function CollaborationPage() {
       }
 
       setProgrammingLanguages(languages);
-      setLanguageIndex(languages[0].slug);
+      setQuestionTitle(title);
+      setQuestionDifficulty(difficulty);
+      setLanguageOption(languages[0].slug);
+      setCode(languages[0].code);
       setQuestionContent(content);
     };
 
     getQuestion(difficulty);
+
+    return () => {
+      socket.off("receiveCurrentCode");
+      socket.off("receiveLeaveRoom");
+    };
   }, []);
-
-  const handleCancel = () => {
-    navigate("/matching");
-  };
-
-  const updateCode = (newCode) => {
-    setCode(newCode);
-  };
 
   return (
     <Box display="flex" flexDirection="column" width="90%">
       <Box display="flex" flexDirection="row" width="100%">
-        <div dangerouslySetInnerHTML={{ __html: questionContent }} />
+        <Box display="flex" flexDirection="column" width="100%">
+          <Box display="flex" flexDirection="row" width="100%">
+            <Typography variant="button" margin="20px">
+              Question Title: <strong>{questionTitle}</strong>
+            </Typography>
+            <Typography variant="button" margin="20px">
+              Difficulty: <strong>{questionDifficulty}</strong>
+            </Typography>
+          </Box>
+          <div dangerouslySetInnerHTML={{ __html: questionContent }} />
+        </Box>
         <Box display={"flex"} flexDirection="column" width="100%">
           <Box display={"flex"} flexDirection="column" width="150px">
             <Select
-              value={languageIndex}
+              value={languageOption}
               label="Language"
-              onChange={(e) => {
-                for (const programmingLanguage of programmingLanguages) {
-                  if (programmingLanguage.slug === e.target.value) {
-                    updateCode(programmingLanguage.code);
-                  }
-                }
-                setLanguageIndex(e.target.value);
-                setLanguageOption(e.target.value);
-              }}
+              onChange={updateLanguage}
             >
               {programmingLanguages.map((programmingLanguage) => {
                 return (
@@ -87,7 +120,7 @@ function CollaborationPage() {
               height="80vh"
               value={code}
               language={languageOption}
-              // onChange={() => {}}
+              onChange={updateCode}
             />
           </div>
         </Box>
@@ -96,7 +129,7 @@ function CollaborationPage() {
       <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
         <Button
           variant={"outlined"}
-          onClick={() => handleCancel()}
+          onClick={(e) => leaveRoom()}
           startIcon={<CloseSharpIcon />}
         >
           back

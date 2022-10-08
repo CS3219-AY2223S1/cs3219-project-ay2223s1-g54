@@ -24,6 +24,23 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
       async ({ roomId, messageId, name, message, time }) =>
         await sendMessageEvent(defaultParams, roomId, messageId, name, message, time) //todo
     );
+
+    socket.on(
+      "sendLanguage",
+      async ({ roomId, language }) =>
+        await sendLanguage(defaultParams, roomId, language)
+    );
+
+    socket.on(
+      "sendCurrentCode",
+      async ({ roomId, code }) =>
+        await sendCollaborationCode(defaultParams, roomId, code)
+    );
+
+    socket.on(
+      "sendLeaveRoom",
+      async ({ roomId }) => await sendLeaveRoom(defaultParams, roomId)
+    );
   });
 };
 
@@ -48,6 +65,23 @@ const sendMessageEvent = async (defaultParams, roomId, messageId, name, message,
   const [io, pubClient, subClient] = defaultParams;
   const data = JSON.stringify({ roomId, messageId, name, message, time });
   await pubClient.publish("sendMessage", data);
+
+const sendLanguage = async (defaultParams, roomId, language) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId, language });
+  await pubClient.publish("sendLanguage", data);
+};
+
+const sendCollaborationCode = async (defaultParams, roomId, code) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId, code });
+  await pubClient.publish("sendCurrentCode", data);
+};
+
+const sendLeaveRoom = async (defaultParams, roomId) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId });
+  await pubClient.publish("sendLeaveRoom", data);
 };
 
 export { registerConnectionHandlers };
