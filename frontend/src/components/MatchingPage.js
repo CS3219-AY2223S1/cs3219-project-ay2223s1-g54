@@ -13,25 +13,6 @@ function MatchingPage() {
   const { userId, socket } = auth;
   const privateAxios = usePrivateAxios();
 
-  useEffect(() => {
-    // component mount, add event handlers
-    socket.on("connect", () => {
-      console.log("connected to gateway");
-      socket.emit("clientConnected", { socketId: socket.id, userId });
-    });
-
-    socket.on("disconnect", () => {
-      console.log("disconnected to gateway");
-      socket.emit("clientDisconnected", { userId });
-    });
-
-    // component unmount, remove event handlers
-    return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-    };
-  });
-
   const handleMatch = (difficulty) => {
     navigate("/waiting", { state: { difficulty } });
   };
