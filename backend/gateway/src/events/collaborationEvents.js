@@ -28,8 +28,6 @@ const receiveCollaborationCode = async (defaultParams, roomId, code) => {
   const [io, pubClient, subClient] = defaultParams;
 
   const codeData = { code };
-  console.log("collab");
-  console.log(roomId);
   io.sockets.in(roomId).emit("receiveCurrentCode", codeData);
 };
 

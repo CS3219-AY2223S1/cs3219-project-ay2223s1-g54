@@ -14,14 +14,18 @@ function ChatComponent() {
     location.state.collabData;
 
   useEffect(() => {
-    socket.on("receiveMessage", ({ message }) => {
-      //update the event
-      updateMessageList(message);
+    socket.on("receiveMessage", ({ roomId, messageId, name, message, time }) => {
+      if (messageId >= (messageList.length)) {
+        //update the event
+        const messageData = {roomId, messageId, name, message, time}
+        updateMessageList(messageData);
+      }
+
     });
   }, []);
 
-  const updateMessageList = (message) => {
-    setMessageList((list) => [...list, message]);
+  const updateMessageList = (messageData) => {
+    setMessageList((list) => [...list, messageData]);
   };
 
   const sendMessage = () => {
@@ -36,8 +40,8 @@ function ChatComponent() {
         time: time,
       };
       // TODO
-      socket.emit("sendMessage", messageData);
       updateMessageList(messageData);
+      socket.emit("sendMessage", messageData);
       setMessage("");
     }
   };
@@ -46,12 +50,12 @@ function ChatComponent() {
     <Box
       className="chat-box"
       sx={{
-        height: "50%",
-        width: "30%",
+        height: "80%",
+        width: "80%",
         border: "1px solid",
         borderColor: "grey.300",
         borderRadius: 3,
-        maxHeight: 400,
+        // maxHeight: 400,
         flexDirection: "column",
         justifyContent: "center",
       }}
@@ -61,15 +65,15 @@ function ChatComponent() {
         sx={{
           justifyContent: "center",
           height: 300,
-          maxHeight: "75%",
+          // maxHeight: "75%",
           overflow: "auto",
         }}
       >
         <Grid>
           <ul>
-            {messageList.map((message) => {
+            {messageList.map((messageData) => {
               return (
-                <MessageComponent key={message.messageId} data={message} />
+                <MessageComponent key={message.messageId} data={messageData} />
               );
             })}
           </ul>

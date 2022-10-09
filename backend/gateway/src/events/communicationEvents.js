@@ -12,8 +12,6 @@ const sendMessage = async (defaultParams, roomId, messageId, name, message, time
 
   const messageData = { roomId, messageId, name, message, time };
   // TODO: include question info in collabData
-  console.log("communication");
-  console.log(roomId);
   io.sockets.in(roomId).emit("receiveMessage", messageData);
 };
 
