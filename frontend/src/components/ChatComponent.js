@@ -15,12 +15,9 @@ function ChatComponent() {
 
   useEffect(() => {
     socket.on("receiveMessage", ({ roomId, messageId, name, message, time }) => {
-      if (messageId >= (messageList.length)) {
-        //update the event
-        const messageData = {roomId, messageId, name, message, time}
-        updateMessageList(messageData);
-      }
-
+      //update the event
+      const messageData = {roomId, messageId, name, message, time}
+      updateMessageList(messageData);
     });
   }, []);
 
@@ -40,7 +37,7 @@ function ChatComponent() {
         time: time,
       };
       // TODO
-      updateMessageList(messageData);
+      //updateMessageList(messageData);
       socket.emit("sendMessage", messageData);
       setMessage("");
     }
