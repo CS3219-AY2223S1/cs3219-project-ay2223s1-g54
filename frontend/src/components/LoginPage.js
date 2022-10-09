@@ -54,6 +54,7 @@ function LoginPage() {
         setErrorDialog(name, message);
         return;
       }
+      alert(err);
       setErrorDialog("Unknown Error", "Please try again later");
       return;
     }
