@@ -38,6 +38,17 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
     );
 
     socket.on(
+      "sendDrawing",
+      async ({ roomId, x0, y0, x1, y1, color }) =>
+        await sendDrawing(defaultParams, roomId, x0, y0, x1, y1, color)
+    );
+
+    socket.on(
+      "sendClearDrawing",
+      async ({ roomId }) => await sendClearDrawing(defaultParams, roomId)
+    );
+
+    socket.on(
       "sendLeaveRoom",
       async ({ roomId }) => await sendLeaveRoom(defaultParams, roomId)
     );
@@ -77,6 +88,18 @@ const sendCollaborationCode = async (defaultParams, roomId, code) => {
   const [io, pubClient, subClient] = defaultParams;
   const data = JSON.stringify({ roomId, code });
   await pubClient.publish("sendCurrentCode", data);
+};
+
+const sendDrawing = async (defaultParams, roomId, x0, y0, x1, y1, color) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId, x0, y0, x1, y1, color });
+  await pubClient.publish("sendDrawing", data);
+};
+
+const sendClearDrawing = async (defaultParams, roomId) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId });
+  await pubClient.publish("sendClearDrawing", data);
 };
 
 const sendLeaveRoom = async (defaultParams, roomId) => {
