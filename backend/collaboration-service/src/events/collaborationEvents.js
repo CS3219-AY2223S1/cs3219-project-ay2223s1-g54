@@ -11,6 +11,16 @@ const registerCollaborationHandlers = async (io, pubClient, subClient) => {
     await syncCollaborationCode(defaultParams, roomId, code);
   });
 
+  subClient.subscribe("sendDrawing", async (data) => {
+    const { roomId, x0, y0, x1, y1, color } = JSON.parse(data);
+    await syncDrawing(defaultParams, roomId, x0, y0, x1, y1, color);
+  });
+
+  subClient.subscribe("sendClearDrawing", async (data) => {
+    const { roomId } = JSON.parse(data);
+    await syncClearDrawing(defaultParams, roomId);
+  });
+
   subClient.subscribe("sendLeaveRoom", async (data) => {
     const { roomId } = JSON.parse(data);
     await syncLeaveRoom(defaultParams, roomId);
@@ -29,6 +39,20 @@ const syncCollaborationCode = async (defaultParams, roomId, code) => {
 
   const data = JSON.stringify({ roomId, code });
   await pubClient.publish("receiveCurrentCode", data);
+};
+
+const syncDrawing = async (defaultParams, roomId, x0, y0, x1, y1, color) => {
+  const [io, pubClient, subClient] = defaultParams;
+
+  const data = JSON.stringify({ roomId, x0, y0, x1, y1, color });
+  await pubClient.publish("receiveDrawing", data);
+};
+
+const syncClearDrawing = async (defaultParams, roomId) => {
+  const [io, pubClient, subClient] = defaultParams;
+
+  const data = JSON.stringify({ roomId });
+  await pubClient.publish("receiveClearDrawing", data);
 };
 
 const syncLeaveRoom = async (defaultParams, roomId) => {
