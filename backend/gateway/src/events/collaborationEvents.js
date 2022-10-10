@@ -12,8 +12,18 @@ const registerCollaborationHandlers = async (io, pubClient, subClient) => {
   });
 
   subClient.subscribe("receiveDrawing", async (data) => {
-    const { roomId, x0, y0, x1, y1, color } = JSON.parse(data);
-    await receiveDrawing(defaultParams, roomId, x0, y0, x1, y1, color);
+    const { roomId, strokeData } = JSON.parse(data);
+    await receiveDrawing(defaultParams, roomId, strokeData);
+  });
+
+  subClient.subscribe("receiveUndoDrawing", async (data) => {
+    const { roomId } = JSON.parse(data);
+    await receiveUndoDrawing(defaultParams, roomId);
+  });
+
+  subClient.subscribe("receiveRedoDrawing", async (data) => {
+    const { roomId } = JSON.parse(data);
+    await receiveRedoDrawing(defaultParams, roomId);
   });
 
   subClient.subscribe("receiveClearDrawing", async (data) => {
@@ -41,16 +51,25 @@ const receiveCollaborationCode = async (defaultParams, roomId, code) => {
   io.sockets.in(roomId).emit("receiveCurrentCode", codeData);
 };
 
-const receiveDrawing = async (defaultParams, roomId, x0, y0, x1, y1, color) => {
+const receiveDrawing = async (defaultParams, roomId, strokeData) => {
   const [io, pubClient, subClient] = defaultParams;
 
-  const drawingData = { x0, y0, x1, y1, color };
+  const drawingData = { strokeData };
   io.sockets.in(roomId).emit("receiveDrawing", drawingData);
+};
+
+const receiveUndoDrawing = async (defaultParams, roomId) => {
+  const [io, pubClient, subClient] = defaultParams;
+  io.sockets.in(roomId).emit("receiveUndoDrawing");
+};
+
+const receiveRedoDrawing = async (defaultParams, roomId) => {
+  const [io, pubClient, subClient] = defaultParams;
+  io.sockets.in(roomId).emit("receiveRedoDrawing");
 };
 
 const receiveClearDrawing = async (defaultParams, roomId) => {
   const [io, pubClient, subClient] = defaultParams;
-
   io.sockets.in(roomId).emit("receiveClearDrawing");
 };
 

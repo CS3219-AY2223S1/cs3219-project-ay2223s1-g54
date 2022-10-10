@@ -20,12 +20,6 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
     );
 
     socket.on(
-      "sendMessage",
-      async ({ roomId, messageId, name, message, time }) =>
-        await sendMessageEvent(defaultParams, roomId, messageId, name, message, time) //todo
-    );
-
-    socket.on(
       "sendLanguage",
       async ({ roomId, language }) =>
         await sendLanguage(defaultParams, roomId, language)
@@ -39,13 +33,36 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
 
     socket.on(
       "sendDrawing",
-      async ({ roomId, x0, y0, x1, y1, color }) =>
-        await sendDrawing(defaultParams, roomId, x0, y0, x1, y1, color)
+      async ({ roomId, strokeData }) =>
+        await sendDrawing(defaultParams, roomId, strokeData)
+    );
+
+    socket.on(
+      "sendUndoDrawing",
+      async ({ roomId }) => await sendUndoDrawing(defaultParams, roomId)
+    );
+
+    socket.on(
+      "sendRedoDrawing",
+      async ({ roomId }) => await sendRedoDrawing(defaultParams, roomId)
     );
 
     socket.on(
       "sendClearDrawing",
       async ({ roomId }) => await sendClearDrawing(defaultParams, roomId)
+    );
+
+    socket.on(
+      "sendMessage",
+      async ({ roomId, messageId, name, message, time }) =>
+        await sendMessageEvent(
+          defaultParams,
+          roomId,
+          messageId,
+          name,
+          message,
+          time
+        ) //todo
     );
 
     socket.on(
@@ -71,13 +88,6 @@ const findMatchEvent = async (defaultParams, difficulty, userId) => {
   await pubClient.publish("findMatch", data);
 };
 
-//TODO handle frontent to gateway
-const sendMessageEvent = async (defaultParams, roomId, messageId, name, message, time) => {
-  const [io, pubClient, subClient] = defaultParams;
-  const data = JSON.stringify({ roomId, messageId, name, message, time });
-  await pubClient.publish("sendMessage", data);
-};
-
 const sendLanguage = async (defaultParams, roomId, language) => {
   const [io, pubClient, subClient] = defaultParams;
   const data = JSON.stringify({ roomId, language });
@@ -90,16 +100,42 @@ const sendCollaborationCode = async (defaultParams, roomId, code) => {
   await pubClient.publish("sendCurrentCode", data);
 };
 
-const sendDrawing = async (defaultParams, roomId, x0, y0, x1, y1, color) => {
+const sendDrawing = async (defaultParams, roomId, strokeData) => {
   const [io, pubClient, subClient] = defaultParams;
-  const data = JSON.stringify({ roomId, x0, y0, x1, y1, color });
+  const data = JSON.stringify({ roomId, strokeData });
   await pubClient.publish("sendDrawing", data);
+};
+
+const sendUndoDrawing = async (defaultParams, roomId) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId });
+  await pubClient.publish("sendUndoDrawing", data);
+};
+
+const sendRedoDrawing = async (defaultParams, roomId) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId });
+  await pubClient.publish("sendRedoDrawing", data);
 };
 
 const sendClearDrawing = async (defaultParams, roomId) => {
   const [io, pubClient, subClient] = defaultParams;
   const data = JSON.stringify({ roomId });
   await pubClient.publish("sendClearDrawing", data);
+};
+
+//TODO handle frontent to gateway
+const sendMessageEvent = async (
+  defaultParams,
+  roomId,
+  messageId,
+  name,
+  message,
+  time
+) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId, messageId, name, message, time });
+  await pubClient.publish("sendMessage", data);
 };
 
 const sendLeaveRoom = async (defaultParams, roomId) => {
