@@ -11,12 +11,12 @@ let refreshTokens = [];
 authRoutes.post(
   "/generate",
   asyncHandler(async (req, res) => {
-    const { userId } = req.body;
+    const { userId, username } = req.body;
     if (!userId) {
       throw new MalformedRequest(responseMessages.MISSING_USER_ID_FIELD);
     }
 
-    const tokens = await authService.generateTokens(userId);
+    const tokens = await authService.generateTokens(userId, username);
     const { accessToken, refreshToken } = tokens;
     refreshTokens.push(refreshToken);
     return res.status(statusCodes.OK).json({ accessToken, refreshToken });
