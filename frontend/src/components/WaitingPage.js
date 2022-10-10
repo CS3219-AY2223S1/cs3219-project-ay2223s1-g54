@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useAuth";
 function WaitingPage() {
   const location = useLocation();
   const { auth } = useAuth();
-  const { userId, socket } = auth;
+  const { userId, username, socket } = auth;
 
   useEffect(() => {
     socket.on("readyForCollab", (collabData) => {
@@ -17,6 +17,7 @@ function WaitingPage() {
     socket.emit("findMatch", {
       difficulty: location.state.difficulty,
       userId,
+      username,
     });
   });
 

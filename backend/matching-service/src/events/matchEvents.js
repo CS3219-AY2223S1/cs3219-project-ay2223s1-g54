@@ -4,22 +4,28 @@ const registerMatchHandlers = async (io, pubClient, subClient) => {
   const defaultParams = [io, pubClient, subClient];
 
   subClient.subscribe("findMatch", async (data) => {
-    const { difficulty, userId } = JSON.parse(data);
-    await findMatchEvent(defaultParams, difficulty, userId);
+    const { difficulty, userId, username } = JSON.parse(data);
+    await findMatchEvent(defaultParams, difficulty, userId, username);
   });
 };
 
-const findMatchEvent = async (defaultParams, difficulty, userId) => {
+const findMatchEvent = async (defaultParams, difficulty, userId, username) => {
   const [io, pubClient, subClient] = defaultParams;
 
-  const matchEntry = await findMatch(difficulty, userId);
+  const matchEntry = await findMatch(difficulty, userId, username);
   if (!matchEntry) {
     return; // need to wait for next person to join
   }
 
-  const { userId1, userId2 } = matchEntry;
+  const { userId1, userId2, username1, username2 } = matchEntry;
 
-  const data = JSON.stringify({ difficulty, userId1, userId2 });
+  const data = JSON.stringify({
+    difficulty,
+    userId1,
+    userId2,
+    username1,
+    username2,
+  });
   await pubClient.publish("createSocketRoom", data);
 };
 

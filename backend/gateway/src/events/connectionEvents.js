@@ -15,8 +15,8 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
 
     socket.on(
       "findMatch",
-      async ({ difficulty, userId }) =>
-        await findMatchEvent(defaultParams, difficulty, userId)
+      async ({ difficulty, userId, username }) =>
+        await findMatchEvent(defaultParams, difficulty, userId, username)
     );
 
     socket.on(
@@ -82,9 +82,9 @@ const clientDisconnectedEvent = async (defaultParams, userId) => {
   await pubClient.hDel("userSocketMap", userId);
 };
 
-const findMatchEvent = async (defaultParams, difficulty, userId) => {
+const findMatchEvent = async (defaultParams, difficulty, userId, username) => {
   const [io, pubClient, subClient] = defaultParams;
-  const data = JSON.stringify({ difficulty, userId });
+  const data = JSON.stringify({ difficulty, userId, username });
   await pubClient.publish("findMatch", data);
 };
 
