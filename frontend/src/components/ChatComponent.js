@@ -1,48 +1,48 @@
-import { useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { Box, Button, TextField, Grid } from "@mui/material";
-import { useState, useEffect } from "react";
-import MessageComponent from "./MessageComponent.js";
+import moment from "moment";
 import { useAuth } from "../hooks/useAuth";
+import MessageComponent from "./MessageComponent.js";
 
 function ChatComponent(props) {
+  const { auth } = useAuth();
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
-  const { auth } = useAuth();
-  const { socket } = auth;
+  const usernameRef = useRef();
+  const { userId, socket } = auth;
   const collabData = props.collabData;
-  const { roomId } = collabData;
+  const { roomId, userId1, username1, username2 } = collabData;
 
   useEffect(() => {
-    socket.on(
-      "receiveMessage",
-      ({ roomId, messageId, name, message, time }) => {
-        //update the event
-        const messageData = { roomId, messageId, name, message, time };
-        updateMessageList(messageData);
-      }
-    );
+    // Get current username
+    if (userId === userId1) usernameRef.current = username1;
+    else usernameRef.current = username2;
+
+    socket.on("receiveMessage", (message) => {
+      updateMessageList(message);
+    });
+
+    return () => {
+      socket.off("receiveMessage");
+    };
   }, []);
 
-  const updateMessageList = (messageData) => {
-    setMessageList((list) => [...list, messageData]);
+  const updateMessageList = (message) => {
+    setMessageList((prevMessages) => [...prevMessages, message]);
   };
 
   const sendMessage = () => {
-    if (message !== "") {
-      const current = new Date();
-      const time = current.getHours() + ":" + current.getMinutes();
-      const messageData = {
-        roomId: roomId,
-        messageId: messageList.length,
-        name: "Jerome", //TODO
-        message: message,
-        time: time,
-      };
-      // TODO
-      //updateMessageList(messageData);
-      socket.emit("sendMessage", messageData);
-      setMessage("");
-    }
+    if (message === "") return;
+
+    const messageData = {
+      roomId: roomId,
+      name: usernameRef.current,
+      time: moment().format("LTS"),
+      messageId: messageList.length,
+      message: message,
+    };
+    socket.emit("sendMessage", messageData);
+    setMessage("");
   };
 
   return (
@@ -72,7 +72,10 @@ function ChatComponent(props) {
           <ul>
             {messageList.map((messageData) => {
               return (
-                <MessageComponent key={message.messageId} data={messageData} />
+                <MessageComponent
+                  key={messageData.messageId}
+                  data={messageData}
+                />
               );
             })}
           </ul>

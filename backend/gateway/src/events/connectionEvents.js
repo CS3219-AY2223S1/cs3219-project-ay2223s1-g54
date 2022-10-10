@@ -54,15 +54,15 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
 
     socket.on(
       "sendMessage",
-      async ({ roomId, messageId, name, message, time }) =>
+      async ({ roomId, name, time, messageId, message }) =>
         await sendMessageEvent(
           defaultParams,
           roomId,
-          messageId,
           name,
-          message,
-          time
-        ) //todo
+          time,
+          messageId,
+          message
+        )
     );
 
     socket.on(
@@ -124,17 +124,16 @@ const sendClearDrawing = async (defaultParams, roomId) => {
   await pubClient.publish("sendClearDrawing", data);
 };
 
-//TODO handle frontent to gateway
 const sendMessageEvent = async (
   defaultParams,
   roomId,
-  messageId,
   name,
-  message,
-  time
+  time,
+  messageId,
+  message
 ) => {
   const [io, pubClient, subClient] = defaultParams;
-  const data = JSON.stringify({ roomId, messageId, name, message, time });
+  const data = JSON.stringify({ roomId, name, time, messageId, message });
   await pubClient.publish("sendMessage", data);
 };
 
