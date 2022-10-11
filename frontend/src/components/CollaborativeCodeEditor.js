@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, MenuItem, Select } from "@mui/material";
+import { Box, MenuItem, Select, Stack } from "@mui/material";
 import Editor from "@monaco-editor/react";
 
 const CollaborativeCodeEditor = (props) => {
@@ -60,28 +60,25 @@ const CollaborativeCodeEditor = (props) => {
   };
 
   return (
-    <div>
-      <Box display={"flex"} flexDirection="column">
-        <div style={{ marginBottom: "10px" }}>
-          <Select value={languageSlug} onChange={updateLanguage}>
-            {Object.keys(languageMap).map((slug) => {
-              const language = languageMap[slug];
-              return (
-                <MenuItem key={slug} value={slug}>
-                  {language.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </div>
-        <Editor
-          height="70vh"
-          language={languageSlug}
-          value={code}
-          onChange={updateCode}
-        />
+    <Stack
+      height={props.hidden === true ? "100%" : "0"}
+      visibility={props.hidden === true ? "none" : "hidden"}
+      maxHeight="100%"
+    >
+      <Box marginTop="10px" marginBottom="10px">
+        <Select value={languageSlug} onChange={updateLanguage}>
+          {Object.keys(languageMap).map((slug) => {
+            const language = languageMap[slug];
+            return (
+              <MenuItem key={slug} value={slug}>
+                {language.name}
+              </MenuItem>
+            );
+          })}
+        </Select>
       </Box>
-    </div>
+      <Editor language={languageSlug} value={code} onChange={updateCode} />
+    </Stack>
   );
 };
 

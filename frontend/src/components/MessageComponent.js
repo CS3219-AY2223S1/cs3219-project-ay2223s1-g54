@@ -22,7 +22,9 @@ function MessageComponent({ data }) {
           justifyContent: "space-between",
         }}
       >
-        <Typography>{name}</Typography>
+        <Typography>
+          <strong>{name}</strong>
+        </Typography>
         <Typography>{time}</Typography>
       </Box>
       <Box>
