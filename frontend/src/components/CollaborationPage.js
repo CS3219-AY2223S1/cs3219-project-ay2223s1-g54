@@ -34,6 +34,7 @@ function CollaborationPage() {
       height="100vh"
       maxHeight="100vh"
       padding="20px"
+      style={{ background: "#F1DDBF" }}
     >
       <Box display="flex" flexDirection="row" height="100%" maxHeight="100%">
         <Box
@@ -41,14 +42,18 @@ function CollaborationPage() {
           flexDirection="column"
           width="50%"
           height="100%"
-          maxHeight="100%"
+          style={{ background: "white" }}
         >
-          <Typography variant="button">
-            Question Title: <strong>{questionTitle}</strong>
-          </Typography>
-          <Typography variant="button">
-            Difficulty: <strong>{questionDifficulty}</strong>
-          </Typography>
+          <div style={{ border: "1px solid black" }}>
+            <Typography variant="button">
+              Question Title: <strong>{questionTitle}</strong>
+            </Typography>
+            <br />
+            <Typography variant="button">
+              Difficulty: <strong>{questionDifficulty}</strong>
+            </Typography>
+          </div>
+
           <div
             style={{
               width: "100%",

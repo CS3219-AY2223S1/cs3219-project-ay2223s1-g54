@@ -1,7 +1,7 @@
 import { Box, Button, Typography, Grid, styled } from "@mui/material";
-import { teal, cyan } from "@mui/material/colors";
+import { blue, teal } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
-import landingPageImage from "../landingpage.png";
+import landingPageImage from "../img/landingpage.png";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -22,10 +22,10 @@ const LandingPage = () => {
   }));
 
   const LoginColorButton = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(cyan[500]),
-    backgroundColor: cyan[500],
+    color: theme.palette.getContrastText(blue[500]),
+    backgroundColor: blue[500],
     "&:hover": {
-      backgroundColor: cyan[700],
+      backgroundColor: blue[700],
     },
   }));
 
@@ -54,7 +54,7 @@ const LandingPage = () => {
           <Typography
             variant="caption"
             align="center"
-            fontSize={"20px"}
+            fontSize="1.1vw"
             sx={{ width: "35%", margin: "20px" }}
             justify="flex-end"
           >
@@ -90,6 +90,8 @@ const LandingPage = () => {
       </Grid>
       <Grid item xs={6}>
         <img src={landingPageImage} alt="horse" />
+        {/* Image credits: */}
+        {/* <a href="http://www.freepik.com">Designed by Freepik</a> */}
       </Grid>
     </Grid>
   );

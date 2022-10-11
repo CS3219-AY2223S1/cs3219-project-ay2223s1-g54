@@ -64,6 +64,7 @@ function ChatComponent(props) {
       borderRadius="3"
       justifyContent="center"
       overflow="scroll"
+      background="white"
     >
       <Box
         ref={chatboxRef}

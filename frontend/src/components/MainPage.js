@@ -21,103 +21,138 @@ function MainPage() {
   };
 
   return (
-    <Grid
-      container
-      spacing={0}
-      direction="row"
-      style={{ minHeight: "100vh", background: "#F1DDBF" }}
+    <Box
+      display="flex"
+      flexDirection="column"
+      width="100vw"
+      height="100vh"
+      style={{ background: "#F1DDBF" }}
     >
       <Grid container spacing={0}>
-        <Grid item xs={10}>
+        <Grid item xs={11}>
           <Typography
             variant={"h2"}
             align={"left"}
             marginTop={"2rem"}
-            marginLeft={"2rem"}
+            marginLeft={"5rem"}
+            marginBottom={"2rem"}
+            textAlign="center"
           >
             Welcome, {username}
           </Typography>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={1}>
           <SettingsMenu />
         </Grid>
       </Grid>
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
+      <Box
+        display="flex"
+        flexDirection="row"
+        justifyContent="space-around"
+        alignItems="stretch"
+        width="100%"
+        height="100%"
+        padding="40px"
       >
-        <Grid item xs={12}>
+        <Box
+          sx={{
+            width: "40%",
+            borderRadius: 3,
+            background: "white",
+            boxShadow: "0 6px 6px hsl(0deg 0% 0% / 0.3)",
+            alignItems: "center",
+            padding: "30px",
+          }}
+        >
           <Box
-            sx={{
-              width: 500,
-              height: 350,
-              borderRadius: 3,
-              background: "white",
-              boxShadow: "0 6px 6px hsl(0deg 0% 0% / 0.3)",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            width="100%"
+            height="100%"
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-around"
+            alignItems="center"
           >
-            <Container component="main" maxWidth="xs">
-              <CssBaseline />
-              <div>
-                <Typography
-                  component="h1"
-                  variant="h2"
-                  sx={{ mt: 2 }}
-                  textAlign="center"
-                >
-                  Find Match
-                </Typography>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  sx={{ mt: 3 }}
-                  onClick={() => handleMatch(0)}
-                >
-                  Easy
-                </Button>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  sx={{ mt: 3 }}
-                  onClick={() => handleMatch(1)}
-                >
-                  Medium
-                </Button>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  sx={{ mt: 3 }}
-                  onClick={() => handleMatch(2)}
-                >
-                  Hard
-                </Button>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  sx={{ mt: 2 }}
-                  onClick={() => handleMatch(3)}
-                >
-                  Random
-                </Button>
-              </div>
-            </Container>
+            <Typography
+              component="h1"
+              variant="h2"
+              sx={{ mt: 2 }}
+              textAlign="center"
+            >
+              History
+            </Typography>
           </Box>
-        </Grid>
-      </Grid>
-    </Grid>
+        </Box>
+
+        <Box
+          sx={{
+            width: "40%",
+            borderRadius: 3,
+            background: "white",
+            boxShadow: "0 6px 6px hsl(0deg 0% 0% / 0.3)",
+            alignItems: "center",
+            padding: "30px",
+          }}
+        >
+          <Box
+            width="100%"
+            height="100%"
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-around"
+            alignItems="center"
+          >
+            <Typography
+              component="h1"
+              variant="h2"
+              sx={{ mt: 2 }}
+              textAlign="center"
+            >
+              Find Match
+            </Typography>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3 }}
+              onClick={() => handleMatch(0)}
+            >
+              Easy
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3 }}
+              onClick={() => handleMatch(1)}
+            >
+              Medium
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3 }}
+              onClick={() => handleMatch(2)}
+            >
+              Hard
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+              onClick={() => handleMatch(3)}
+            >
+              Random
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 
