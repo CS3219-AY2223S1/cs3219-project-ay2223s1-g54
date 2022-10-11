@@ -24,10 +24,11 @@ describe("User Endpoints", () => {
   });
 
   describe("Get User By Email", () => {
-    it("Should get the ID of the user using email", async () => {
+    it("Should get the user using email", async () => {
       const res = await supertest(app).get("/").query({ email });
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty("userId");
+      expect(res.body).toHaveProperty("username");
 
       userId = res.body.userId;
     });

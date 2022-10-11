@@ -15,8 +15,10 @@ userRoutes.get(
       throw new MalformedRequest(responseMessages.MISSING_EMAIL_FIELD);
     }
 
-    const userId = await userService.getUserId(email);
-    return res.status(statusCodes.OK).json({ userId });
+    const user = await userService.getUser(email);
+    const userId = user.id;
+    const username = user.username;
+    return res.status(statusCodes.OK).json({ userId, username });
   })
 );
 

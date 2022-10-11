@@ -1,3 +1,5 @@
+import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -6,12 +8,13 @@ import {
   CssBaseline,
   Container,
 } from "@mui/material";
-import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import SettingsMenu from "./SettingsMenu";
 
 function MainPage() {
   const navigate = useNavigate();
+  const { auth } = useAuth();
+  const { username } = auth;
 
   const handleMatch = (difficulty) => {
     navigate("/waiting", { state: { difficulty } });
@@ -32,7 +35,7 @@ function MainPage() {
             marginTop={"2rem"}
             marginLeft={"2rem"}
           >
-            Hi, it is time to prepare for interview!
+            Welcome, {username}
           </Typography>
         </Grid>
         <Grid item xs={2}>

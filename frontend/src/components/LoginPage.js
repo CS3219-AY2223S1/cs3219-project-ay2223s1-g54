@@ -39,14 +39,14 @@ function LoginPage() {
         password,
       });
       const { accessToken } = res.data;
-      const { userId } = decodeToken(accessToken);
+      const { userId, username } = decodeToken(accessToken);
 
       const socket = io(URI_GATEWAY);
       socket.on("connect", () => {
         socket.emit("clientConnected", { socketId: socket.id, userId });
       });
 
-      setAuth({ accessToken, userId, socket });
+      setAuth({ accessToken, userId, username, socket });
       navigate("/matching");
     } catch (err) {
       if (err?.response?.data?.error) {

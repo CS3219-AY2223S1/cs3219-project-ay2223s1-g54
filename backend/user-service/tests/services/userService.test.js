@@ -23,12 +23,13 @@ describe("User Service", () => {
     });
   });
 
-  describe("getUserId", () => {
-    it("Should get the ID of the user using email", async () => {
+  describe("getUser", () => {
+    it("Should get the user using email", async () => {
       const f = async () => {
-        userId = await userService.getUserId(email);
+        const user = await userService.getUser(email);
+        expect(user).not.toBeNull();
 
-        expect(userId).not.toBeNull();
+        userId = user.id;
       };
 
       await expect(f()).resolves.not.toThrow();

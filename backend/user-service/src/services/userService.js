@@ -8,7 +8,7 @@ import { PasswordNotMatch } from "../exceptions/PasswordNotMatch.js";
 import { RepositoryFailure } from "../exceptions/RepositoryFailure.js";
 import { UserNotFound } from "../exceptions/UserNotFound.js";
 
-export const getUserId = async (email) => {
+export const getUser = async (email) => {
   let user;
   try {
     user = await userRepo.getUserByEmail(email);
@@ -20,7 +20,7 @@ export const getUserId = async (email) => {
     throw new UserNotFound(responseMessages.USER_NOT_FOUND);
   }
 
-  return user.id;
+  return user;
 };
 
 export const createUser = async (email, username, password) => {

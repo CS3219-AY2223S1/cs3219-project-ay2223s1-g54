@@ -4,8 +4,16 @@ const registerMatchHandlers = async (io, pubClient, subClient) => {
   const defaultParams = [io, pubClient, subClient];
 
   subClient.subscribe("createSocketRoom", async (data) => {
-    const { difficulty, userId1, userId2 } = JSON.parse(data);
-    await createRoomSockets(defaultParams, difficulty, userId1, userId2);
+    const { difficulty, userId1, userId2, username1, username2 } =
+      JSON.parse(data);
+    await createRoomSockets(
+      defaultParams,
+      difficulty,
+      userId1,
+      userId2,
+      username1,
+      username2
+    );
   });
 };
 
@@ -13,7 +21,9 @@ const createRoomSockets = async (
   defaultParams,
   difficulty,
   userId1,
-  userId2
+  userId2,
+  username1,
+  username2
 ) => {
   const [io, pubClient, subClient] = defaultParams;
 
@@ -45,7 +55,15 @@ const createRoomSockets = async (
   }
 
   // ping for collaboration
-  const collabData = { roomId, difficulty, userId1, userId2, questionSet };
+  const collabData = {
+    roomId,
+    difficulty,
+    userId1,
+    userId2,
+    username1,
+    username2,
+    questionSet,
+  };
   io.sockets.in(roomId).emit("readyForCollab", collabData);
 };
 

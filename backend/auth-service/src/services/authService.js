@@ -5,8 +5,8 @@ import { ExpiredAccessToken } from "../exceptions/ExpiredAccessToken.js";
 import { TokenGenerationFailure } from "../exceptions/TokenGenerationFailure.js";
 import { TokenVerficationFailure } from "../exceptions/TokenVerficationFailure.js";
 
-export const generateTokens = async (userId) => {
-  const userData = { userId };
+export const generateTokens = async (userId, username) => {
+  const userData = { userId, username };
 
   let accessToken;
   try {
