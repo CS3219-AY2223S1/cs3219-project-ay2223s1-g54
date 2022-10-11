@@ -4,21 +4,23 @@ import { useState, useEffect } from "react";
 import MessageComponent from "./MessageComponent.js";
 import { useAuth } from "../hooks/useAuth";
 
-function ChatComponent() {
-  const location = useLocation();
+function ChatComponent(props) {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
   const { auth } = useAuth();
   const { socket } = auth;
-  const { roomId, difficulty, userId1, userId2, questionSet } =
-    location.state.collabData;
+  const collabData = props.collabData;
+  const { roomId } = collabData;
 
   useEffect(() => {
-    socket.on("receiveMessage", ({ roomId, messageId, name, message, time }) => {
-      //update the event
-      const messageData = {roomId, messageId, name, message, time}
-      updateMessageList(messageData);
-    });
+    socket.on(
+      "receiveMessage",
+      ({ roomId, messageId, name, message, time }) => {
+        //update the event
+        const messageData = { roomId, messageId, name, message, time };
+        updateMessageList(messageData);
+      }
+    );
   }, []);
 
   const updateMessageList = (messageData) => {
@@ -106,4 +108,4 @@ function ChatComponent() {
   );
 }
 
-export default ChatComponent;
+export { ChatComponent };
