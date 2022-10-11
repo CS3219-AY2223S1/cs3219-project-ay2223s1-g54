@@ -1,7 +1,11 @@
 import { MatchModel } from "../models/match.js";
 
-export const createMatch = async (difficulty, userId1) => {
-  const createdMatch = await MatchModel.create({ difficulty, userId1 });
+export const createMatch = async (difficulty, userId1, username1) => {
+  const createdMatch = await MatchModel.create({
+    difficulty,
+    userId1,
+    username1,
+  });
   return createdMatch;
 };
 

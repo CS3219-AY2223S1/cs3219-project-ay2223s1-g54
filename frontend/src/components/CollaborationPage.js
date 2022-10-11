@@ -32,10 +32,11 @@ function CollaborationPage() {
       flexDirection="column"
       width="100vw"
       height="100vh"
+      maxHeight="100vh"
       padding="20px"
       style={{ background: "#F1DDBF" }}
     >
-      <Box display="flex" flexDirection="row">
+      <Box display="flex" flexDirection="row" height="100%" maxHeight="100%">
         <Box
           display="flex"
           flexDirection="column"

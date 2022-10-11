@@ -13,8 +13,10 @@ export const MATCHING_SERVICE_URI =
   process.env.MATCHING_SERVICE_URI || "http://localhost:8003";
 export const QUESTION_SERVICE_URI =
   process.env.QUESTION_SERVICE_URI || "http://localhost:8004";
+export const COLLABORATION_SERVICE_URI =
+  process.env.COLLABORATION_SERVICE_URI || "http://localhost:8005";
 export const COMMUNICATION_SERVICE_URI =
-process.env.COOMUNICATION_SERVICE_URI || "http://localhost:8006";
+  process.env.COOMUNICATION_SERVICE_URI || "http://localhost:8006";
 
 export const ioOptions = {
   cors: {

@@ -32,7 +32,13 @@ const CollaborativeTabs = (props) => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" width="100%">
+    <Box
+      display="flex"
+      flexDirection="column"
+      width="100%"
+      height="100%"
+      maxHeight="100%"
+    >
       <Tabs
         value={tabIndex}
         onChange={handleTabIndexChange}
@@ -43,17 +49,23 @@ const CollaborativeTabs = (props) => {
         <Tab value="1" label="White Board" />
         <Tab value="2" label="Chat" />
       </Tabs>
-      <div>
-        <div style={{ display: tabIndex === "0" ? "block" : "none" }}>
-          <CollaborativeCodeEditor socket={socket} collabData={collabData} />
-        </div>
-        <div style={{ display: tabIndex === "1" ? "block" : "none" }}>
-          <CollaborativeWhiteBoard socket={socket} collabData={collabData} />
-        </div>
-        <div style={{ display: tabIndex === "2" ? "block" : "none" }}>
-          <ChatComponent socket={socket} collabData={collabData} />
-        </div>
-      </div>
+
+      <CollaborativeCodeEditor
+        hidden={tabIndex === "0" ? true : false}
+        socket={socket}
+        collabData={collabData}
+      />
+      <CollaborativeWhiteBoard
+        hidden={tabIndex === "1" ? true : false}
+        socket={socket}
+        collabData={collabData}
+      />
+      <ChatComponent
+        hidden={tabIndex === "2" ? true : false}
+        socket={socket}
+        collabData={collabData}
+      />
+
       <Button
         variant="contained"
         color="error"

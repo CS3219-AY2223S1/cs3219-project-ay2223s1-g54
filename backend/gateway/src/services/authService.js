@@ -20,10 +20,11 @@ export const loginUser = async (email, password) => {
   const resUserId = await axiosDecorator(userAxios.get)("/", {
     params: { email },
   });
-  const { userId } = resUserId.data;
+  const { userId, username } = resUserId.data;
 
   const resToken = await axiosDecorator(authAxios.post)("/generate", {
     userId,
+    username,
   });
   const { accessToken, refreshToken } = resToken.data;
   return { accessToken, refreshToken };

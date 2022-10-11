@@ -13,6 +13,13 @@ let MatchSchema = new Schema({
   userId2: {
     type: String,
   },
+  username1: {
+    type: String,
+    required: true,
+  },
+  username2: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     immutable: true,

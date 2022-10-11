@@ -1,49 +1,43 @@
 import { useEffect, useState } from "react";
+import { Box, MenuItem, Select, Stack } from "@mui/material";
 import Editor from "@monaco-editor/react";
-import { Box, MenuItem, Select } from "@mui/material";
 
 const CollaborativeCodeEditor = (props) => {
-  const [code, setCode] = useState("");
-  const [languageList, setLanguageList] = useState([]);
+  const [theme, setTheme] = useState("vs-light");
+  const [languageMap, setLanguageMap] = useState({});
   const [languageSlug, setLanguageSlug] = useState("");
+  const [code, setCode] = useState("");
   const { socket, collabData } = props;
   const { roomId, questionSet } = collabData;
-
-  const updateLanguage = (event) => {
-    const language = event.target.value;
-    socket.emit("sendLanguage", { roomId, language });
-  };
-
-  const updateCode = (code) => {
-    socket.emit("sendCurrentCode", { roomId, code });
-  };
+  const question = questionSet[0];
 
   useEffect(() => {
-    const question = questionSet[0];
-    const { codeSnippets } = question;
+    const initLanguageMap = () => {
+      const { codeSnippets } = question;
 
-    let languages = [];
-    for (const codeSnippet of codeSnippets) {
-      const { slug, name, code } = codeSnippet;
-      const language = {
-        slug,
-        name,
-        code,
-      };
-      languages.push(language);
+      const languageMap = {};
+      for (const codeSnippet of codeSnippets) {
+        const { slug, name, code } = codeSnippet;
+        const languageObj = {
+          name,
+          code,
+        };
+        languageMap[slug] = languageObj;
+      }
+      return languageMap;
+    };
+
+    // initialise state if it does not exist
+    if (Object.keys(languageMap).length === 0) {
+      const languageMap = initLanguageMap();
+      const firstSlug = Object.keys(languageMap)[0];
+      setLanguageMap(languageMap);
+      setLanguageSlug(firstSlug);
+      setCode(languageMap[firstSlug].code);
     }
 
-    setLanguageList(languages);
-    setLanguageSlug(languages[0].slug);
-    setCode(languages[0].code);
-
     socket.on("receiveLanguage", ({ language }) => {
-      console.log(languageList);
-      for (const languageItem of languageList) {
-        if (languageItem.slug === language) {
-          updateCode(languageItem.code);
-        }
-      }
+      updateCode(languageMap[language].code);
       setLanguageSlug(language);
     });
 
@@ -55,30 +49,58 @@ const CollaborativeCodeEditor = (props) => {
       socket.off("receiveLanguage");
       socket.off("receiveCurrentCode");
     };
-  }, []);
+  }, [languageMap]);
+
+  const updateTheme = (event) => {
+    setTheme(event.target.value);
+  };
+
+  const updateLanguage = (event) => {
+    const language = event.target.value;
+    socket.emit("sendLanguage", { roomId, language });
+  };
+
+  const updateCode = (code) => {
+    socket.emit("sendCurrentCode", { roomId, code });
+  };
 
   return (
-    <div>
-      <Box display={"flex"} flexDirection="column">
-        <div style={{ marginBottom: "10px" }}>
-          <Select value={languageSlug} onChange={updateLanguage}>
-            {languageList.map((languageItem) => {
-              return (
-                <MenuItem key={languageItem.slug} value={languageItem.slug}>
-                  {languageItem.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </div>
-        <Editor
-          height="70vh"
-          value={code}
-          language={languageSlug}
-          onChange={updateCode}
-        />
+    <Stack
+      height={props.hidden === true ? "100%" : "0"}
+      visibility={props.hidden === true ? "none" : "hidden"}
+      maxHeight="100%"
+    >
+      <Box marginTop="10px" marginBottom="10px" spacing="10">
+        <Select
+          sx={{ marginRight: "10px" }}
+          value={theme}
+          onChange={updateTheme}
+        >
+          <MenuItem key="vs-light" value="vs-light">
+            Light
+          </MenuItem>
+          <MenuItem key="vs-dark" value="vs-dark">
+            Dark
+          </MenuItem>
+        </Select>
+        <Select value={languageSlug} onChange={updateLanguage}>
+          {Object.keys(languageMap).map((slug) => {
+            const language = languageMap[slug];
+            return (
+              <MenuItem key={slug} value={slug}>
+                {language.name}
+              </MenuItem>
+            );
+          })}
+        </Select>
       </Box>
-    </div>
+      <Editor
+        theme={theme}
+        language={languageSlug}
+        value={code}
+        onChange={updateCode}
+      />
+    </Stack>
   );
 };
 
