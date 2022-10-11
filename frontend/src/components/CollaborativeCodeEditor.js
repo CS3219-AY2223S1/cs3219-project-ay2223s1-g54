@@ -3,6 +3,7 @@ import { Box, MenuItem, Select, Stack } from "@mui/material";
 import Editor from "@monaco-editor/react";
 
 const CollaborativeCodeEditor = (props) => {
+  const [theme, setTheme] = useState("vs-light");
   const [languageMap, setLanguageMap] = useState({});
   const [languageSlug, setLanguageSlug] = useState("");
   const [code, setCode] = useState("");
@@ -50,6 +51,10 @@ const CollaborativeCodeEditor = (props) => {
     };
   }, [languageMap]);
 
+  const updateTheme = (event) => {
+    setTheme(event.target.value);
+  };
+
   const updateLanguage = (event) => {
     const language = event.target.value;
     socket.emit("sendLanguage", { roomId, language });
@@ -65,7 +70,19 @@ const CollaborativeCodeEditor = (props) => {
       visibility={props.hidden === true ? "none" : "hidden"}
       maxHeight="100%"
     >
-      <Box marginTop="10px" marginBottom="10px">
+      <Box marginTop="10px" marginBottom="10px" spacing="10">
+        <Select
+          sx={{ marginRight: "10px" }}
+          value={theme}
+          onChange={updateTheme}
+        >
+          <MenuItem key="vs-light" value="vs-light">
+            Light
+          </MenuItem>
+          <MenuItem key="vs-dark" value="vs-dark">
+            Dark
+          </MenuItem>
+        </Select>
         <Select value={languageSlug} onChange={updateLanguage}>
           {Object.keys(languageMap).map((slug) => {
             const language = languageMap[slug];
@@ -77,7 +94,12 @@ const CollaborativeCodeEditor = (props) => {
           })}
         </Select>
       </Box>
-      <Editor language={languageSlug} value={code} onChange={updateCode} />
+      <Editor
+        theme={theme}
+        language={languageSlug}
+        value={code}
+        onChange={updateCode}
+      />
     </Stack>
   );
 };
