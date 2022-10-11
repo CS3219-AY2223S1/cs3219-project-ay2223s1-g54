@@ -57,6 +57,7 @@ function ChatComponent(props) {
         // maxHeight: 400,
         flexDirection: "column",
         justifyContent: "center",
+        background: "white",
       }}
     >
       <Box
