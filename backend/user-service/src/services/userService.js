@@ -33,6 +33,11 @@ export const createUser = async (email, username, password) => {
     throw new FieldValidationFailure(responseMessages.EMAIL_VALIDATION_FAIL);
   }
 
+  const usernameRegExp = new RegExp(regExp.USERNAME);
+  if (!username.match(usernameRegExp)) {
+    throw new FieldValidationFailure(responseMessages.USERNAME_VALIDATION_FAIL);
+  }
+
   try {
     emailExists = await userRepo.emailExists(email);
   } catch (err) {

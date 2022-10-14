@@ -24,3 +24,5 @@ export const PASSWORD_DOES_NOT_MATCH = "The password does not match";
 
 export const EMAIL_VALIDATION_FAIL =
   "The email specified is not a school email";
+export const USERNAME_VALIDATION_FAIL =
+  "The password specified does not start with an alphabet, follow by alphanumeric characters with total length between 6 to 18 characters";
