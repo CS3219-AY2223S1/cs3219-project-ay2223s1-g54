@@ -1,7 +1,9 @@
 import bcrypt from "bcryptjs";
 import * as userRepo from "../db/repositories/user.js";
+import * as regExp from "../constants/regExp.js";
 import * as responseMessages from "../constants/responseMessages.js";
 import { SALT_ROUNDS } from "../constants/bcrypt.js";
+import { FieldValidationFailure } from "../exceptions/FieldValidationFailure.js";
 import { IdenticalPassword } from "../exceptions/IdenticalPassword.js";
 import { InformationExists } from "../exceptions/InformationExists.js";
 import { PasswordNotMatch } from "../exceptions/PasswordNotMatch.js";
@@ -25,6 +27,11 @@ export const getUser = async (email) => {
 
 export const createUser = async (email, username, password) => {
   let emailExists, usernameExists;
+
+  const emailRegExp = new RegExp(regExp.EMAIL);
+  if (!email.match(emailRegExp)) {
+    throw new FieldValidationFailure(responseMessages.EMAIL_VALIDATION_FAIL);
+  }
 
   try {
     emailExists = await userRepo.emailExists(email);

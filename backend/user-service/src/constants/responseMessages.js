@@ -21,3 +21,6 @@ export const EMAIL_ALREADY_EXISTS = "The email was already taken";
 export const USERNAME_ALREADY_EXISTS = "The username was already taken";
 export const PASSWORDS_IDENTICAL = "The old and new passwords were identical";
 export const PASSWORD_DOES_NOT_MATCH = "The password does not match";
+
+export const EMAIL_VALIDATION_FAIL =
+  "The email specified is not a school email";
