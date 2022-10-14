@@ -81,6 +81,11 @@ export const updateUserPassword = async (userId, oldPassword, newPassword) => {
     throw new IdenticalPassword(responseMessages.PASSWORDS_IDENTICAL);
   }
 
+  const passwordRegExp = new RegExp(regExp.PASSWORD);
+  if (!newPassword.match(passwordRegExp)) {
+    throw new FieldValidationFailure(responseMessages.PASSWORD_VALIDATION_FAIL);
+  }
+
   let user;
   try {
     user = await userRepo.getUserById(userId);
