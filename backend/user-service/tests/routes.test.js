@@ -8,7 +8,7 @@ describe("User Endpoints", () => {
   });
 
   let userId;
-  const email = "jesttest@test.com";
+  const email = "jesttest@u.nus.edu";
   const username = "jesttest";
   const password = "jesttest123";
   const oldPassword = password;
