@@ -38,6 +38,7 @@ const CollaborativeTabs = (props) => {
       width="100%"
       height="100%"
       maxHeight="100%"
+      backgroundColor="white"
     >
       <Tabs
         value={tabIndex}
@@ -66,15 +67,28 @@ const CollaborativeTabs = (props) => {
         collabData={collabData}
       />
 
-      <Button
-        variant="contained"
-        color="error"
-        startIcon={<CloseSharpIcon />}
-        onClick={leaveRoom}
-        style={{ marginTop: "20px" }}
-      >
-        Leave Room
-      </Button>
+      <Box style={{ background: "#F1DDBF" }}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            alert("Coming soon");
+          }}
+          style={{ marginTop: "20px" }}
+          fullWidth
+        >
+          Submit Code
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<CloseSharpIcon />}
+          onClick={leaveRoom}
+          style={{ marginTop: "20px" }}
+          fullWidth
+        >
+          Leave Room
+        </Button>
+      </Box>
     </Box>
   );
 };
