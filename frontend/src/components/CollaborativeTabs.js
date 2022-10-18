@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Tab, Tabs } from "@mui/material";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { CollaborativeCodeEditor } from "./CollaborativeCodeEditor";
 import { CollaborativeWhiteBoard } from "./CollaborativeWhiteBoard";
@@ -83,6 +84,7 @@ const CollaborativeTabs = (props) => {
         </Button>
         <Button
           variant="contained"
+          startIcon={<UploadFileIcon />}
           onClick={() => {
             alert("Coming soon");
           }}
