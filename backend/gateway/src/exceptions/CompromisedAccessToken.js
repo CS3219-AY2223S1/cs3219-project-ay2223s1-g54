@@ -4,6 +4,6 @@ export class CompromisedAccessToken extends Error {
   constructor(message) {
     super(message);
     this.name = "CompromisedAccessToken";
-    this.httpStatusCode = statusCodes.FORBIDDEN;
+    this.httpStatusCode = statusCodes.UNAUTHORIZED;
   }
 }

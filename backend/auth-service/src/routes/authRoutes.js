@@ -61,6 +61,10 @@ authRoutes.post(
       throw new MalformedRequest(responseMessages.MISSING_REFRESH_TOKEN_FIELD);
     }
 
+    if (!refreshTokens.includes(refreshToken)) {
+      throw new MalformedRequest(responseMessages.INVALID_REFRESH_TOKEN);
+    }
+
     refreshTokens = refreshTokens.filter((token) => token != refreshToken);
     return res.sendStatus(statusCodes.OK);
   })

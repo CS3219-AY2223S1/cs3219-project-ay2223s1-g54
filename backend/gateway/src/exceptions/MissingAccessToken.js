@@ -4,6 +4,6 @@ export class MissingAccessToken extends Error {
   constructor(message) {
     super(message);
     this.name = "MissingAccessToken";
-    this.httpStatusCode = statusCodes.BAD_REQUEST;
+    this.httpStatusCode = statusCodes.UNAUTHORIZED;
   }
 }
