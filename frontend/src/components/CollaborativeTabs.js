@@ -67,26 +67,28 @@ const CollaborativeTabs = (props) => {
         collabData={collabData}
       />
 
-      <Box style={{ background: "#F1DDBF" }}>
-        <Button
-          variant="contained"
-          onClick={() => {
-            alert("Coming soon");
-          }}
-          style={{ marginTop: "20px" }}
-          fullWidth
-        >
-          Submit Code
-        </Button>
+      <Box
+        display="flex"
+        flexDirection="row-reverse"
+        style={{ background: "#F1DDBF" }}
+      >
         <Button
           variant="contained"
           color="error"
           startIcon={<CloseSharpIcon />}
           onClick={leaveRoom}
-          style={{ marginTop: "20px" }}
-          fullWidth
+          style={{ marginTop: "20px", marginLeft: "20px" }}
         >
           Leave Room
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            alert("Coming soon");
+          }}
+          style={{ marginTop: "20px", marginLeft: "20px" }}
+        >
+          Submit Code
         </Button>
       </Box>
     </Box>
