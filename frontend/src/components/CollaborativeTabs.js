@@ -174,8 +174,8 @@ const CollaborativeTabs = (props) => {
         <Button
           variant="contained"
           onClick={handleSubmit}
-          style={{ marginTop: "20px" }}
-          fullWidth
+          startIcon={<UploadFileIcon />}
+          style={{ marginTop: "20px", marginLeft: "20px" }}
         >
           {processing ? "Processing..." : "Submit Code"}
         </Button>
@@ -187,16 +187,6 @@ const CollaborativeTabs = (props) => {
           style={{ marginTop: "20px", marginLeft: "20px" }}
         >
           Leave Room
-        </Button>
-        <Button
-          variant="contained"
-          startIcon={<UploadFileIcon />}
-          onClick={() => {
-            alert("Coming soon");
-          }}
-          style={{ marginTop: "20px", marginLeft: "20px" }}
-        >
-          Submit Code
         </Button>
       </Box>
     </Box>
