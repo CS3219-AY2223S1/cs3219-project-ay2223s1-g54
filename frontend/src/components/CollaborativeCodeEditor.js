@@ -11,6 +11,25 @@ const CollaborativeCodeEditor = (props) => {
   const { roomId, questionSet } = collabData;
   const question = questionSet[0];
 
+  const languageIdMap = new Map();
+  languageIdMap.set("cpp", 76);
+  languageIdMap.set("java", 62);
+  languageIdMap.set("python", 70);
+  languageIdMap.set("python3", 71);
+  languageIdMap.set("c", 75);
+  languageIdMap.set("csharp", 51);
+  languageIdMap.set("javascript", 63);
+  languageIdMap.set("ruby", 72);
+  languageIdMap.set("swift", 83);
+  languageIdMap.set("golang", 60);
+  languageIdMap.set("scala", 81);
+  languageIdMap.set("kotlin", 78);
+  languageIdMap.set("rust", 73);
+  languageIdMap.set("php", 68);
+  languageIdMap.set("typescript", 74);
+  languageIdMap.set("erlang", 58);
+  languageIdMap.set("elixir", 57);
+
   useEffect(() => {
     const initLanguageMap = () => {
       const { codeSnippets } = question;
@@ -33,16 +52,19 @@ const CollaborativeCodeEditor = (props) => {
       const firstSlug = Object.keys(languageMap)[0];
       setLanguageMap(languageMap);
       setLanguageSlug(firstSlug);
+      props.setLanguageId(languageIdMap.get(firstSlug));
       setCode(languageMap[firstSlug].code);
     }
 
     socket.on("receiveLanguage", ({ language }) => {
       updateCode(languageMap[language].code);
       setLanguageSlug(language);
+      props.setLanguageId(languageIdMap.get(language));
     });
 
     socket.on("receiveCurrentCode", ({ code }) => {
       setCode(code);
+      props.setCode(code);
     });
 
     return () => {
