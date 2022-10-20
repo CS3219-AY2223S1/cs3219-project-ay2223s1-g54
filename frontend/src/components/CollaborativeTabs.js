@@ -48,7 +48,6 @@ const CollaborativeTabs = (props) => {
   };
 
   const handleSubmit = () => {
-    socket.emit("sendSubmitCode", { roomId });
     setProcessing(true);
     const formData = {
       language_id: languageId,
@@ -69,25 +68,26 @@ const CollaborativeTabs = (props) => {
       data: formData,
     };
 
-    // axios
-    //   .request(options)
-    //   .then(function (response) {
-    //     console.log("res.data", response.data);
-    //     const token = response.data.token;
-    //     checkStatus(token);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     let error = err.response ? err.response.data : err;
-    //     // get error status
-    //     let status = err.response.status;
-    //     console.log("status", status);
-    //     if (status === 429) {
-    //       console.log("too many requests", status);
-    //     }
-    //     setProcessing(false);
-    //     console.log("catch block...", error);
-    //   });
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log("res.data", response.data);
+        const token = response.data.token;
+        checkStatus(token);
+      })
+      .catch((err) => {
+        console.log(err);
+        let error = err.response ? err.response.data : err;
+        // get error status
+        let status = err.response.status;
+        console.log("status", status);
+        if (status === 429) {
+          console.log("too many requests", status);
+        }
+        setProcessing(false);
+        console.log("catch block...", error);
+      });
+      socket.emit("sendSubmitCode", { roomId });
   };
 
   const checkStatus = async (token) => {
