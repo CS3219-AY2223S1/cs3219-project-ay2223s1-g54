@@ -10,9 +10,9 @@ function CollaborationPage() {
   const [questionTitle, setQuestionTitle] = useState("");
   const [questionDifficulty, setQuestionDifficulty] = useState("");
   const [questionContent, setQuestionContent] = useState("");
-  const { socket } = auth;
+  const { userId, socket } = auth;
   const collabData = location.state.collabData;
-
+  
   useEffect(() => {
     const setupStates = async () => {
       const question = collabData.questionSet[0];
@@ -68,7 +68,7 @@ function CollaborationPage() {
 
         <Divider variant="middle" />
 
-        <CollaborativeTabs socket={socket} collabData={collabData} />
+        <CollaborativeTabs userId={userId} socket={socket} collabData={collabData} />
       </Box>
     </Box>
   );

@@ -13,13 +13,15 @@ import axios from "axios";
 const CollaborativeTabs = (props) => {
   const navigate = useNavigate();
   const [tabIndex, setTabIndex] = useState("0");
-  const { socket, collabData } = props;
+  const { userId, socket, collabData } = props;
+  const { userId1, userId2 } = collabData;
   const { roomId } = collabData;
   const [processing, setProcessing] = useState(null);
   const [userInput, setUserInput] = useState("");
   const [outputDetails, setOutputDetails] = useState(null);
   const [languageId, setLanguageId] = useState(null);
   const [code, setCode] = useState("");
+  const [submits, setSubmits] = useState(0);
 
   useEffect(() => {
     socket.on("receiveLeaveRoom", () => {
@@ -27,8 +29,13 @@ const CollaborativeTabs = (props) => {
       navigate("/matching");
     });
 
+    socket.on("receiveSubmitCode", () => {
+      setSubmits(prevSubmits => prevSubmits + 1);
+    });
+
     return () => {
       socket.off("receiveLeaveRoom");
+      socket.off("receiveSubmitCode");
     };
   }, []);
 
@@ -41,7 +48,7 @@ const CollaborativeTabs = (props) => {
   };
 
   const handleSubmit = () => {
-    console.log("in here");
+    socket.emit("sendSubmitCode", { roomId });
     setProcessing(true);
     const formData = {
       language_id: languageId,
@@ -62,25 +69,25 @@ const CollaborativeTabs = (props) => {
       data: formData,
     };
 
-    axios
-      .request(options)
-      .then(function (response) {
-        console.log("res.data", response.data);
-        const token = response.data.token;
-        checkStatus(token);
-      })
-      .catch((err) => {
-        console.log(err);
-        let error = err.response ? err.response.data : err;
-        // get error status
-        let status = err.response.status;
-        console.log("status", status);
-        if (status === 429) {
-          console.log("too many requests", status);
-        }
-        setProcessing(false);
-        console.log("catch block...", error);
-      });
+    // axios
+    //   .request(options)
+    //   .then(function (response) {
+    //     console.log("res.data", response.data);
+    //     const token = response.data.token;
+    //     checkStatus(token);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     let error = err.response ? err.response.data : err;
+    //     // get error status
+    //     let status = err.response.status;
+    //     console.log("status", status);
+    //     if (status === 429) {
+    //       console.log("too many requests", status);
+    //     }
+    //     setProcessing(false);
+    //     console.log("catch block...", error);
+    //   });
   };
 
   const checkStatus = async (token) => {
@@ -115,6 +122,10 @@ const CollaborativeTabs = (props) => {
       setProcessing(false);
     }
   };
+
+  const showSubmitButton = () => {
+    return (userId == userId1 && submits == 0) || (userId == userId2 && submits == 1);
+  }
 
   return (
     <Box
@@ -171,14 +182,16 @@ const CollaborativeTabs = (props) => {
           />
           </Grid>
         </Grid>
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          startIcon={<UploadFileIcon />}
-          style={{ marginTop: "20px", marginLeft: "20px" }}
-        >
-          {processing ? "Processing..." : "Submit Code"}
-        </Button>
+        {showSubmitButton() && 
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            startIcon={<UploadFileIcon />}
+            style={{ marginTop: "20px", marginLeft: "20px" }}
+          >
+            {processing ? "Processing..." : "Submit Code"}
+          </Button>
+        }
         <Button
           variant="contained"
           color="error"
