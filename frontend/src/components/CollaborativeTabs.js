@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Tab, Tabs, Grid } from "@mui/material";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { CollaborativeCodeEditor } from "./CollaborativeCodeEditor";
 import { CollaborativeWhiteBoard } from "./CollaborativeWhiteBoard";
@@ -152,7 +153,11 @@ const CollaborativeTabs = (props) => {
         socket={socket}
         collabData={collabData}
       />
-      <Box style={{ background: "#F1DDBF" }}>
+      <Box
+        display="flex"
+        flexDirection="row-reverse"
+        style={{ background: "#F1DDBF" }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={6}>
           <InputWindow
@@ -179,10 +184,19 @@ const CollaborativeTabs = (props) => {
           color="error"
           startIcon={<CloseSharpIcon />}
           onClick={leaveRoom}
-          style={{ marginTop: "20px" }}
-          fullWidth
+          style={{ marginTop: "20px", marginLeft: "20px" }}
         >
           Leave Room
+        </Button>
+        <Button
+          variant="contained"
+          startIcon={<UploadFileIcon />}
+          onClick={() => {
+            alert("Coming soon");
+          }}
+          style={{ marginTop: "20px", marginLeft: "20px" }}
+        >
+          Submit Code
         </Button>
       </Box>
     </Box>
