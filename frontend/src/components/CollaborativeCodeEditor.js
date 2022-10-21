@@ -9,7 +9,8 @@ const CollaborativeCodeEditor = (props) => {
   const [code, setCode] = useState("");
   const { socket, collabData } = props;
   const { roomId, questionSet } = collabData;
-  const question = questionSet[0];
+  const firstQuestion = questionSet[0];
+  const secondQuestion = questionSet[1];
 
   const languageIdMap = new Map();
   languageIdMap.set("cpp", 76);
@@ -30,31 +31,35 @@ const CollaborativeCodeEditor = (props) => {
   languageIdMap.set("erlang", 58);
   languageIdMap.set("elixir", 57);
 
-  useEffect(() => {
-    const initLanguageMap = () => {
-      const { codeSnippets } = question;
+  const initLanguageMap = (question) => {
+    const { codeSnippets } = question;
 
-      const languageMap = {};
-      for (const codeSnippet of codeSnippets) {
-        const { slug, name, code } = codeSnippet;
-        const languageObj = {
-          name,
-          code,
-        };
-        languageMap[slug] = languageObj;
-      }
-      return languageMap;
-    };
+    const languageMap = {};
+    for (const codeSnippet of codeSnippets) {
+      const { slug, name, code } = codeSnippet;
+      const languageObj = {
+        name,
+        code,
+      };
+      languageMap[slug] = languageObj;
+    }
+    return languageMap;
+  };
 
+  const setupQuestion = (question) => {
     // initialise state if it does not exist
     if (Object.keys(languageMap).length === 0) {
-      const languageMap = initLanguageMap();
+      const languageMap = initLanguageMap(question);
       const firstSlug = Object.keys(languageMap)[0];
       setLanguageMap(languageMap);
       setLanguageSlug(firstSlug);
       props.setLanguageId(languageIdMap.get(firstSlug));
       setCode(languageMap[firstSlug].code);
     }
+  }
+
+  useEffect(() => {
+    setupQuestion(firstQuestion);
 
     socket.on("receiveLanguage", ({ language }) => {
       updateCode(languageMap[language].code);
@@ -71,7 +76,11 @@ const CollaborativeCodeEditor = (props) => {
       socket.off("receiveLanguage");
       socket.off("receiveCurrentCode");
     };
-  }, [languageMap]);
+  }, []);
+
+  socket.on("receiveSubmitCode", () => {
+    setupQuestion(questionSet[1]);
+  })
 
   const updateTheme = (event) => {
     setTheme(event.target.value);
