@@ -87,7 +87,7 @@ const CollaborativeTabs = (props) => {
         setProcessing(false);
         console.log("catch block...", error);
       });
-      socket.emit("sendSubmitCode", { roomId });
+    socket.emit("sendSubmitCode", { roomId });
   };
 
   const checkStatus = async (token) => {
