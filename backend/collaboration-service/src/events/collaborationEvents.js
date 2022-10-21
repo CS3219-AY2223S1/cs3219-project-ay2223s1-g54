@@ -35,6 +35,11 @@ const registerCollaborationHandlers = async (io, pubClient, subClient) => {
     const { roomId } = JSON.parse(data);
     await syncLeaveRoom(defaultParams, roomId);
   });
+
+  subClient.subscribe("sendSubmitCode", async (data) => {
+    const { roomId } = JSON.parse(data);
+    await syncSubmitCode(pubClient, roomId);
+  });
 };
 
 const syncLanguage = async (defaultParams, roomId, language) => {
@@ -84,6 +89,11 @@ const syncLeaveRoom = async (defaultParams, roomId) => {
 
   const data = JSON.stringify({ roomId });
   await pubClient.publish("receiveLeaveRoom", data);
+};
+
+const syncSubmitCode = async (pubClient, roomId) => {
+  const data = JSON.stringify({ roomId });
+  await pubClient.publish("receiveSubmitCode", data);
 };
 
 export { registerCollaborationHandlers };

@@ -13,13 +13,15 @@ import axios from "axios";
 const CollaborativeTabs = (props) => {
   const navigate = useNavigate();
   const [tabIndex, setTabIndex] = useState("0");
-  const { socket, collabData } = props;
+  const { userId, socket, collabData } = props;
+  const { userId1, userId2 } = collabData;
   const { roomId } = collabData;
   const [processing, setProcessing] = useState(null);
   const [userInput, setUserInput] = useState("");
   const [outputDetails, setOutputDetails] = useState(null);
   const [languageId, setLanguageId] = useState(null);
   const [code, setCode] = useState("");
+  const [submits, setSubmits] = useState(0);
 
   useEffect(() => {
     socket.on("receiveLeaveRoom", () => {
@@ -27,8 +29,13 @@ const CollaborativeTabs = (props) => {
       navigate("/matching");
     });
 
+    socket.on("receiveSubmitCode", () => {
+      setSubmits(prevSubmits => prevSubmits + 1);
+    });
+
     return () => {
       socket.off("receiveLeaveRoom");
+      socket.off("receiveSubmitCode");
     };
   }, []);
 
@@ -41,7 +48,6 @@ const CollaborativeTabs = (props) => {
   };
 
   const handleSubmit = () => {
-    console.log("in here");
     setProcessing(true);
     const formData = {
       language_id: languageId,
@@ -81,6 +87,7 @@ const CollaborativeTabs = (props) => {
         setProcessing(false);
         console.log("catch block...", error);
       });
+    socket.emit("sendSubmitCode", { roomId });
   };
 
   const checkStatus = async (token) => {
@@ -115,6 +122,10 @@ const CollaborativeTabs = (props) => {
       setProcessing(false);
     }
   };
+
+  const showSubmitButton = () => {
+    return (userId == userId1 && submits == 0) || (userId == userId2 && submits == 1);
+  }
 
   return (
     <Box
@@ -171,14 +182,16 @@ const CollaborativeTabs = (props) => {
           />
           </Grid>
         </Grid>
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          startIcon={<UploadFileIcon />}
-          style={{ marginTop: "20px", marginLeft: "20px" }}
-        >
-          {processing ? "Processing..." : "Submit Code"}
-        </Button>
+        {showSubmitButton() && 
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            startIcon={<UploadFileIcon />}
+            style={{ marginTop: "20px", marginLeft: "20px" }}
+          >
+            {processing ? "Processing..." : "Submit Code"}
+          </Button>
+        }
         <Button
           variant="contained"
           color="error"

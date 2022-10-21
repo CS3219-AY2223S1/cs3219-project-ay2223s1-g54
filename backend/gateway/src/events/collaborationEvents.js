@@ -35,6 +35,11 @@ const registerCollaborationHandlers = async (io, pubClient, subClient) => {
     const { roomId } = JSON.parse(data);
     await receiveLeaveRoom(defaultParams, roomId);
   });
+
+  subClient.subscribe("receiveSubmitCode", async (data) => {
+    const { roomId } = JSON.parse(data);
+    await receiveSubmitCode(io, roomId);
+  })
 };
 
 const receiveLanguage = async (defaultParams, roomId, language) => {
@@ -77,5 +82,9 @@ const receiveLeaveRoom = async (defaultParams, roomId) => {
   const [io, pubClient, subClient] = defaultParams;
   io.sockets.in(roomId).emit("receiveLeaveRoom");
 };
+
+const receiveSubmitCode = async (io, roomId) => {
+  io.sockets.in(roomId).emit("receiveSubmitCode");
+}
 
 export { registerCollaborationHandlers };

@@ -69,6 +69,11 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
       "sendLeaveRoom",
       async ({ roomId }) => await sendLeaveRoom(defaultParams, roomId)
     );
+
+    socket.on(
+      "sendSubmitCode",
+      async ({ roomId }) => await sendSubmitCode(pubClient, roomId)
+    );
   });
 };
 
@@ -142,5 +147,10 @@ const sendLeaveRoom = async (defaultParams, roomId) => {
   const data = JSON.stringify({ roomId });
   await pubClient.publish("sendLeaveRoom", data);
 };
+
+const sendSubmitCode = async (pubClient, roomId) => {
+  const data = JSON.stringify({ roomId });
+  await pubClient.publish("sendSubmitCode", data);
+}
 
 export { registerConnectionHandlers };

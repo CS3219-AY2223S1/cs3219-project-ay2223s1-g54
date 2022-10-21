@@ -10,21 +10,24 @@ function CollaborationPage() {
   const [questionTitle, setQuestionTitle] = useState("");
   const [questionDifficulty, setQuestionDifficulty] = useState("");
   const [questionContent, setQuestionContent] = useState("");
-  const { socket } = auth;
+  const { userId, socket } = auth;
   const collabData = location.state.collabData;
+  
+  const setupStates = async (questionIndex) => {
+    const question = collabData.questionSet[questionIndex];
+    const { title, difficulty, codeSnippets, content } = question;
+    setQuestionTitle(title);
+    setQuestionDifficulty(difficulty);
+    setQuestionContent(content);
+  };
 
   useEffect(() => {
-    const setupStates = async () => {
-      const question = collabData.questionSet[0];
-      const { title, difficulty, codeSnippets, content } = question;
-
-      setQuestionTitle(title);
-      setQuestionDifficulty(difficulty);
-      setQuestionContent(content);
-    };
-
-    setupStates();
+    setupStates(0);
   }, []);
+
+  socket.on("receiveSubmitCode", () => {
+    setupStates(1);
+  })
 
   return (
     <Box
@@ -68,7 +71,7 @@ function CollaborationPage() {
 
         <Divider variant="middle" />
 
-        <CollaborativeTabs socket={socket} collabData={collabData} />
+        <CollaborativeTabs userId={userId} socket={socket} collabData={collabData} />
       </Box>
     </Box>
   );
