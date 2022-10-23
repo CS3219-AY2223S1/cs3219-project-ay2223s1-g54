@@ -12,9 +12,12 @@ const useRefreshToken = () => {
       headers: { "Content-Type": "application/json" },
     });
     const response = await axiosInstance.post(URL_AUTH_SVC_REFRESH_USER);
-    auth.accessToken = response.data.accessToken;
-
-    setAuth(auth);
+    setAuth((prev) => {
+      return {
+        ...prev,
+        accessToken: response.data.accessToken,
+      };
+    });
     return response.data.accessToken;
   };
   return refresh;
