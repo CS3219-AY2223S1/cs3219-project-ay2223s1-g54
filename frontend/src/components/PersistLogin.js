@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { LinearProgress } from "@mui/material";
 import { useAuth } from "../hooks/useAuth";
 import useRefreshToken from "../hooks/useRefreshToken";
 
@@ -24,7 +25,7 @@ const PersistLogin = () => {
 
   return (
     <React.Fragment>
-      {!persist ? <Outlet /> : isLoading ? <p>Loading...</p> : <Outlet />}
+      {!persist ? <Outlet /> : isLoading ? <LinearProgress /> : <Outlet />}
     </React.Fragment>
   );
 };
