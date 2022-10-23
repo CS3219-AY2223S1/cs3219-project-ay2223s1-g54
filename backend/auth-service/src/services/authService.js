@@ -81,6 +81,7 @@ const _generateRefreshToken = async (payload) => {
 
 const _renewAccessToken = async (refreshToken) => {
   const decoded = jwt.verify(refreshToken, configs.REFRESH_TOKEN_SECRET);
-  const accessToken = await _generateAccessToken({ userId: decoded.userId });
+  const { iat, exp, ...auth } = decoded;
+  const accessToken = await _generateAccessToken(auth);
   return accessToken;
 };

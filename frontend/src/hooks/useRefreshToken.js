@@ -1,6 +1,8 @@
+import { decodeToken } from "react-jwt";
 import axios from "axios";
+import { io } from "socket.io-client";
 import { useAuth } from "./useAuth";
-import { URL_AUTH_SVC_REFRESH_USER } from "../configs";
+import { URI_GATEWAY, URL_AUTH_SVC_REFRESH_USER } from "../configs";
 
 const useRefreshToken = () => {
   const { auth, setAuth } = useAuth();
@@ -12,10 +14,22 @@ const useRefreshToken = () => {
       headers: { "Content-Type": "application/json" },
     });
     const response = await axiosInstance.post(URL_AUTH_SVC_REFRESH_USER);
+
+    const { accessToken } = response.data;
+    const { userId, username } = decodeToken(accessToken);
+
+    const socket = io(URI_GATEWAY);
+    socket.on("connect", () => {
+      socket.emit("clientConnected", { socketId: socket.id, userId });
+    });
+
     setAuth((prev) => {
       return {
         ...prev,
-        accessToken: response.data.accessToken,
+        accessToken,
+        userId,
+        username,
+        socket,
       };
     });
     return response.data.accessToken;
