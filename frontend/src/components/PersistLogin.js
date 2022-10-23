@@ -6,7 +6,7 @@ import useRefreshToken from "../hooks/useRefreshToken";
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const refresh = useRefreshToken();
-  const { auth } = useAuth();
+  const { auth, persist } = useAuth();
 
   useEffect(() => {
     const verifyRefreshToken = async () => {
@@ -24,7 +24,7 @@ const PersistLogin = () => {
 
   return (
     <React.Fragment>
-      {isLoading ? <p>Loading...</p> : <Outlet />}
+      {!persist ? <Outlet /> : isLoading ? <p>Loading...</p> : <Outlet />}
     </React.Fragment>
   );
 };

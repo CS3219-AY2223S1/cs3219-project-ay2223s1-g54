@@ -1,11 +1,13 @@
 import {
   Box,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControlLabel,
   TextField,
   Typography,
   Link,
@@ -13,7 +15,7 @@ import {
   CssBaseline,
   Container,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 import { io } from "socket.io-client";
@@ -27,10 +29,14 @@ function LoginPage() {
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
   const [password, setPassword] = useState("");
-  const { setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
   const axiosPublic = usePublicAxios();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    localStorage.setItem("persist", persist);
+  }, [persist]);
 
   const handleLogin = async () => {
     try {
@@ -66,6 +72,10 @@ function LoginPage() {
     setIsDialogOpen(true);
     setDialogTitle(title);
     setDialogMsg(msg);
+  };
+
+  const togglePersist = () => {
+    setPersist((prev) => !prev);
   };
 
   const navigateSignUp = () => {
@@ -132,6 +142,12 @@ function LoginPage() {
             >
               Login
             </Button>
+
+            <FormControlLabel
+              control={<Checkbox checked={persist} onChange={togglePersist} />}
+              label="Remember Me"
+            />
+
             <Grid container sx={{ mt: 1 }}>
               <Grid item xs>
                 <Link href="#" variant="body2">
