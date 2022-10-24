@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import * as jwt from "jsonwebtoken";
+import jsonwebtoken from "jsonwebtoken";
 import * as userRepo from "../db/repositories/user.js";
 import * as regExp from "../constants/regExp.js";
 import * as responseMessages from "../constants/responseMessages.js";
@@ -68,7 +68,7 @@ export const createUser = async (email, username, password) => {
   }
 
   try {
-    const confirmationCode = jwt.sign(
+    const confirmationCode = jsonwebtoken.sign(
       { email: email },
       EMAIL_CONFIRMATION_SECRET
     );
