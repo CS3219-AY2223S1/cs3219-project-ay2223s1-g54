@@ -8,6 +8,8 @@ export const GET_USER_BY_ID_FAILURE =
   "There is a problem retrieving the user by userId";
 export const GET_USER_BY_EMAIL_FAILURE =
   "There is a problem retrieving the user by email";
+export const GET_USER_BY_CONFIRMATION_CODE_FAILURE =
+  "There is a problem retrieving the user by confirmation code";
 export const GET_EMAIL_EXISTS_FAILURE =
   "There is a problem checking if the email exists";
 export const GET_USER_EXISTS_FAILURE =
@@ -15,6 +17,7 @@ export const GET_USER_EXISTS_FAILURE =
 export const CREATE_USER_FAILURE = "There is a problem creating the user";
 export const UPDATE_USER_FAILURE = "There is a problem updating the user";
 export const DELETE_USER_FAILURE = "There is a problem deleting the user";
+export const CONFIRM_USER_FAILURE = "There is a problem confirming the user";
 
 export const USER_NOT_FOUND = "There is not such user";
 export const EMAIL_ALREADY_EXISTS = "The email was already taken";
@@ -28,3 +31,5 @@ export const USERNAME_VALIDATION_FAIL =
   "The password specified does not start with an alphabet, follow by alphanumeric characters with total length between 6 to 18 characters";
 export const PASSWORD_VALIDATION_FAIL =
   "The password does not contain alphanumeric characters of between 8 to 16 characters long";
+
+export const USER_NOT_EMAIL_VERIFIED = "Please verify your Email before logging in";

@@ -50,7 +50,7 @@ function SignupPage() {
       setErrorDialog("Unknown Error", "Please try again later");
       return;
     }
-    setSuccessDialog("Account successfully created");
+    setSuccessDialog("Account successfully created! Please check your email");
 
     setIsSignupSuccess(true);
   };

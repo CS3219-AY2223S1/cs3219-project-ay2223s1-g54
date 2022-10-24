@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import * as jwt from "jsonwebtoken";
 import * as userRepo from "../db/repositories/user.js";
 import * as regExp from "../constants/regExp.js";
 import * as responseMessages from "../constants/responseMessages.js";
@@ -9,6 +10,8 @@ import { InformationExists } from "../exceptions/InformationExists.js";
 import { PasswordNotMatch } from "../exceptions/PasswordNotMatch.js";
 import { RepositoryFailure } from "../exceptions/RepositoryFailure.js";
 import { UserNotFound } from "../exceptions/UserNotFound.js";
+import { UserNotVerified } from "../exceptions/UserNotVerified.js";
+import { sendConfirmationEmail } from "../nodeMailerConfig.js";
 
 export const getUser = async (email) => {
   let user;
@@ -64,12 +67,17 @@ export const createUser = async (email, username, password) => {
   }
 
   try {
+    const confirmationCode = jwt.sign({ email: req.body.email }, config.secret);
     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
     const createdUser = await userRepo.createUser(
       email,
       username,
-      passwordHash
+      passwordHash,
+      confirmationCode
     );
+
+    sendConfirmationEmail(username, email, confirmationCode);
+
     return createdUser;
   } catch (err) {
     throw new RepositoryFailure(responseMessages.CREATE_USER_FAILURE);
@@ -138,7 +146,35 @@ export const verifyUser = async (email, password) => {
     throw new UserNotFound(responseMessages.USER_NOT_FOUND);
   }
 
+  if (user.status != "Active") {
+    throw new UserNotVerified(responseMessages.USER_NOT_EMAIL_VERIFIED);
+  }
+
   const { passwordHash } = user;
   const passwordMatch = await bcrypt.compare(password, passwordHash);
   return passwordMatch;
+};
+
+export const emailVerifyingUser = async (confirmationCode) => {
+  let user;
+  let confirmedUser;
+
+  try {
+    user = await userRepo.getUserByConfirmationCode(confirmationCode);
+  } catch (err) {
+    throw new RepositoryFailure(
+      responseMessages.GET_USER_BY_CONFIRMATION_CODE_FAILURE
+    );
+  }
+
+  if (!user) {
+    throw new UserNotFound(responseMessages.USER_NOT_FOUND);
+  }
+
+  try {
+    confirmedUser = await userRepo.confirmUser(confirmationCode);
+  } catch (err) {
+    throw new RepositoryFailure(responseMessages.CONFIRM_USER_FAILURE);
+  }
+  return confirmedUser;
 };

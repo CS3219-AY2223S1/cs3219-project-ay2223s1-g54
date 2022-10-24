@@ -20,8 +20,23 @@ export const getUserByEmail = async (email) => {
   return user;
 };
 
-export const createUser = async (email, username, passwordHash) => {
-  const createdUser = await UserModel.create({ email, username, passwordHash });
+export const getUserByConfirmationCode = async (confirmationCode) => {
+  const user = await UserModel.findOne({ confirmationCode: confirmationCode });
+  return user;
+};
+
+export const createUser = async (
+  email,
+  username,
+  passwordHash,
+  confirmationCode
+) => {
+  const createdUser = await UserModel.create({
+    email,
+    username,
+    passwordHash,
+    confirmationCode,
+  });
   return createdUser;
 };
 
@@ -39,4 +54,11 @@ export const updateUser = async (userId, email, username, passwordHash) => {
 export const deleteUser = async (userId) => {
   const deletedUser = await UserModel.findByIdAndDelete(userId);
   return deletedUser;
+};
+
+export const confirmUser = async (confirmationCode) => {
+  const confirmedUser = await getUserByConfirmationCode(confirmationCode);
+  confirmedUser.status = "Active";
+  await confirmedUser.save();
+  return confirmedUser;
 };

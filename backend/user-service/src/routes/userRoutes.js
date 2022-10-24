@@ -84,4 +84,19 @@ userRoutes.post(
   })
 );
 
+userRoutes.get(
+  "/confirm/:confirmationCode",
+  asyncHandler(async (req, res) => {
+    const { confirmationCode } = req.params;
+    if (!confirmationCode) {
+      throw new MalformedRequest(
+        responseMessages.MISSING_CONFIRMATION_CODE_FIELD
+      );
+    }
+
+    await userService.emailVerifyingUser(confirmationCode);
+    return res.sendStatus(statusCodes.OK);
+  })
+);
+
 export { userRoutes };
