@@ -95,7 +95,9 @@ userRoutes.get(
     }
 
     await userService.emailVerifyingUser(confirmationCode);
-    return res.sendStatus(statusCodes.OK);
+    return res
+      .status(statusCodes.OK)
+      .json({ success: responseMessages.USER_EMAIL_VERIFIED });
   })
 );
 

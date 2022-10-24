@@ -34,3 +34,5 @@ export const PASSWORD_VALIDATION_FAIL =
 
 export const USER_NOT_EMAIL_VERIFIED =
   "Please verify your Email before logging in";
+export const USER_EMAIL_VERIFIED =
+  "Account successfully verified, you can login now";
