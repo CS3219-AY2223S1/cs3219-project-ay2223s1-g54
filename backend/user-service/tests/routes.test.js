@@ -1,6 +1,8 @@
 import supertest from "supertest";
 import { app } from "../src/app.js";
 import { dbInit, dbTerminate } from "../src/db/setup.js";
+import jsonwebtoken from "jsonwebtoken";
+import { EMAIL_CONFIRMATION_SECRET } from "../configs.js";
 
 describe("User Endpoints", () => {
   beforeAll(async () => {
@@ -19,6 +21,17 @@ describe("User Endpoints", () => {
       const res = await supertest(app)
         .post("/")
         .send({ email, username, password });
+      expect(res.statusCode).toBe(200);
+    });
+  });
+
+  describe("Confirm User By Email", () => {
+    it("Should confirm user account successfully", async () => {
+      const confirmationCode = jsonwebtoken.sign(
+        { email: email },
+        EMAIL_CONFIRMATION_SECRET
+      );
+      const res = await supertest(app).get("/confirm" + confirmationCode);
       expect(res.statusCode).toBe(200);
     });
   });
