@@ -13,6 +13,7 @@ import { UserNotFound } from "../exceptions/UserNotFound.js";
 import { UserNotVerified } from "../exceptions/UserNotVerified.js";
 import { sendConfirmationEmail } from "../nodeMailerConfig.js";
 import { EMAIL_CONFIRMATION_SECRET } from "../configs.js";
+import { UserAlreadyEmailVerified } from "../exceptions/UserAlreadyEmailVerified.js";
 
 export const getUser = async (email) => {
   let user;
@@ -173,6 +174,12 @@ export const emailVerifyingUser = async (confirmationCode) => {
 
   if (!user) {
     throw new UserNotFound(responseMessages.USER_NOT_FOUND);
+  }
+
+  if (user.status == "Active") {
+    throw new UserAlreadyEmailVerified(
+      responseMessages.USER_ALREADY_EMAIL_VERIFIED
+    );
   }
 
   try {
