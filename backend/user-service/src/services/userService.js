@@ -12,6 +12,7 @@ import { RepositoryFailure } from "../exceptions/RepositoryFailure.js";
 import { UserNotFound } from "../exceptions/UserNotFound.js";
 import { UserNotVerified } from "../exceptions/UserNotVerified.js";
 import { sendConfirmationEmail } from "../nodeMailerConfig.js";
+import { EMAIL_CONFIRMATION_SECRET } from "../configs.js";
 
 export const getUser = async (email) => {
   let user;
@@ -67,7 +68,10 @@ export const createUser = async (email, username, password) => {
   }
 
   try {
-    const confirmationCode = jwt.sign({ email: req.body.email }, config.secret);
+    const confirmationCode = jwt.sign(
+      { email: email },
+      EMAIL_CONFIRMATION_SECRET
+    );
     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
     const createdUser = await userRepo.createUser(
       email,

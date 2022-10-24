@@ -7,5 +7,6 @@ export const DB_CLOUD_URI = process.env.DB_CLOUD_URI;
 export const DB_LOCAL_URI = process.env.DB_LOCAL_URI;
 export const MONGOGB_URI = ENV == "PROD" ? DB_CLOUD_URI : DB_LOCAL_URI;
 
-export const GMAIL_MAILER = "yongliangang@gmail.com";
-export const GMAIL_PASSWORD = "nathzuzudiehsmsi";
+export const EMAIL_CONFIRMATION_SECRET = process.env.EMAIL_CONFIRMATION_SECRET;
+export const GMAIL_MAILER = process.env.GMAIL_MAILER;
+export const GMAIL_PASSWORD = process.env.GMAIL_PASSWORD;

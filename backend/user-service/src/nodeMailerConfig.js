@@ -20,7 +20,7 @@ export const sendConfirmationEmail = (name, email, confirmationCode) => {
     html: `<h1>Email Confirmation</h1>
     <h2>Hello ${name}</h2>
     <p>Thank you for signing up with Peerprep. Please confirm your email by clicking on the following link</p>
-    <!-- We need to change this to a dynamic link ... --> 
+    <!-- We need to change this to a dynamic link ... -->
     <a href=http://localhost:8002/confirm/${confirmationCode}> Click here</a>
     </div>`,
   });
