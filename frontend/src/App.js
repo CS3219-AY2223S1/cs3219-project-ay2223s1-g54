@@ -7,6 +7,7 @@ import WaitingPage from "./components/WaitingPage";
 import CollaborationPage from "./components/CollaborationPage";
 import InvalidPage from "./components/InvalidPage";
 import RequireAuth from "./components/RequireAuth";
+import PersistLogin from "./components/PersistLogin";
 
 const App = () => {
   return (
@@ -15,10 +16,12 @@ const App = () => {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/login" element={<LoginPage />} />
 
-      <Route element={<RequireAuth />}>
-        <Route path="/matching" element={<MainPage />} />
-        <Route path="/waiting" element={<WaitingPage />} />
-        <Route path="/collaboration" element={<CollaborationPage />} />
+      <Route element={<PersistLogin />}>
+        <Route element={<RequireAuth />}>
+          <Route path="/matching" element={<MainPage />} />
+          <Route path="/waiting" element={<WaitingPage />} />
+          <Route path="/collaboration" element={<CollaborationPage />} />
+        </Route>
       </Route>
 
       <Route path="/*" element={<InvalidPage />} />
