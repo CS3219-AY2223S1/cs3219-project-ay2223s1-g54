@@ -1,5 +1,6 @@
 import * as userService from "../../src/services/userService.js";
 import { dbInit, dbTerminate } from "../../src/db/setup.js";
+import jsonwebtoken from "jsonwebtoken";
 
 describe("User Service", () => {
   beforeAll(async () => {
@@ -12,13 +13,32 @@ describe("User Service", () => {
   const password = "jesttest123";
   const oldPassword = password;
   const newPassword = "jesttest1234";
+  process.env.EMAIL_CONFIRMATION_SECRET = "123456";
 
   describe("createUser", () => {
     it("Should create user successfully", async () => {
       const f = async () => {
-        await userService.createUser(email, username, password);
+        const createdUser = await userService.createUser(
+          email,
+          username,
+          password
+        );
       };
 
+      await expect(f()).resolves.not.toThrow();
+    });
+  });
+
+  describe("confirmUser", () => {
+    it("Should confirm user account successfully", async () => {
+      const confirmationCode = jsonwebtoken.sign(
+        { email: email },
+        process.env.EMAIL_CONFIRMATION_SECRET
+      );
+
+      const f = async () => {
+        await userService.emailVerifyingUser(confirmationCode);
+      };
       await expect(f()).resolves.not.toThrow();
     });
   });

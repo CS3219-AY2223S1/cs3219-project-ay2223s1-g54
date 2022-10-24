@@ -2,7 +2,6 @@ import supertest from "supertest";
 import { app } from "../src/app.js";
 import { dbInit, dbTerminate } from "../src/db/setup.js";
 import jsonwebtoken from "jsonwebtoken";
-import { EMAIL_CONFIRMATION_SECRET } from "../configs.js";
 
 describe("User Endpoints", () => {
   beforeAll(async () => {
@@ -15,6 +14,7 @@ describe("User Endpoints", () => {
   const password = "jesttest123";
   const oldPassword = password;
   const newPassword = "jesttest1234";
+  process.env.EMAIL_CONFIRMATION_SECRET = "123456";
 
   describe("Create User", () => {
     it("Should create user successfully", async () => {
@@ -29,9 +29,9 @@ describe("User Endpoints", () => {
     it("Should confirm user account successfully", async () => {
       const confirmationCode = jsonwebtoken.sign(
         { email: email },
-        EMAIL_CONFIRMATION_SECRET
+        process.env.EMAIL_CONFIRMATION_SECRET
       );
-      const res = await supertest(app).get("/confirm" + confirmationCode);
+      const res = await supertest(app).get("/confirm/" + confirmationCode);
       expect(res.statusCode).toBe(200);
     });
   });
