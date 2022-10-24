@@ -28,8 +28,9 @@ export const PASSWORD_DOES_NOT_MATCH = "The password does not match";
 export const EMAIL_VALIDATION_FAIL =
   "The email specified is not an NUS school email";
 export const USERNAME_VALIDATION_FAIL =
-  "The password specified does not start with an alphabet, follow by alphanumeric characters with total length between 6 to 18 characters";
+  "The username specified does not start with an alphabet, follow by alphanumeric characters with total length between 6 to 18 characters";
 export const PASSWORD_VALIDATION_FAIL =
   "The password does not contain alphanumeric characters of between 8 to 16 characters long";
 
-export const USER_NOT_EMAIL_VERIFIED = "Please verify your Email before logging in";
+export const USER_NOT_EMAIL_VERIFIED =
+  "Please verify your Email before logging in";
