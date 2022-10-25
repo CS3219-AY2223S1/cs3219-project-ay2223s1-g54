@@ -7,6 +7,7 @@ describe("User Service", () => {
   });
 
   let userId;
+  let confirmationCode;
   const email = "jesttest@u.nus.edu";
   const username = "jesttest";
   const password = "jesttest123";
@@ -16,9 +17,23 @@ describe("User Service", () => {
   describe("createUser", () => {
     it("Should create user successfully", async () => {
       const f = async () => {
-        await userService.createUser(email, username, password);
+        const createdUser = await userService.createUser(
+          email,
+          username,
+          password
+        );
+        confirmationCode = createdUser.confirmationCode;
       };
 
+      await expect(f()).resolves.not.toThrow();
+    });
+  });
+
+  describe("confirmUser", () => {
+    it("Should confirm user account successfully", async () => {
+      const f = async () => {
+        await userService.emailVerifyingUser(confirmationCode);
+      };
       await expect(f()).resolves.not.toThrow();
     });
   });

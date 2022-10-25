@@ -60,7 +60,7 @@ function LoginPage() {
         setErrorDialog(name, message);
         return;
       }
-      alert(err);
+
       setErrorDialog("Unknown Error", "Please try again later");
       return;
     }
@@ -76,10 +76,6 @@ function LoginPage() {
 
   const togglePersist = () => {
     setPersist((prev) => !prev);
-  };
-
-  const navigateSignUp = () => {
-    navigate("/signup");
   };
 
   return (
