@@ -16,6 +16,14 @@ let UserSchema = new Schema({
     type: String,
     required: true,
   },
+  isEmailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  confirmationCode: {
+    type: String,
+    unique: true,
+  },
   createdAt: {
     type: Date,
     immutable: true,

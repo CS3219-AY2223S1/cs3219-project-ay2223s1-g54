@@ -13,6 +13,11 @@ jobs:
       ENV: PROD
       PORT: 8002
       DB_CLOUD_URI: ${{ secrets.DB_CLOUD_URI }}
+      EMAIL_CONFIRMATION_URI: ${{ secrets.EMAIL_CONFIRMATION_URI }}
+      EMAIL_SERVICE: ${{ secrets.EMAIL_SERVICE }}
+      EMAIL_MAILER: ${{ secrets.EMAIL_MAILER }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      EMAIL_CONFIRMATION_SECRET: ${{ secrets.EMAIL_CONFIRMATION_SECRET }}
     strategy:
       matrix:
         node-version: [16.x]

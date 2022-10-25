@@ -1,6 +1,7 @@
 import supertest from "supertest";
 import { app } from "../src/app.js";
 import { dbInit, dbTerminate } from "../src/db/setup.js";
+import { getUserByEmail } from "../src/db/repositories/user.js";
 
 describe("User Endpoints", () => {
   beforeAll(async () => {
@@ -19,6 +20,15 @@ describe("User Endpoints", () => {
       const res = await supertest(app)
         .post("/")
         .send({ email, username, password });
+      expect(res.statusCode).toBe(200);
+    });
+  });
+
+  describe("Confirm User By Email", () => {
+    it("Should confirm user account successfully", async () => {
+      const user = await getUserByEmail(email);
+      const { confirmationCode } = user;
+      const res = await supertest(app).get("/confirm/" + confirmationCode);
       expect(res.statusCode).toBe(200);
     });
   });
