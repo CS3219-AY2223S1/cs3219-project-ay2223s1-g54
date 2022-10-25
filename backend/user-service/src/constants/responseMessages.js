@@ -37,3 +37,6 @@ export const USER_NOT_EMAIL_VERIFIED =
 export const USER_EMAIL_VERIFIED =
   "Account successfully verified, you can login now";
 export const USER_ALREADY_EMAIL_VERIFIED = "Account is already verified";
+
+export const MISSING_MAILER_ENV =
+  "The mailer environment variables are missing";

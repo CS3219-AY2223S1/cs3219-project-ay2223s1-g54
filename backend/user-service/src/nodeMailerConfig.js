@@ -1,32 +1,39 @@
 import * as nodemailer from "nodemailer";
+import * as responseMessages from "./constants/responseMessages.js";
 import {
   EMAIL_CONFIRMATION_URI,
-  GMAIL_MAILER,
-  GMAIL_PASSWORD,
+  EMAIL_SERVICE,
+  EMAIL_MAILER,
+  EMAIL_PASSWORD,
 } from "./configs.js";
+import { MissingEnv } from "./exceptions/MissingEnv.js";
+import {
+  EMAIL_SUBJECT,
+  generateBodyTemplate,
+} from "./constants/emailTemplate.js";
 
-const user = GMAIL_MAILER;
-const pass = GMAIL_PASSWORD;
+export const sendConfirmationEmail = async (name, email, confirmationCode) => {
+  if (
+    !EMAIL_CONFIRMATION_URI ||
+    !EMAIL_SERVICE ||
+    !EMAIL_MAILER ||
+    !EMAIL_PASSWORD
+  ) {
+    throw new MissingEnv(responseMessages.MISSING_MAILER_ENV);
+  }
 
-const transport = nodemailer.createTransport({
-  service: "Gmail",
-  auth: {
-    user: user,
-    pass: pass,
-  },
-});
+  const transport = nodemailer.createTransport({
+    service: EMAIL_SERVICE,
+    auth: {
+      user: EMAIL_MAILER,
+      pass: EMAIL_PASSWORD,
+    },
+  });
 
-export const sendConfirmationEmail = (name, email, confirmationCode) => {
-  transport.sendMail({
-    from: user,
+  await transport.sendMail({
+    from: EMAIL_MAILER,
     to: email,
-    subject: "Please confirm your account for peerprep",
-    html: `<h1>Email Confirmation</h1>
-    <h2>Hello ${name}</h2>
-    <p>Thank you for signing up with Peerprep. Please confirm your email by clicking on the following link</p>
-    <!-- We need to change this to a dynamic link ... -->
-    <a href=${EMAIL_CONFIRMATION_URI}/${confirmationCode}> Click here</a>
-    <p>Happy coding,<br>Peerprep Team 54</p>
-    </div>`,
+    subject: EMAIL_SUBJECT,
+    html: generateBodyTemplate(EMAIL_CONFIRMATION_URI, name, confirmationCode),
   });
 };

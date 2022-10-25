@@ -81,8 +81,7 @@ export const createUser = async (email, username, password) => {
       confirmationCode
     );
 
-    sendConfirmationEmail(username, email, confirmationCode);
-
+    await sendConfirmationEmail(username, email, confirmationCode);
     return createdUser;
   } catch (err) {
     throw new RepositoryFailure(responseMessages.CREATE_USER_FAILURE);
@@ -151,7 +150,7 @@ export const verifyUser = async (email, password) => {
     throw new UserNotFound(responseMessages.USER_NOT_FOUND);
   }
 
-  if (user.status != "Active") {
+  if (!user.isEmailVerified) {
     throw new UserNotVerified(responseMessages.USER_NOT_EMAIL_VERIFIED);
   }
 
@@ -176,7 +175,7 @@ export const emailVerifyingUser = async (confirmationCode) => {
     throw new UserNotFound(responseMessages.USER_NOT_FOUND);
   }
 
-  if (user.status == "Active") {
+  if (user.isEmailVerified) {
     throw new UserAlreadyEmailVerified(
       responseMessages.USER_ALREADY_EMAIL_VERIFIED
     );

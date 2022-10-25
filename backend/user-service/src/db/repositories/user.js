@@ -58,7 +58,7 @@ export const deleteUser = async (userId) => {
 
 export const confirmUser = async (confirmationCode) => {
   const confirmedUser = await getUserByConfirmationCode(confirmationCode);
-  confirmedUser.status = "Active";
+  confirmedUser.isEmailVerified = true;
   await confirmedUser.save();
   return confirmedUser;
 };

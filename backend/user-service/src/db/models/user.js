@@ -16,6 +16,14 @@ let UserSchema = new Schema({
     type: String,
     required: true,
   },
+  isEmailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  confirmationCode: {
+    type: String,
+    unique: true,
+  },
   createdAt: {
     type: Date,
     immutable: true,
@@ -24,15 +32,6 @@ let UserSchema = new Schema({
   updatedAt: {
     type: Date,
     default: () => Date.now(),
-  },
-  status: {
-    type: String,
-    enum: ["Pending", "Active"],
-    default: "Pending",
-  },
-  confirmationCode: {
-    type: String,
-    unique: true,
   },
 });
 

@@ -1,6 +1,5 @@
 import * as userService from "../../src/services/userService.js";
 import { dbInit, dbTerminate } from "../../src/db/setup.js";
-import jsonwebtoken from "jsonwebtoken";
 
 describe("User Service", () => {
   beforeAll(async () => {
@@ -8,12 +7,12 @@ describe("User Service", () => {
   });
 
   let userId;
+  let confirmationCode;
   const email = "jesttest@u.nus.edu";
   const username = "jesttest";
   const password = "jesttest123";
   const oldPassword = password;
   const newPassword = "jesttest1234";
-  process.env.EMAIL_CONFIRMATION_SECRET = "123456";
 
   describe("createUser", () => {
     it("Should create user successfully", async () => {
@@ -23,6 +22,7 @@ describe("User Service", () => {
           username,
           password
         );
+        confirmationCode = createdUser.confirmationCode;
       };
 
       await expect(f()).resolves.not.toThrow();
@@ -31,11 +31,6 @@ describe("User Service", () => {
 
   describe("confirmUser", () => {
     it("Should confirm user account successfully", async () => {
-      const confirmationCode = jsonwebtoken.sign(
-        { email: email },
-        process.env.EMAIL_CONFIRMATION_SECRET
-      );
-
       const f = async () => {
         await userService.emailVerifyingUser(confirmationCode);
       };
