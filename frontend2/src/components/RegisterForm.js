@@ -18,7 +18,7 @@ export const RegisterForm = (props) => {
       <Stack pt="5">
         <AlternativeSubmitFormControl
           caption="Already a user?"
-          title="Sign Up"
+          title="Sign In"
           link={props.loginLink}
         />
       </Stack>
