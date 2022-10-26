@@ -24,7 +24,7 @@ const LandingPage = () => {
   return (
     <BaseLayout>
       <Box boxSize="lg" align="center">
-        <Stack bg="white" p="10">
+        <Stack bg="white" p="10" mt="150">
           <Heading>PeerPrep</Heading>
           <Image src="assets/LandingPage.png" />
           <Text>

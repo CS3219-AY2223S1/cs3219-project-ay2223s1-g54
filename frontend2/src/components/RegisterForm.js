@@ -5,7 +5,7 @@ import TextFormControl from "./formcontrols/TextFormControl";
 import PasswordFormControl from "./formcontrols/PasswordFormControl";
 import SubmitFormControl from "./formcontrols/SubmitFormControl";
 
-export const RegisterForm = () => {
+export const RegisterForm = (props) => {
   return (
     <Stack spacing="4">
       <EmailFormControl />
@@ -18,8 +18,8 @@ export const RegisterForm = () => {
       <Stack pt="5">
         <AlternativeSubmitFormControl
           caption="Already a user?"
-          title="Login"
-          link="/login"
+          title="Sign Up"
+          link={props.loginLink}
         />
       </Stack>
     </Stack>
