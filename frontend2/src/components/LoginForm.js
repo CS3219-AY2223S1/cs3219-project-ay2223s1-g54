@@ -1,58 +1,31 @@
-import { Link as RouterLink } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControl,
-  FormLabel,
-  Input,
-  Link,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Checkbox, Link, Stack } from "@chakra-ui/react";
+import AlternativeSubmitFormControl from "./formcontrols/AlternativeSubmitFormControl";
+import EmailFormControl from "./formcontrols/EmailFormControl";
+import PasswordFormControl from "./formcontrols/PasswordFormControl";
+import SubmitFormControl from "./formcontrols/SubmitFormControl";
 
-export const LoginForm = (props) => {
+export const LoginForm = () => {
   return (
-    <Box p="8" bg="white" rounded="lg" boxShadow="lg">
-      <Stack spacing="4">
-        <FormControl>
-          <FormLabel>Email Address</FormLabel>
-          <Input type="email" />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input type="password" />
-        </FormControl>
-        <Stack spacing="10">
-          <Stack
-            direction={{ base: "column", sm: "row" }}
-            align="start"
-            justify="space-between"
-          >
-            <Checkbox>Remember Me</Checkbox>
-            <Link color="blue.400">Forgot Password?</Link>
-          </Stack>
-          <Button
-            size="lg"
-            color="white"
-            bg="green.400"
-            _hover={{
-              bg: "green.500",
-            }}
-          >
-            Sign In
-          </Button>
-        </Stack>
-        <Stack pt="5">
-          <Text align="center">
-            {"Not a user? "}
-            <Link color="blue.400" as={RouterLink} to={props.registerLink}>
-              Sign Up
-            </Link>
-          </Text>
-        </Stack>
+    <Stack spacing="4">
+      <EmailFormControl />
+      <PasswordFormControl />
+      <Stack
+        direction={{ base: "column", sm: "row" }}
+        align="start"
+        justify="space-between"
+      >
+        <Checkbox>Remember Me</Checkbox>
+        <Link color="blue.400">Forgot Password?</Link>
       </Stack>
-    </Box>
+      <SubmitFormControl title="Sign In" />
+      <Stack pt="5">
+        <AlternativeSubmitFormControl
+          caption="Not a user?"
+          title="Sign Up"
+          link="/register"
+        />
+      </Stack>
+    </Stack>
   );
 };
 

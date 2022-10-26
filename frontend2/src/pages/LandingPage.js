@@ -8,7 +8,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import BaseLayout from "../components/BaseLayout";
+import BaseLayout from "../components/layouts/BaseLayout";
 
 const LandingPage = () => {
   const navigate = useNavigate();
