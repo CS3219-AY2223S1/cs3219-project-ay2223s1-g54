@@ -96,7 +96,7 @@ export const RegisterForm = (props) => {
             }}
             onClick={handleSignup}
           >
-            Sign up
+            Sign Up
           </Button>
         </Stack>
         <Stack pt="5">

@@ -1,18 +1,17 @@
-import { Flex, Heading, Stack } from "@chakra-ui/react";
+import { Heading, Stack } from "@chakra-ui/react";
+import BaseLayout from "../components/BaseLayout";
 import RegisterForm from "../components/RegisterForm";
 
 export const RegisterPage = () => {
-  const handleSignup = () => {};
-
   return (
-    <Flex minH="100vh" align="center" justify="center" bg="#39424e">
+    <BaseLayout>
       <Stack>
         <Heading textAlign="center" color="#ffffff">
           Registration
         </Heading>
-        <RegisterForm signupClick={handleSignup} loginLink="/login" />
+        <RegisterForm loginLink="/login" />
       </Stack>
-    </Flex>
+    </BaseLayout>
   );
 };
 

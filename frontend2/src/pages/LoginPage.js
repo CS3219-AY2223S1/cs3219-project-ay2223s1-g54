@@ -1,16 +1,17 @@
-import { Flex, Heading, Stack } from "@chakra-ui/react";
+import { Heading, Stack } from "@chakra-ui/react";
+import BaseLayout from "../components/BaseLayout";
 import LoginForm from "../components/LoginForm";
 
 export const LoginPage = () => {
   return (
-    <Flex minH="100vh" align="center" justify="center" bg="#39424e">
+    <BaseLayout>
       <Stack>
         <Heading textAlign="center" color="#ffffff">
           Login Portal
         </Heading>
         <LoginForm registerLink="/register" />
       </Stack>
-    </Flex>
+    </BaseLayout>
   );
 };
 
