@@ -66,6 +66,18 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
     );
 
     socket.on(
+      "sendCallerSignal",
+      async ({ roomId, signalData }) =>
+        await sendCallerSignalEvent(defaultParams, roomId, signalData)
+    );
+
+    socket.on(
+      "sendResponderSignal",
+      async ({ roomId, signalData }) =>
+        await sendResponderSignalEvent(defaultParams, roomId, signalData)
+    );
+
+    socket.on(
       "sendLeaveRoom",
       async ({ roomId }) => await sendLeaveRoom(defaultParams, roomId)
     );
@@ -142,6 +154,18 @@ const sendMessageEvent = async (
   await pubClient.publish("sendMessage", data);
 };
 
+const sendCallerSignalEvent = async (defaultParams, roomId, signalData) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId, signalData });
+  await pubClient.publish("sendCallerSignal", data);
+};
+
+const sendResponderSignalEvent = async (defaultParams, roomId, signalData) => {
+  const [io, pubClient, subClient] = defaultParams;
+  const data = JSON.stringify({ roomId, signalData });
+  await pubClient.publish("sendResponderSignal", data);
+};
+
 const sendLeaveRoom = async (defaultParams, roomId) => {
   const [io, pubClient, subClient] = defaultParams;
   const data = JSON.stringify({ roomId });
@@ -151,6 +175,6 @@ const sendLeaveRoom = async (defaultParams, roomId) => {
 const sendSubmitCode = async (pubClient, roomId) => {
   const data = JSON.stringify({ roomId });
   await pubClient.publish("sendSubmitCode", data);
-}
+};
 
 export { registerConnectionHandlers };
