@@ -16,10 +16,6 @@ let TokenSchema = new Schema({
     immutable: true,
     default: () => Date.now(),
   },
-  updatedAt: {
-    type: Date,
-    default: () => Date.now(),
-  },
 });
 
 const TokenModel = mongoose.model("TokenModel", TokenSchema);

@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
 import * as userRepo from "../db/repositories/user.js";
+import * as tokenRepo from "../db/repositories/token.js";
 import * as regExp from "../constants/regExp.js";
 import * as responseMessages from "../constants/responseMessages.js";
 import { SALT_ROUNDS } from "../constants/bcrypt.js";
@@ -10,9 +11,10 @@ import { InformationExists } from "../exceptions/InformationExists.js";
 import { PasswordNotMatch } from "../exceptions/PasswordNotMatch.js";
 import { RepositoryFailure } from "../exceptions/RepositoryFailure.js";
 import { UserNotFound } from "../exceptions/UserNotFound.js";
+import { TokenNotFound } from "../exceptions/TokenNotFound.js";
 import { UserNotVerified } from "../exceptions/UserNotVerified.js";
-import { sendConfirmationEmail } from "../nodeMailerConfig.js";
-import { EMAIL_CONFIRMATION_SECRET } from "../configs.js";
+import { sendConfirmationEmail, sendResetEmail } from "../nodeMailerConfig.js";
+import { EMAIL_CONFIRMATION_SECRET, EMAIL_RESET_URI } from "../configs.js";
 import { UserAlreadyEmailVerified } from "../exceptions/UserAlreadyEmailVerified.js";
 
 export const getUser = async (email) => {
@@ -28,6 +30,22 @@ export const getUser = async (email) => {
   }
 
   return user;
+};
+
+export const getToken = async (userId) => {
+  let token;
+
+  try {
+    token = await tokenRepo.getTokenByUserId(userId);
+  } catch (err) {
+    throw new RepositoryFailure(responseMessages.GET_TOKEN_BY_USER_ID_FAILURE);
+  }
+
+  if (!token) {
+    token = createToken(userId);
+  }
+
+  return token;
 };
 
 export const createUser = async (email, username, password) => {
@@ -187,4 +205,40 @@ export const emailVerifyingUser = async (confirmationCode) => {
     throw new RepositoryFailure(responseMessages.CONFIRM_USER_FAILURE);
   }
   return confirmedUser;
+};
+
+export const createToken = async (userId) => {
+  let createdToken;
+  try {
+    createdToken = await tokenRepo.createToken(userId);
+  } catch (err) {
+    throw new RepositoryFailure(responseMessages.CREATE_TOKEN_FAILURE);
+  }
+  return createdToken;
+};
+
+export const sendResetPasswordLinkUser = async (email) => {
+  let user;
+  let token;
+
+  try {
+    user = await userRepo.getUserByEmail(email);
+  } catch (err) {
+    throw new RepositoryFailure(responseMessages.GET_USER_BY_EMAIL_FAILURE);
+  }
+
+  if (!user) {
+    throw new UserNotFound(responseMessages.USER_NOT_FOUND);
+  }
+
+  token = getToken(user.id);
+
+  if (!token) {
+    throw new TokenNotFound(responseMessages.TOKEN_NOT_FOUND);
+  }
+
+  const passwordResetLink = `EMAIL_RESET_URI/${user.id}/${token.token}`;
+  await sendResetEmail(user.username, email, passwordResetLink);
+
+  return { user, token };
 };

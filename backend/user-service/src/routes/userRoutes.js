@@ -101,4 +101,16 @@ userRoutes.get(
   })
 );
 
+userRoutes.post("/passwordReset", async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    throw new MalformedRequest(responseMessages.MISSING_EMAIL_FIELD);
+  }
+
+  await userService.sendResetPasswordLinkUser(email);
+  return res
+    .status(statusCodes.OK)
+    .json({ success: responseMessages.USER_RESET_EMAIL_SENT });
+});
+
 export { userRoutes };

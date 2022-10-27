@@ -40,3 +40,12 @@ export const USER_ALREADY_EMAIL_VERIFIED = "Account is already verified";
 
 export const MISSING_MAILER_ENV =
   "The mailer environment variables are missing";
+
+export const GET_TOKEN_BY_USER_ID_FAILURE =
+  "There is a problem retrieving the token by user id";
+export const TOKEN_NOT_FOUND = "There is not such token";
+
+export const CREATE_TOKEN_FAILURE = "There is a problem creating the token";
+export const DELETE_TOKEN_FAILURE = "There is a problem deleting the token";
+export const USER_RESET_EMAIL_SENT =
+  "Reset password Email has been sent to your account";
