@@ -113,4 +113,17 @@ userRoutes.post("/passwordReset", async (req, res) => {
     .json({ success: responseMessages.USER_RESET_EMAIL_SENT });
 });
 
+userRoutes.post("/passwordReset/:userId/:token", async (req, res) => {
+  const { newPassword } = req.body;
+  const { userId, token } = req.params;
+  if (!newPassword) {
+    throw new MalformedRequest(responseMessages.MISSING_PASSWORD_FIELD);
+  }
+
+  await userService.resetPasswordUser(userId, token, newPassword);
+  return res
+    .status(statusCodes.OK)
+    .json({ success: responseMessages.USER_PASSWORD_RESET_SUCCESS });
+});
+
 export { userRoutes };

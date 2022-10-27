@@ -2,8 +2,16 @@ import { TokenModel } from "../models/token.js";
 import { nanoid } from "nanoid";
 
 export const getTokenByUserId = async (userId) => {
-  const token = await TokenModel.findOne({ userId: userId });
-  return token;
+  const retrievedToken = await TokenModel.findOne({ userId: userId });
+  return retrievedToken;
+};
+
+export const getTokenByUserIdTokenValue = async (userId, token) => {
+  const retrievedToken = await TokenModel.findOne({
+    userId: userId,
+    token: token,
+  });
+  return retrievedToken;
 };
 
 export const createToken = async (userId) => {

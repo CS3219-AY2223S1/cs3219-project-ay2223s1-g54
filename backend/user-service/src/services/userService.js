@@ -32,20 +32,28 @@ export const getUser = async (email) => {
   return user;
 };
 
-export const getToken = async (userId) => {
-  let token;
-
+export const getTokenByUserId = async (userId) => {
+  let retrievedToken;
   try {
-    token = await tokenRepo.getTokenByUserId(userId);
+    retrievedToken = await tokenRepo.getTokenByUserId(userId);
   } catch (err) {
     throw new RepositoryFailure(responseMessages.GET_TOKEN_BY_USER_ID_FAILURE);
   }
 
-  if (!token) {
-    token = createToken(userId);
+  return retrievedToken;
+};
+
+export const getTokenByUserIdTokenValue = async (userId, token) => {
+  let retrievedToken;
+  try {
+    retrievedToken = await tokenRepo.getTokenByUserIdTokenValue(userId, token);
+  } catch (err) {
+    throw new RepositoryFailure(
+      responseMessages.GET_TOKEN_BY_USER_ID_TOKEN_VALUE_FAILURE
+    );
   }
 
-  return token;
+  return retrievedToken;
 };
 
 export const createUser = async (email, username, password) => {
@@ -231,14 +239,61 @@ export const sendResetPasswordLinkUser = async (email) => {
     throw new UserNotFound(responseMessages.USER_NOT_FOUND);
   }
 
-  token = getToken(user.id);
+  token = await getTokenByUserId(user.id);
+
+  if (!token) {
+    token = await createToken(userId);
+  }
 
   if (!token) {
     throw new TokenNotFound(responseMessages.TOKEN_NOT_FOUND);
   }
 
-  const passwordResetLink = `EMAIL_RESET_URI/${user.id}/${token.token}`;
+  console.log(token);
+  const passwordResetLink = `${EMAIL_RESET_URI}/${user.id}/${token.token}`;
   await sendResetEmail(user.username, email, passwordResetLink);
 
   return { user, token };
+};
+
+export const resetPasswordUser = async (userId, token, newPassword) => {
+  let user;
+  let updatedUser;
+  let retrievedToken;
+
+  try {
+    user = await userRepo.getUserById(userId);
+  } catch (err) {
+    throw new RepositoryFailure(responseMessages.GET_USER_BY_ID_FAILURE);
+  }
+
+  if (!user) {
+    throw new UserNotFound(responseMessages.USER_NOT_FOUND);
+  }
+
+  retrievedToken = await getTokenByUserIdTokenValue(userId, token);
+
+  if (!retrievedToken) {
+    throw new TokenNotFound(responseMessages.TOKEN_NOT_FOUND);
+  }
+
+  try {
+    const passwordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+    updatedUser = await userRepo.updateUser(
+      userId,
+      user.email,
+      user.username,
+      passwordHash
+    );
+  } catch (err) {
+    throw new RepositoryFailure(responseMessages.UPDATE_USER_FAILURE);
+  }
+
+  try {
+    await tokenRepo.deleteToken(userId);
+  } catch (err) {
+    throw new RepositoryFailure(responseMessages.DELETE_TOKEN_FAILURE);
+  }
+
+  return updatedUser;
 };

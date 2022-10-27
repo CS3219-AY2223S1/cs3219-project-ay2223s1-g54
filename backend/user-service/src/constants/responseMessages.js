@@ -43,9 +43,13 @@ export const MISSING_MAILER_ENV =
 
 export const GET_TOKEN_BY_USER_ID_FAILURE =
   "There is a problem retrieving the token by user id";
+export const GET_TOKEN_BY_USER_ID_TOKEN_VALUE_FAILURE =
+  "There is a problem retrieving the token by user id and token value";
 export const TOKEN_NOT_FOUND = "There is not such token";
 
 export const CREATE_TOKEN_FAILURE = "There is a problem creating the token";
 export const DELETE_TOKEN_FAILURE = "There is a problem deleting the token";
 export const USER_RESET_EMAIL_SENT =
   "Reset password Email has been sent to your account";
+
+export const USER_PASSWORD_RESET_SUCCESS = "Your password has been reset";
