@@ -8,6 +8,7 @@ import { CollaborativeWhiteBoard } from "./CollaborativeWhiteBoard";
 import { ChatComponent } from "./ChatComponent";
 import { InputWindow } from "./InputWindow";
 import { OutputWindow } from "./OutputWindow";
+import { VideoChatComponent } from "./VideoChatComponent";
 import axios from "axios";
 
 const CollaborativeTabs = (props) => {
@@ -145,6 +146,7 @@ const CollaborativeTabs = (props) => {
         <Tab value="0" label="Code Editor" />
         <Tab value="1" label="White Board" />
         <Tab value="2" label="Chat" />
+        <Tab value="3" label="Video Chat" />
       </Tabs>
 
       <CollaborativeCodeEditor
@@ -161,6 +163,11 @@ const CollaborativeTabs = (props) => {
       />
       <ChatComponent
         hidden={tabIndex === "2" ? true : false}
+        socket={socket}
+        collabData={collabData}
+      />
+      <VideoChatComponent
+        hidden={tabIndex === "3" ? true : false}
         socket={socket}
         collabData={collabData}
       />
