@@ -1,7 +1,11 @@
-import { Box } from "@mui/system";
+import { Box, Button, TextField, IconButton } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import Peer from "simple-peer";
+import MicIcon from "@mui/icons-material/Mic";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
+import MicOffIcon from "@mui/icons-material/MicOff";
 
 function VideoChatComponent(props) {
   const { auth } = useAuth();
@@ -10,9 +14,13 @@ function VideoChatComponent(props) {
   const { userId, socket } = auth;
   const collabData = props.collabData;
   const { roomId, userId1, username1, username2 } = collabData;
+
   const userVideo = useRef();
   const partnerVideo = useRef();
   const connectionRef = useRef();
+
+  const [mic, setMic] = useState(true);
+  const [cam, setCam] = useState(true);
 
   useEffect(() => {
     // Get current username
@@ -39,6 +47,7 @@ function VideoChatComponent(props) {
     };
   }, []);
 
+  //User with userId1 will make the call
   function callUser() {
     const peer = new Peer({
       initiator: true,
@@ -64,6 +73,7 @@ function VideoChatComponent(props) {
     connectionRef.current = peer;
   }
 
+  //User with userId2 will answer the call
   function answerCall() {
     const peer = new Peer({
       initiator: false,
@@ -78,7 +88,7 @@ function VideoChatComponent(props) {
     peer.on("signal", (data) => {
       socket.emit("sendResponderSignal", {
         roomId: roomId,
-        signalData: data
+        signalData: data,
       });
     });
     peer.on("stream", (stream) => {
@@ -88,30 +98,75 @@ function VideoChatComponent(props) {
     connectionRef.current = peer;
   }
 
+  const handleVideoToggle = () => {
+    const videoTrack = stream
+      .getTracks()
+      .find((track) => track.kind === "video");
+    if (videoTrack.enabled) {
+      videoTrack.enabled = false;
+      setCam(false);
+    } else {
+      videoTrack.enabled = true;
+      setCam(true);
+    }
+  };
+
+  const handleAudioToggle = () => {
+    const audioTrack = stream
+      .getTracks()
+      .find((track) => track.kind === "audio");
+    if (audioTrack.enabled) {
+      audioTrack.enabled = false;
+      setMic(false);
+    } else {
+      audioTrack.enabled = true;
+      setMic(true);
+    }
+  };
+
   return (
     <Box>
-      <Box>
-        {
-          <video
-            playsInline
-            muted
-            ref={userVideo}
-            autoPlay
-            style={{ width: "300px" }}
-          />
-        }
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          p: 1,
+          m: 1,
+          bgcolor: "background.paper",
+          borderRadius: 1,
+        }}
+      >
+        <Box>
+          Self
+          {
+            <video
+              playsInline
+              muted
+              ref={userVideo}
+              autoPlay
+              style={{ width: "300px" }}
+            />
+          }
+        </Box>
+        <Box>
+          Partner
+          {
+            <video
+              playsInline
+              ref={partnerVideo}
+              autoPlay
+              style={{ width: "300px" }}
+            />
+          }
+        </Box>
       </Box>
-      <Box>
-        {
-          <video
-            playsInline
-            muted
-            ref={partnerVideo}
-            autoPlay
-            style={{ width: "300px" }}
-          />
-        }
-      </Box>
+      <IconButton size="middle" onClick={handleVideoToggle}>
+        {cam ? <VideocamIcon /> : <VideocamOffIcon />}
+      </IconButton>
+      <IconButton size="middle" onClick={handleAudioToggle}>
+        {mic ? <MicIcon /> : <MicOffIcon />}
+      </IconButton>
     </Box>
   );
 }
