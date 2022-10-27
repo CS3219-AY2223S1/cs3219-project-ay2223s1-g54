@@ -26,9 +26,16 @@ function VideoChatComponent(props) {
         userVideo.current.srcObject = stream;
       });
 
+    if (userId === userId1) {
+      callUser();
+    } else {
+      answerCall();
+    }
+
     return () => {
       //socket.off("receiveMessage");
-      connectionRef.current.destroy();
+      //connectionRef.current.destroy();
+      //stream.getTracks().forEach(track => track.stop());
     };
   }, []);
 
@@ -71,16 +78,41 @@ function VideoChatComponent(props) {
     peer.on("signal", (data) => {
       socket.emit("sendResponderSignal", {
         roomId: roomId,
-        signalData: data,
+        signalData: data
       });
     });
     peer.on("stream", (stream) => {
-      userVideo.current.srcObject = stream;
+      partnerVideo.current.srcObject = stream;
     });
 
     connectionRef.current = peer;
   }
 
-  return <Box></Box>;
+  return (
+    <Box>
+      <Box>
+        {
+          <video
+            playsInline
+            muted
+            ref={userVideo}
+            autoPlay
+            style={{ width: "300px" }}
+          />
+        }
+      </Box>
+      <Box>
+        {
+          <video
+            playsInline
+            muted
+            ref={partnerVideo}
+            autoPlay
+            style={{ width: "300px" }}
+          />
+        }
+      </Box>
+    </Box>
+  );
 }
 export { VideoChatComponent };
