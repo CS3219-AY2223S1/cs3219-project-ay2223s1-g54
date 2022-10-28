@@ -5,6 +5,7 @@ export const PREFIX_AUTH_SVC = "/auth";
 export const PREFIX_USER_SVC = "/user";
 export const PREFIX_MATCHING_SVC = "/matching";
 export const PREFIX_QUESTION_SVC = "/question";
+export const PREFIX_JUDGE_SVC = "/judge";
 
 export const URL_AUTH_SVC_LOGIN_USER = URI_GATEWAY + PREFIX_AUTH_SVC + "/login";
 export const URL_AUTH_SVC_LOGOUT_USER =
@@ -17,3 +18,5 @@ export const URL_USER_SVC_UPDATE_USER =
   URI_GATEWAY + PREFIX_USER_SVC + "/update";
 export const URL_USER_SVC_DELETE_USER =
   URI_GATEWAY + PREFIX_USER_SVC + "/delete";
+export const URL_JUDGE_SVC_SUBMISSION = 
+  URI_GATEWAY + PREFIX_JUDGE_SVC + "/submissions"

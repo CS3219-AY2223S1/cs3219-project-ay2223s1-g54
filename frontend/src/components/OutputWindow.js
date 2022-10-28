@@ -8,14 +8,14 @@ const OutputWindow = ({ outputDetails }) => {
       // compilation error
       return (
         <pre>
-          {atob(outputDetails?.compile_output)}
+          {outputDetails?.compile_output}
         </pre>
       );
     } else if (statusId === 3) {
       return (
         <pre>
-          {atob(outputDetails.stdout) !== null
-            ? `${atob(outputDetails.stdout)}`
+          {outputDetails.stdout !== null
+            ? `${outputDetails.stdout}`
             : null}
         </pre>
       );
@@ -28,7 +28,7 @@ const OutputWindow = ({ outputDetails }) => {
     } else {
       return (
         <pre>
-          {atob(outputDetails?.stderr)}
+          {outputDetails?.stderr}
         </pre>
       );
     }
