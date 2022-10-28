@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 
 const QuestionPane = () => {
-  return <Box bg="#39424e"></Box>;
+  return <Box w="full" h="full" bg="green"></Box>;
 };
 
 export default QuestionPane;
