@@ -1,8 +1,8 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 export const BaseLayout = (props) => {
   return (
-    <Box as={Flex} minH="100vh" maxH="100vh" justify="center" bg="#39424e">
+    <Box minH="100vh" maxH="100vh" align="center" justify="center" bg="#39424e">
       {props.children}
     </Box>
   );

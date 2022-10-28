@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Flex,
   Heading,
   Image,
   Stack,
@@ -23,7 +24,15 @@ const LandingPage = () => {
 
   return (
     <BaseLayout>
-      <Box boxSize="lg" align="center">
+      <Box
+        minHeight="100%"
+        maxHeight="100%"
+        h="100%"
+        as={Flex}
+        justify="center"
+        align="center"
+        w="500px"
+      >
         <Stack bg="white" p="10" mt="150">
           <Heading>PeerPrep</Heading>
           <Image src="assets/LandingPage.png" />

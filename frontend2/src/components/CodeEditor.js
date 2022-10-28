@@ -3,7 +3,7 @@ import Editor from "@monaco-editor/react";
 
 const CodeEditor = () => {
   return (
-    <Box w="100%">
+    <Box w="100%" minW="25%">
       <Flex p="3" pr="5" justify="flex-end">
         <Select variant="filled" w="150px" value="testLanguage1">
           <option value="testLanguage1">Language 1</option>
