@@ -1,9 +1,16 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 
 export const BaseLayout = (props) => {
   return (
-    <Box minH="100vh" maxH="100vh" align="center" justify="center" bg="#39424e">
-      {props.children}
+    <Box
+      minW="100vw"
+      maxW="100vw"
+      minH="100vh"
+      maxH="100vh"
+      overflow="hidden"
+      bg="#39424e"
+    >
+      <Container>{props.children}</Container>
     </Box>
   );
 };
