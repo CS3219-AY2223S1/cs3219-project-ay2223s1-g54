@@ -1,4 +1,4 @@
-import { Box, Container } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 export const BaseLayout = (props) => {
   return (
@@ -10,7 +10,7 @@ export const BaseLayout = (props) => {
       overflow="hidden"
       bg="#39424e"
     >
-      <Container>{props.children}</Container>
+      {props.children}
     </Box>
   );
 };
