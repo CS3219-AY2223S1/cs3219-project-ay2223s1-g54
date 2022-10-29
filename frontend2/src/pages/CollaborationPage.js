@@ -36,7 +36,7 @@ const CollaborationPage = () => {
             maxH="full"
             bg="#ffffff"
             isFitted
-            variant="enclosed"
+            variant="line"
             colorScheme="green"
           >
             <TabList>
