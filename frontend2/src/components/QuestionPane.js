@@ -2,14 +2,7 @@ import { Box, Flex, Heading, Stack, Tag } from "@chakra-ui/react";
 
 const QuestionPane = () => {
   return (
-    <Box
-      w="full"
-      h="full"
-      minH="full"
-      maxH="full"
-      bg="#ffffff"
-      borderRight="1px solid black"
-    >
+    <Box w="full" h="full" minH="full" maxH="full" bg="#ffffff">
       <Stack w="full" h="full" minH="full" maxH="full" p="5">
         <Heading size="lg">Test Title</Heading>
         <Flex>

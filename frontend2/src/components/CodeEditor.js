@@ -3,7 +3,7 @@ import Editor from "@monaco-editor/react";
 
 const CodeEditor = () => {
   return (
-    <Box h="full" minH="full" maxH="full" pb="175">
+    <Box h="full" minH="full" maxH="full" pb="180">
       <Editor theme="vs-dark" />
     </Box>
   );
