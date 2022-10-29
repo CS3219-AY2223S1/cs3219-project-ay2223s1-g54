@@ -26,11 +26,11 @@ const CollaborationPage = () => {
           </Button>
         </Flex>
         <Flex w="full" h="full" minH="full" maxH="full">
-          <Box w="50%" h="full" minH="full" maxH="full">
+          <Box w="40%" h="full" minH="full" maxH="full">
             <QuestionPane />
           </Box>
           <Tabs
-            w="50%"
+            w="60%"
             h="full"
             minH="full"
             maxH="full"
@@ -42,7 +42,7 @@ const CollaborationPage = () => {
             <TabList>
               <Tab>Code Editor</Tab>
               <Tab>White Board</Tab>
-              <Tab>Judge</Tab>
+              <Tab>Communication</Tab>
             </TabList>
             <TabPanels h="full" minH="full" maxH="full">
               <TabPanel h="full" minH="full" maxH="full">
