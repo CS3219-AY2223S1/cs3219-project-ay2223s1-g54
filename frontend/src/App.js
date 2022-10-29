@@ -9,13 +9,18 @@ import InvalidPage from "./components/InvalidPage";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
 import RequestResetPasswordPage from "./components/RequestResetPasswordPage";
+import ResetPasswordPage from "./components/ResetPasswordPage";
 const App = () => {
   return (
     <Routes>
       <Route exact path="/" element={<LandingPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/resetPassword" element={<RequestResetPasswordPage />} />
+      <Route
+        path="/requestResetPassword"
+        element={<RequestResetPasswordPage />}
+      />
+      <Route path="/resetPasswordPage" element={<ResetPasswordPage />} />
       <Route element={<PersistLogin />}>
         <Route element={<RequireAuth />}>
           <Route path="/matching" element={<MainPage />} />

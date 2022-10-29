@@ -121,6 +121,15 @@ userRoutes.post(
   asyncHandler(async (req, res) => {
     const { newPassword } = req.body;
     const { userId, token } = req.params;
+
+    if (!userId) {
+      throw new MalformedRequest(responseMessages.MISSING_USER_ID_GET_PARAM);
+    }
+
+    if (!token) {
+      throw new MalformedRequest(responseMessages.MISSING_TOKEN_GET_PARAM);
+    }
+
     if (!newPassword) {
       throw new MalformedRequest(responseMessages.MISSING_PASSWORD_FIELD);
     }
