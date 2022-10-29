@@ -242,14 +242,13 @@ export const sendResetPasswordLinkUser = async (email) => {
   token = await getTokenByUserId(user.id);
 
   if (!token) {
-    token = await createToken(userId);
+    token = await createToken(user.id);
   }
 
   if (!token) {
     throw new TokenNotFound(responseMessages.TOKEN_NOT_FOUND);
   }
 
-  console.log(token);
   const passwordResetLink = `${EMAIL_RESET_URI}/${user.id}/${token.token}`;
   await sendResetEmail(user.username, email, passwordResetLink);
 
@@ -275,6 +274,11 @@ export const resetPasswordUser = async (userId, token, newPassword) => {
 
   if (!retrievedToken) {
     throw new TokenNotFound(responseMessages.TOKEN_NOT_FOUND);
+  }
+
+  const passwordRegExp = new RegExp(regExp.PASSWORD);
+  if (!newPassword.match(passwordRegExp)) {
+    throw new FieldValidationFailure(responseMessages.PASSWORD_VALIDATION_FAIL);
   }
 
   try {

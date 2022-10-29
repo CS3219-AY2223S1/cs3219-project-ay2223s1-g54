@@ -3,6 +3,8 @@ export const MISSING_EMAIL_FIELD = "The email field is missing";
 export const MISSING_USERNAME_FIELD = "The username field is missing";
 export const MISSING_PASSWORD_FIELD = "The password field is missing";
 export const MISSING_NEW_PASSWORD_FIELD = "The new password field is missing";
+export const MISSING_CONFIRMATION_CODE_FIELD =
+  "The confirmation code parameter is missing";
 export const MISSING_REFRESH_TOKEN_COOKIE =
   "The refreshToken cookie is missing";
 export const COMPROMISED_ACCESS_TOKEN_HEADER =
@@ -16,3 +18,7 @@ export const OUT_OF_RANGE_DIFFICULTY =
   "The difficulty specified is not within the supported range";
 
 export const INVALID_CREDENTIALS = "The credentials supplied were incorrect";
+
+export const USER_RESET_EMAIL_SENT =
+  "Reset password Email has been sent to your account";
+export const USER_PASSWORD_RESET_SUCCESS = "Your password has been reset";

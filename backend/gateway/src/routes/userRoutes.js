@@ -57,4 +57,50 @@ userRoutes.post(
   })
 );
 
+userRoutes.get(
+  "/confirm/:confirmationCode",
+  asyncHandler(async (req, res) => {
+    const { confirmationCode } = req.params;
+    if (!confirmationCode) {
+      throw new MalformedRequest(
+        responseMessages.MISSING_CONFIRMATION_CODE_FIELD
+      );
+    }
+
+    await userService.emailVerifyingUser(confirmationCode);
+    return res.sendStatus(statusCodes.OK);
+  })
+);
+
+userRoutes.post(
+  "/passwordReset",
+  asyncHandler(async (req, res) => {
+    const { email } = req.body;
+    if (!email) {
+      throw new MalformedRequest(responseMessages.MISSING_EMAIL_FIELD);
+    }
+
+    await userService.sendResetPasswordLinkUser(email);
+    return res
+      .status(statusCodes.OK)
+      .json({ success: responseMessages.USER_RESET_EMAIL_SENT });
+  })
+);
+
+userRoutes.post(
+  "/passwordReset/:userId/:token",
+  asyncHandler(async (req, res) => {
+    const { newPassword } = req.body;
+    const { userId, token } = req.params;
+    if (!newPassword) {
+      throw new MalformedRequest(responseMessages.MISSING_PASSWORD_FIELD);
+    }
+
+    await userService.resetPasswordUser(userId, token, newPassword);
+    return res
+      .sendStatus(statusCodes.OK)
+      .json({ success: responseMessages.USER_PASSWORD_RESET_SUCCESS });
+  })
+);
+
 export { userRoutes };

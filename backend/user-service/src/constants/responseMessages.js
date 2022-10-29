@@ -3,6 +3,8 @@ export const MISSING_EMAIL_FIELD = "The email field is missing";
 export const MISSING_USERNAME_FIELD = "The username field is missing";
 export const MISSING_PASSWORD_FIELD = "The password field is missing";
 export const MISSING_NEW_PASSWORD_FIELD = "The new password field is missing";
+export const MISSING_CONFIRMATION_CODE_FIELD =
+  "The confirmation code parameter is missing";
 
 export const GET_USER_BY_ID_FAILURE =
   "There is a problem retrieving the user by userId";
