@@ -8,8 +8,10 @@ import {
   Box,
   Button,
   Flex,
+  Input,
   Select,
   Stack,
+  Textarea,
 } from "@chakra-ui/react";
 import CodeEditor from "../components/CodeEditor";
 
@@ -53,14 +55,17 @@ const DevEnvironment = () => {
           <AccordionItem>
             <AccordionButton>
               <Box flex="1" textAlign="left">
-                Input / Output
+                Run Test
               </Box>
               <AccordionIcon />
             </AccordionButton>
             <AccordionPanel>
               <Stack>
-                <Box w="100%" h="100px" bg="green"></Box>
-                <Box w="100%" h="400px" bg="red"></Box>
+                <Input size="md" placeholder="Specify standard input" />
+                <Textarea
+                  placeholder="Program output will be shown here"
+                  isReadOnly
+                />
                 <Button colorScheme="green">Compile Code</Button>
               </Stack>
             </AccordionPanel>
