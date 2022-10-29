@@ -9,7 +9,7 @@ import {
   TabPanel,
   TabPanels,
 } from "@chakra-ui/react";
-import CodeEditor from "../components/CodeEditor";
+import DevEnvironment from "../components/DevEnvironment";
 import QuestionPane from "../components/QuestionPane";
 import BaseLayout from "../components/layouts/BaseLayout";
 
@@ -46,7 +46,7 @@ const CollaborationPage = () => {
             </TabList>
             <TabPanels h="full" minH="full" maxH="full">
               <TabPanel h="full" minH="full" maxH="full">
-                <CodeEditor />
+                <DevEnvironment />
               </TabPanel>
               <TabPanel></TabPanel>
               <TabPanel></TabPanel>
