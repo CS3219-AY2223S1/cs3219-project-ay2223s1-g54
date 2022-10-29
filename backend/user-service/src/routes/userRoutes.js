@@ -96,7 +96,7 @@ userRoutes.get(
 
     await userService.emailVerifyingUser(confirmationCode);
     return res
-      .sendStatus(statusCodes.OK)
+      .status(statusCodes.OK)
       .json({ success: responseMessages.USER_EMAIL_VERIFIED });
   })
 );
@@ -111,7 +111,7 @@ userRoutes.post(
 
     await userService.sendResetPasswordLinkUser(email);
     return res
-      .sendStatus(statusCodes.OK)
+      .status(statusCodes.OK)
       .json({ success: responseMessages.USER_RESET_EMAIL_SENT });
   })
 );
@@ -127,7 +127,7 @@ userRoutes.post(
 
     await userService.resetPasswordUser(userId, token, newPassword);
     return res
-      .sendStatus(statusCodes.OK)
+      .status(statusCodes.OK)
       .json({ success: responseMessages.USER_PASSWORD_RESET_SUCCESS });
   })
 );

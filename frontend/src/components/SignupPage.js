@@ -151,7 +151,7 @@ function SignupPage() {
             </Button>
             <Grid container sx={{ mt: 1 }}>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="/resetPassword" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>

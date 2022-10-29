@@ -16,7 +16,9 @@ export const URL_USER_SVC_CREATE_USER =
   URI_GATEWAY + PREFIX_USER_SVC + "/create";
 export const URL_USER_SVC_UPDATE_USER =
   URI_GATEWAY + PREFIX_USER_SVC + "/update";
+export const URL_USER_RESET_PASSWORD =
+  URI_GATEWAY + PREFIX_USER_SVC + "/passwordReset";
 export const URL_USER_SVC_DELETE_USER =
   URI_GATEWAY + PREFIX_USER_SVC + "/delete";
-export const URL_JUDGE_SVC_SUBMISSION = 
-  URI_GATEWAY + PREFIX_JUDGE_SVC + "/submissions"
+export const URL_JUDGE_SVC_SUBMISSION =
+  URI_GATEWAY + PREFIX_JUDGE_SVC + "/submissions";
