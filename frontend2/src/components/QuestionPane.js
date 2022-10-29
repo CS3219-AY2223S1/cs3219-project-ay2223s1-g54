@@ -15,7 +15,7 @@ const QuestionPane = () => {
             Test Category
           </Tag>
         </Flex>
-        <Flex w="full" h="full" minH="full" maxH="full" pb="150">
+        <Flex w="full" h="full" minH="full" maxH="full" pb="144">
           <Flex
             w="full"
             h="full"

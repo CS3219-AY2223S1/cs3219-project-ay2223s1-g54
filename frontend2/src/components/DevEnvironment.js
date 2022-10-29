@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Accordion,
   AccordionButton,
@@ -13,10 +14,17 @@ import {
 import CodeEditor from "../components/CodeEditor";
 
 const DevEnvironment = () => {
+  const [codeEditorTheme, setCodeEditorTheme] = useState("light");
+
+  const updateCodeEditorTheme = (event) => {
+    const theme = event.target.value;
+    setCodeEditorTheme(theme);
+  };
+
   return (
     <Box w="full" minH="full" maxH="full" h="full">
       <Flex direction="column" minH="full" maxH="full" h="full">
-        <Accordion allowToggle>
+        <Accordion allowToggle mb="2">
           <AccordionItem>
             <AccordionButton>
               <Box flex="1" textAlign="left">
@@ -26,10 +34,13 @@ const DevEnvironment = () => {
             </AccordionButton>
             <AccordionPanel>
               <Flex>
-                <Select variant="filled" mr="2">
-                  <option value="testTheme1">Theme 1</option>
-                  <option value="testTheme2">Theme 2</option>
-                  <option value="testTheme3">Theme 3</option>
+                <Select
+                  variant="filled"
+                  mr="2"
+                  onChange={updateCodeEditorTheme}
+                >
+                  <option value="light">Light</option>
+                  <option value="vs-dark">Dark</option>
                 </Select>
                 <Select variant="filled" ml="2">
                   <option value="testLanguage1">Language 1</option>
@@ -55,7 +66,7 @@ const DevEnvironment = () => {
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
-        <CodeEditor />
+        <CodeEditor theme={codeEditorTheme} />
       </Flex>
     </Box>
   );
