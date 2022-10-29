@@ -55,7 +55,7 @@ const CodeEditor = () => {
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
-        <Box h="full" minH="full" maxH="full" overflow="hidden">
+        <Box h="full" minH="full" maxH="full" pb="175">
           <Editor theme="vs-dark" />
         </Box>
       </Flex>
