@@ -95,9 +95,43 @@ userRoutes.get(
     }
 
     await userService.emailVerifyingUser(confirmationCode);
-    return res
-      .status(statusCodes.OK)
-      .json({ success: responseMessages.USER_EMAIL_VERIFIED });
+    return res.sendStatus(statusCodes.OK);
+  })
+);
+
+userRoutes.post(
+  "/passwordReset",
+  asyncHandler(async (req, res) => {
+    const { email } = req.body;
+    if (!email) {
+      throw new MalformedRequest(responseMessages.MISSING_EMAIL_FIELD);
+    }
+
+    await userService.sendResetPasswordLinkUser(email);
+    return res.sendStatus(statusCodes.OK);
+  })
+);
+
+userRoutes.post(
+  "/passwordReset/:userId/:token",
+  asyncHandler(async (req, res) => {
+    const { newPassword } = req.body;
+    const { userId, token } = req.params;
+
+    if (!userId) {
+      throw new MalformedRequest(responseMessages.MISSING_USER_ID_GET_PARAM);
+    }
+
+    if (!token) {
+      throw new MalformedRequest(responseMessages.MISSING_TOKEN_GET_PARAM);
+    }
+
+    if (!newPassword) {
+      throw new MalformedRequest(responseMessages.MISSING_PASSWORD_FIELD);
+    }
+
+    await userService.resetPasswordUser(userId, token, newPassword);
+    return res.sendStatus(statusCodes.OK);
   })
 );
 
