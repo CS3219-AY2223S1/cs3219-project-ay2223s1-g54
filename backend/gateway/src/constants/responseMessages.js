@@ -20,7 +20,3 @@ export const OUT_OF_RANGE_DIFFICULTY =
   "The difficulty specified is not within the supported range";
 
 export const INVALID_CREDENTIALS = "The credentials supplied were incorrect";
-
-export const USER_RESET_EMAIL_SENT =
-  "Reset password Email has been sent to your account";
-export const USER_PASSWORD_RESET_SUCCESS = "Your password has been reset";

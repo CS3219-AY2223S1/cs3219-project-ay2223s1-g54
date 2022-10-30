@@ -16,15 +16,17 @@ import {
 import { useState } from "react";
 import { URL_USER_RESET_PASSWORD } from "../configs";
 import { usePublicAxios } from "../hooks/useAxios";
-import { Link as LinkRoute, useParams } from "react-router-dom";
+import { Link as LinkRoute } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function ResetPasswordPage() {
-  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
   const [isResetPasswordSuccess, setIsResetPasswordSuccess] = useState(false);
+  const { userId, token } = useParams();
 
   const axiosPublic = usePublicAxios();
 
@@ -43,8 +45,7 @@ function ResetPasswordPage() {
   };
 
   const HandleResetPassword = async () => {
-    let { userId, token } = useParams();
-    if (password !== confirmPassword) {
+    if (newPassword !== confirmPassword) {
       setErrorDialog("Validation Error", "Password fields must match");
       return;
     }
@@ -53,7 +54,7 @@ function ResetPasswordPage() {
       const res = await axiosPublic.post(
         URL_USER_RESET_PASSWORD + `/${userId}/${token}`,
         {
-          password,
+          newPassword,
         }
       );
     } catch (err) {
@@ -66,7 +67,7 @@ function ResetPasswordPage() {
       setErrorDialog("Unknown Error", "Please try again later");
       return;
     }
-    setSuccessDialog("Your password has been successfully changed.");
+    setSuccessDialog("Your password has been changed.");
     setIsResetPasswordSuccess(true);
   };
 
@@ -106,8 +107,8 @@ function ResetPasswordPage() {
               fullWidth
               label="Password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
             />
             <TextField
               variant="outlined"

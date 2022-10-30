@@ -20,7 +20,10 @@ const App = () => {
         path="/requestResetPassword"
         element={<RequestResetPasswordPage />}
       />
-      <Route path="/resetPasswordPage" element={<ResetPasswordPage />} />
+      <Route
+        path="/resetPassword/:userId/:token"
+        element={<ResetPasswordPage />}
+      />
       <Route element={<PersistLogin />}>
         <Route element={<RequireAuth />}>
           <Route path="/matching" element={<MainPage />} />
