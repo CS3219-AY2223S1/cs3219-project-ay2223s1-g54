@@ -44,7 +44,7 @@ function RequestResetPasswordPage() {
 
   const handleResetPasswordRequest = async () => {
     try {
-      const res = await axiosPublic.post(URL_USER_RESET_PASSWORD, {
+      await axiosPublic.post(URL_USER_RESET_PASSWORD, {
         email,
       });
     } catch (err) {

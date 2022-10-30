@@ -8,6 +8,7 @@ import CollaborationPage from "./components/CollaborationPage";
 import InvalidPage from "./components/InvalidPage";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
+import AccountVerifiedPage from "./components/AccountVerifiedPage";
 import RequestResetPasswordPage from "./components/RequestResetPasswordPage";
 import ResetPasswordPage from "./components/ResetPasswordPage";
 const App = () => {
@@ -15,6 +16,10 @@ const App = () => {
     <Routes>
       <Route exact path="/" element={<LandingPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route
+        path="/confirm/:confirmationCode"
+        element={<AccountVerifiedPage />}
+      />
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/requestResetPassword"
