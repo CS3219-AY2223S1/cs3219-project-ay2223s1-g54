@@ -8,11 +8,13 @@ describe("User Service", () => {
 
   let userId;
   let confirmationCode;
+  let retrievedToken;
   const email = "jesttest@u.nus.edu";
   const username = "jesttest";
   const password = "jesttest123";
   const oldPassword = password;
   const newPassword = "jesttest1234";
+  const resetPassword = "jesttest5678";
 
   describe("createUser", () => {
     it("Should create user successfully", async () => {
@@ -68,6 +70,35 @@ describe("User Service", () => {
 
         expect(match).not.toBeNull();
         expect(match).toBe(true);
+      };
+
+      await expect(f()).resolves.not.toThrow();
+    });
+  });
+
+  describe("sendResetPasswordLinkUser", () => {
+    it("Should send the user the link to reset password successfully", async () => {
+      const f = async () => {
+        const { user, token } = await userService.sendResetPasswordLinkUser(
+          email
+        );
+
+        userId = user.id;
+        retrievedToken = token.token;
+      };
+
+      await expect(f()).resolves.not.toThrow();
+    });
+  });
+
+  describe("resetPasswordUser", () => {
+    it("Should send the user the link to reset password successfully", async () => {
+      const f = async () => {
+        await userService.resetPasswordUser(
+          userId,
+          retrievedToken,
+          resetPassword
+        );
       };
 
       await expect(f()).resolves.not.toThrow();
