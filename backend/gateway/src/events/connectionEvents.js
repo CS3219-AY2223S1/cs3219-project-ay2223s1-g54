@@ -151,6 +151,6 @@ const sendLeaveRoom = async (defaultParams, roomId) => {
 const sendSubmitCode = async (pubClient, roomId) => {
   const data = JSON.stringify({ roomId });
   await pubClient.publish("sendSubmitCode", data);
-}
+};
 
 export { registerConnectionHandlers };
