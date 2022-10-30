@@ -1,7 +1,7 @@
-import { Box, Button, TextField, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import Peer from "simple-peer";
+import Peer from "peerjs";
 import MicIcon from "@mui/icons-material/Mic";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
@@ -11,92 +11,61 @@ function VideoChatComponent(props) {
   const { auth } = useAuth();
   const [stream, setStream] = useState();
   const usernameRef = useRef();
+  const partnerNameRef = useRef();
   const { userId, socket } = auth;
   const collabData = props.collabData;
   const { roomId, userId1, username1, username2 } = collabData;
 
   const userVideo = useRef();
   const partnerVideo = useRef();
-  const connectionRef = useRef();
 
   const [mic, setMic] = useState(true);
   const [cam, setCam] = useState(true);
 
   useEffect(() => {
     // Get current username
-    if (userId === userId1) usernameRef.current = username1;
-    else usernameRef.current = username2;
-
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        setStream(stream);
-        userVideo.current.srcObject = stream;
-      });
-
     if (userId === userId1) {
-      callUser();
+      usernameRef.current = username1;
+      partnerNameRef.current = username2;
     } else {
-      answerCall();
+      usernameRef.current = username2;
+      partnerNameRef.current = username1;
     }
 
+    const peer = new Peer(userId);
+
+    navigator.mediaDevices
+      .getUserMedia({ video: cam, audio: mic })
+      .then((stream) => {
+        setStream(stream);
+        if (stream) {
+          userVideo.current.srcObject = stream;
+        }
+        if (userId !== userId1) {
+          const call = peer.call(userId1, stream);
+
+          call.on("stream", (stream) => {
+            partnerVideo.current.srcObject = stream;
+          });
+        } else {
+          peer.on("call", (call) => {
+            call.answer(stream); // Answer the call with an A/V stream.
+            call.on("stream", (stream) => {
+              partnerVideo.current.srcObject = stream;
+            });
+          });
+        }
+      })
+      .catch(console.log);
+
+
     return () => {
-      //socket.off("receiveMessage");
-      //connectionRef.current.destroy();
-      //stream.getTracks().forEach(track => track.stop());
+      peer.destroy();
+      
+      // Can't get stream to work
+      // stream.getTracks().forEach((track) => track.stop());
     };
   }, []);
-
-  //User with userId1 will make the call
-  function callUser() {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: stream,
-    });
-
-    peer.on("signal", (data) => {
-      socket.emit("sendCallerSignal", {
-        roomId: roomId,
-        signalData: data,
-      });
-    });
-
-    peer.on("stream", (stream) => {
-      partnerVideo.current.srcObject = stream;
-    });
-
-    socket.on("receiveResponderSignal", (data) => {
-      peer.signal(data.signalData);
-    });
-
-    connectionRef.current = peer;
-  }
-
-  //User with userId2 will answer the call
-  function answerCall() {
-    const peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream: stream,
-    });
-
-    socket.on("receiveCallerSignal", (data) => {
-      peer.signal(data.signalData);
-    });
-
-    peer.on("signal", (data) => {
-      socket.emit("sendResponderSignal", {
-        roomId: roomId,
-        signalData: data,
-      });
-    });
-    peer.on("stream", (stream) => {
-      partnerVideo.current.srcObject = stream;
-    });
-
-    connectionRef.current = peer;
-  }
 
   const handleVideoToggle = () => {
     const videoTrack = stream
@@ -124,12 +93,20 @@ function VideoChatComponent(props) {
     }
   };
 
+  const handleStreamStop = (stream) => {
+    stream.getTracks().forEach((track) => track.stop());
+  };
+
   return (
-    <Box>
+    <Box
+      height={props.hidden === true ? "100%" : "0"}
+      visibility={props.hidden === true ? "none" : "hidden"}
+      maxHeight="100%"
+    >
       <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
           justifyContent: "center",
           p: 1,
           m: 1,
@@ -137,36 +114,80 @@ function VideoChatComponent(props) {
           borderRadius: 1,
         }}
       >
-        <Box>
-          Self
-          {
-            <video
-              playsInline
-              muted
-              ref={userVideo}
-              autoPlay
-              style={{ width: "300px" }}
-            />
-          }
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            p: 1,
+            m: 1,
+            width: "40%",
+            bgcolor: "background.paper",
+            borderRadius: 1,
+          }}
+        >
+          <video
+            playsInline
+            muted
+            ref={userVideo}
+            autoPlay
+            style={{ width: "100%" }}
+          />
+          <Typography
+            component="h4"
+            variant="h5"
+            sx={{ mt: 2 }}
+            textAlign="center"
+          >
+            {usernameRef.current}
+          </Typography>
         </Box>
-        <Box>
-          Partner
-          {
-            <video
-              playsInline
-              ref={partnerVideo}
-              autoPlay
-              style={{ width: "300px" }}
-            />
-          }
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            p: 1,
+            m: 1,
+            width: "40%",
+            bgcolor: "background.paper",
+            borderRadius: 1,
+          }}
+        >
+          <video
+            playsInline
+            ref={partnerVideo}
+            autoPlay
+            style={{ width: "100%" }}
+          />
+          <Typography
+            component="h4"
+            variant="h5"
+            sx={{ mt: 2 }}
+            textAlign="center"
+          >
+            {partnerNameRef.current}
+          </Typography>
         </Box>
       </Box>
-      <IconButton size="middle" onClick={handleVideoToggle}>
-        {cam ? <VideocamIcon /> : <VideocamOffIcon />}
-      </IconButton>
-      <IconButton size="middle" onClick={handleAudioToggle}>
-        {mic ? <MicIcon /> : <MicOffIcon />}
-      </IconButton>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          p: 1,
+          m: 1,
+          bgcolor: "background.paper",
+          borderRadius: 1,
+        }}
+      >
+        <IconButton size="large" onClick={handleVideoToggle}>
+          {cam ? <VideocamIcon /> : <VideocamOffIcon />}
+        </IconButton>
+        <IconButton size="large" onClick={handleAudioToggle}>
+          {mic ? <MicIcon /> : <MicOffIcon />}
+        </IconButton>
+      </Box>
     </Box>
   );
 }
