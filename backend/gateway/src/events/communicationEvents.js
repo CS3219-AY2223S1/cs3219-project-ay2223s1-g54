@@ -6,15 +6,6 @@ const registerCommunicationHandlers = async (io, pubClient, subClient) => {
     await sendMessage(defaultParams, roomId, name, time, messageId, message);
   });
 
-  subClient.subscribe("receiveCallerSignal", async (data) => {
-    const { roomId, signalData } = JSON.parse(data);
-    await sendCallerSignal(defaultParams, roomId, signalData);
-  });
-
-  subClient.subscribe("receiveResponderSignal", async (data) => {
-    const { roomId, signalData } = JSON.parse(data);
-    await sendResponderSignal(defaultParams, roomId, signalData);
-  });
 };
 
 const sendMessage = async (
@@ -31,18 +22,5 @@ const sendMessage = async (
   io.sockets.in(roomId).emit("receiveMessage", data);
 };
 
-const sendCallerSignal = async (defaultParams, roomId, signalData) => {
-  const [io, pubClient, subClient] = defaultParams;
-
-  const data = { roomId, signalData };
-  io.sockets.in(roomId).emit("receiveCallerSignal", data);
-};
-
-const sendResponderSignal = async (defaultParams, roomId, signalData) => {
-  const [io, pubClient, subClient] = defaultParams;
-
-  const data = { roomId, signalData };
-  io.sockets.in(roomId).emit("receiveResponderSignal", data);
-};
 
 export { registerCommunicationHandlers };
