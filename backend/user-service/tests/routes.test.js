@@ -2,6 +2,7 @@ import supertest from "supertest";
 import { app } from "../src/app.js";
 import { dbInit, dbTerminate } from "../src/db/setup.js";
 import { getUserByEmail } from "../src/db/repositories/user.js";
+import { getTokenByUserId } from "../src/db/repositories/token.js";
 
 describe("User Endpoints", () => {
   beforeAll(async () => {
@@ -14,6 +15,7 @@ describe("User Endpoints", () => {
   const password = "jesttest123";
   const oldPassword = password;
   const newPassword = "jesttest1234";
+  const resetPassword = "jesttest5678";
 
   describe("Create User", () => {
     it("Should create user successfully", async () => {
@@ -64,6 +66,24 @@ describe("User Endpoints", () => {
       const { match } = res.body;
       expect(match).not.toBeNull();
       expect(match).toBe(true);
+    });
+  });
+
+  describe("Request password reset for User", () => {
+    it("Should send the user an email to reset password successfully", async () => {
+      const res = await supertest(app).post("/passwordReset").send({ email });
+      expect(res.statusCode).toBe(200);
+    });
+  });
+
+  describe("Reset User's password", () => {
+    it("Should reset the user's password successfully", async () => {
+      const user = await getUserByEmail(email);
+      const token = await getTokenByUserId(user.id);
+      const res = await supertest(app)
+        .post("/passwordReset" + `/${user.id}/${token.token}`)
+        .send({ newPassword: resetPassword });
+      expect(res.statusCode).toBe(200);
     });
   });
 
