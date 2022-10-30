@@ -1,5 +1,5 @@
 import { TokenModel } from "../models/token.js";
-import * as nanoid from "nanoid";
+import nanoid from "nanoid";
 
 export const getTokenByUserId = async (userId) => {
   const retrievedToken = await TokenModel.findOne({ userId: userId });
