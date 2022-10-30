@@ -16,13 +16,13 @@ export const generateConfirmAccountTemplate = (
         </div>`;
 };
 
-export const generatePasswordResetTemplate = (name, passwordResetLink) => {
+export const generatePasswordResetTemplate = (name, EMAIL_RESET_URI) => {
   return `<h1>Reset Your PeepPrep Password</h1>
   <h2>Hello ${name}</h2>
   <p>You are receiving this email because we received a password reset request for your account.<p>
   <p>Please click the link below to reset your password</p>
   <!-- We need to change this to a dynamic link ... -->
-  <a href=${passwordResetLink}> Click here</a>
+  <a href=${EMAIL_RESET_URI}> Click here</a>
   <p>Happy coding,<br>PeerPrep Team 54</p>
   </div>`;
 };
