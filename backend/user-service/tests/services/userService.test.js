@@ -3,12 +3,14 @@ import { dbInit, dbTerminate } from "../../src/db/setup.js";
 import {
   EMAIL_ALREADY_EXISTS,
   EMAIL_VALIDATION_FAIL,
-  MISSING_USER_ID_FIELD,
+  GET_USER_BY_ID_FAILURE,
   PASSWORDS_IDENTICAL,
+  PASSWORD_DOES_NOT_MATCH,
   PASSWORD_VALIDATION_FAIL,
   USERNAME_ALREADY_EXISTS,
   USERNAME_VALIDATION_FAIL,
   USER_ALREADY_EMAIL_VERIFIED,
+  USER_NOT_EMAIL_VERIFIED,
   USER_NOT_FOUND,
 } from "../../src/constants/responseMessages.js";
 
@@ -28,10 +30,12 @@ describe("User Service", () => {
   const newPassword = "jesttest1234";
   const resetPassword = "jesttest5678";
 
+  const invalidUserId = "1234567";
   const invalidEmail = "test@test";
   const invalidUsernameStartWithNumber = "1jesttest123";
   const invalidShortPassword = "12345";
   const invalidConfirmationCode = "123456";
+  const invalidOldPassword = "notjesttest123";
 
   describe("createUser", () => {
     it("Should create user successfully", async () => {
@@ -110,6 +114,16 @@ describe("User Service", () => {
     });
   });
 
+  describe("verifyUserFail", () => {
+    it("Should not verify user successfully as it is not email verified", async () => {
+      const f = async () => {
+        const passwordMatch = await userService.verifyUser(email, password);
+      };
+
+      await expect(f()).rejects.toThrow(USER_NOT_EMAIL_VERIFIED);
+    });
+  });
+
   describe("confirmUser", () => {
     it("Should confirm user account successfully", async () => {
       const f = async () => {
@@ -148,6 +162,52 @@ describe("User Service", () => {
       };
 
       await expect(f()).resolves.not.toThrow();
+    });
+  });
+
+  describe("updateUserPasswordFail", () => {
+    it("Should not update the user's password successfully if new password identical to old password", async () => {
+      const f = async () => {
+        await userService.updateUserPassword(userId, oldPassword, oldPassword);
+      };
+
+      await expect(f()).rejects.toThrow(PASSWORDS_IDENTICAL);
+    });
+
+    it("Should not update the user's password successfully if new password is short and invalid", async () => {
+      const f = async () => {
+        await userService.updateUserPassword(
+          userId,
+          oldPassword,
+          invalidShortPassword
+        );
+      };
+
+      await expect(f()).rejects.toThrow(PASSWORD_VALIDATION_FAIL);
+    });
+
+    it("Should not update the user's password successfully if account doesn't exist", async () => {
+      const f = async () => {
+        await userService.updateUserPassword(
+          invalidUserId,
+          oldPassword,
+          newPassword
+        );
+      };
+
+      await expect(f()).rejects.toThrow(GET_USER_BY_ID_FAILURE);
+    });
+
+    it("Should not update the user's password successfully if old password is incorrect", async () => {
+      const f = async () => {
+        await userService.updateUserPassword(
+          userId,
+          invalidOldPassword,
+          newPassword
+        );
+      };
+
+      await expect(f()).rejects.toThrow(PASSWORD_DOES_NOT_MATCH);
     });
   });
 
@@ -207,36 +267,6 @@ describe("User Service", () => {
     it("Should not confirm account with incorrect confirmation code", async () => {
       const f = async () => {
         await userService.emailVerifyingUser(invalidConfirmationCode);
-      };
-
-      await expect(f()).rejects.toThrow(USER_NOT_FOUND);
-    });
-  });
-
-  describe("updateUserPasswordFail", () => {
-    it("Should not update the user's password successfully if new password identical to old password", async () => {
-      const f = async () => {
-        await userService.updateUserPassword(userId, oldPassword, oldPassword);
-      };
-
-      await expect(f()).rejects.toThrow(PASSWORDS_IDENTICAL);
-    });
-
-    it("Should not update the user's password successfully if new password is short and invalid", async () => {
-      const f = async () => {
-        await userService.updateUserPassword(
-          userId,
-          oldPassword,
-          invalidShortPassword
-        );
-      };
-
-      await expect(f()).rejects.toThrow(PASSWORD_VALIDATION_FAIL);
-    });
-
-    it("Should not update the user's password successfully if account doesn't exist", async () => {
-      const f = async () => {
-        await userService.updateUserPassword(userId, oldPassword, newPassword);
       };
 
       await expect(f()).rejects.toThrow(USER_NOT_FOUND);
