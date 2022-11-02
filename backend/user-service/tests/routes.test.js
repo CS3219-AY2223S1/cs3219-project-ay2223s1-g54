@@ -3,6 +3,15 @@ import { app } from "../src/app.js";
 import { dbInit, dbTerminate } from "../src/db/setup.js";
 import { getUserByEmail } from "../src/db/repositories/user.js";
 import { getTokenByUserId } from "../src/db/repositories/token.js";
+import {
+  EMAIL_VALIDATION_FAIL,
+  MISSING_EMAIL_FIELD,
+  MISSING_PASSWORD_FIELD,
+  MISSING_USERNAME_FIELD,
+  PASSWORD_VALIDATION_FAIL,
+  USERNAME_VALIDATION_FAIL,
+  USER_NOT_FOUND,
+} from "../src/constants/responseMessages.js";
 
 describe("User Endpoints", () => {
   beforeAll(async () => {
@@ -16,6 +25,11 @@ describe("User Endpoints", () => {
   const oldPassword = password;
   const newPassword = "jesttest1234";
   const resetPassword = "jesttest5678";
+
+  const invalidEmail = "test@test";
+  const invalidUsernameStartWithNumber = "1jesttest123";
+  const invalidShortPassword = "12345";
+  const invalidConfirmationCode = "123456";
 
   describe("Create User", () => {
     it("Should create user successfully", async () => {
@@ -91,6 +105,76 @@ describe("User Endpoints", () => {
     it("Should delete the user successfully", async () => {
       const res = await supertest(app).delete(`/${userId}`);
       expect(res.statusCode).toBe(200);
+    });
+  });
+
+  describe("Cannot Create user", () => {
+    it("Should not create user with missing email field", async () => {
+      const res = await supertest(app).post("/").send({ username, password });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.error.name).toBe("MalformedRequest");
+      expect(res.body.error.message).toBe(MISSING_EMAIL_FIELD);
+    });
+
+    it("Should not create user with missing username field", async () => {
+      const res = await supertest(app).post("/").send({ email, password });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.error.name).toBe("MalformedRequest");
+      expect(res.body.error.message).toBe(MISSING_USERNAME_FIELD);
+    });
+
+    it("Should not create user with missing password field", async () => {
+      const res = await supertest(app).post("/").send({ username, email });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.error.name).toBe("MalformedRequest");
+      expect(res.body.error.message).toBe(MISSING_PASSWORD_FIELD);
+    });
+
+    it("Should not create user with invalid email", async () => {
+      const res = await supertest(app)
+        .post("/")
+        .send({ email: invalidEmail, username, password });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.error.name).toBe("FieldValidationFailure");
+      expect(res.body.error.message).toBe(EMAIL_VALIDATION_FAIL);
+    });
+
+    it("Should not create user with invalid username starting with number", async () => {
+      const res = await supertest(app)
+        .post("/")
+        .send({ email, username: invalidUsernameStartWithNumber, password });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.error.name).toBe("FieldValidationFailure");
+      expect(res.body.error.message).toBe(USERNAME_VALIDATION_FAIL);
+    });
+
+    it("Should not create user with invalid short password", async () => {
+      const res = await supertest(app)
+        .post("/")
+        .send({ email, username, password: invalidShortPassword });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.error.name).toBe("FieldValidationFailure");
+      expect(res.body.error.message).toBe(PASSWORD_VALIDATION_FAIL);
+    });
+  });
+
+  describe("Cannot Confirm User By Email", () => {
+    it("Should not confirm account with incorrect confirmation code", async () => {
+      const res = await supertest(app).get(
+        "/confirm/" + invalidConfirmationCode
+      );
+      expect(res.statusCode).toBe(404);
+      expect(res.body.error.name).toBe("UserNotFound");
+      expect(res.body.error.message).toBe(USER_NOT_FOUND);
+    });
+  });
+
+  describe("Cannot request password reset for User without email", () => {
+    it("Should not send the user an email to reset password successfully if no email is supplied", async () => {
+      const res = await supertest(app).post("/passwordReset").send({});
+      expect(res.statusCode).toBe(400);
+      expect(res.body.error.name).toBe("MalformedRequest");
+      expect(res.body.error.message).toBe(MISSING_EMAIL_FIELD);
     });
   });
 
