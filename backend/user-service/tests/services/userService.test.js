@@ -1,6 +1,7 @@
 import * as userService from "../../src/services/userService.js";
 import { dbInit, dbTerminate } from "../../src/db/setup.js";
 import {
+  DELETE_USER_FAILURE,
   EMAIL_ALREADY_EXISTS,
   EMAIL_VALIDATION_FAIL,
   GET_USER_BY_ID_FAILURE,
@@ -123,6 +124,13 @@ describe("User Service", () => {
       };
 
       await expect(f()).rejects.toThrow(USER_NOT_EMAIL_VERIFIED);
+    });
+
+    it("Should not verify the user's credentials if email does not belong to any account", async () => {
+      const f = async () => {
+        const match = await userService.verifyUser(invalidEmail, newPassword);
+      };
+      await expect(f()).rejects.toThrow(USER_NOT_FOUND);
     });
   });
 
@@ -262,6 +270,18 @@ describe("User Service", () => {
     });
   });
 
+  describe("sendResetPasswordLinkUserFail", () => {
+    it("Should not send user link to reset password if email does not belong to any account ", async () => {
+      const f = async () => {
+        const { user, token } = await userService.sendResetPasswordLinkUser(
+          invalidEmail
+        );
+      };
+
+      await expect(f()).rejects.toThrow(USER_NOT_FOUND);
+    });
+  });
+
   describe("resetPasswordUser", () => {
     it("Should reset user password successfully", async () => {
       const f = async () => {
@@ -288,6 +308,18 @@ describe("User Service", () => {
 
       await expect(f()).rejects.toThrow(TOKEN_NOT_FOUND);
     });
+
+    it("Should not reset user password as new password is invalid", async () => {
+      const f = async () => {
+        await userService.resetPasswordUser(
+          userId,
+          retrievedToken,
+          invalidShortPassword
+        );
+      };
+
+      await expect(f()).rejects.toThrow(PASSWORD_VALIDATION_FAIL);
+    });
   });
 
   describe("deleteUser", () => {
@@ -297,6 +329,16 @@ describe("User Service", () => {
       };
 
       await expect(f()).resolves.not.toThrow();
+    });
+  });
+
+  describe("deleteUserFail", () => {
+    it("Should not delete user with invalid userId", async () => {
+      const f = async () => {
+        await userService.deleteUser(invalidUserId);
+      };
+
+      await expect(f()).rejects.toThrow(DELETE_USER_FAILURE);
     });
   });
 
