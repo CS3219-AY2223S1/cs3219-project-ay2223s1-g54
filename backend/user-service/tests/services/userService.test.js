@@ -7,6 +7,7 @@ import {
   PASSWORDS_IDENTICAL,
   PASSWORD_DOES_NOT_MATCH,
   PASSWORD_VALIDATION_FAIL,
+  TOKEN_NOT_FOUND,
   USERNAME_ALREADY_EXISTS,
   USERNAME_VALIDATION_FAIL,
   USER_ALREADY_EMAIL_VERIFIED,
@@ -36,6 +37,7 @@ describe("User Service", () => {
   const invalidShortPassword = "12345";
   const invalidConfirmationCode = "123456";
   const invalidOldPassword = "notjesttest123";
+  const invalidRetrievedToken = "12345678";
 
   describe("createUser", () => {
     it("Should create user successfully", async () => {
@@ -134,7 +136,15 @@ describe("User Service", () => {
   });
 
   describe("confirmUserFail", () => {
-    it("Should npt confirm user account as it is confirmed already", async () => {
+    it("Should not confirm account with incorrect confirmation code", async () => {
+      const f = async () => {
+        await userService.emailVerifyingUser(invalidConfirmationCode);
+      };
+
+      await expect(f()).rejects.toThrow(USER_NOT_FOUND);
+    });
+
+    it("Should not confirm user account as it is confirmed already", async () => {
       const f = async () => {
         await userService.emailVerifyingUser(confirmationCode);
       };
@@ -152,6 +162,19 @@ describe("User Service", () => {
       };
 
       await expect(f()).resolves.not.toThrow();
+    });
+  });
+
+  describe("getUserFail", () => {
+    it("Should not get the user using email not belonging to any account", async () => {
+      const f = async () => {
+        const user = await userService.getUser(invalidEmail);
+        expect(user).not.toBeNull();
+
+        userId = user.id;
+      };
+
+      await expect(f()).rejects.toThrow(USER_NOT_FOUND);
     });
   });
 
@@ -240,7 +263,7 @@ describe("User Service", () => {
   });
 
   describe("resetPasswordUser", () => {
-    it("Should send the user the link to reset password successfully", async () => {
+    it("Should reset user password successfully", async () => {
       const f = async () => {
         await userService.resetPasswordUser(
           userId,
@@ -253,6 +276,20 @@ describe("User Service", () => {
     });
   });
 
+  describe("resetPasswordUserFail", () => {
+    it("Should not reset user password as token not found", async () => {
+      const f = async () => {
+        await userService.resetPasswordUser(
+          userId,
+          invalidRetrievedToken,
+          resetPassword
+        );
+      };
+
+      await expect(f()).rejects.toThrow(TOKEN_NOT_FOUND);
+    });
+  });
+
   describe("deleteUser", () => {
     it("Should delete the user successfully", async () => {
       const f = async () => {
@@ -260,16 +297,6 @@ describe("User Service", () => {
       };
 
       await expect(f()).resolves.not.toThrow();
-    });
-  });
-
-  describe("confirmUserFail", () => {
-    it("Should not confirm account with incorrect confirmation code", async () => {
-      const f = async () => {
-        await userService.emailVerifyingUser(invalidConfirmationCode);
-      };
-
-      await expect(f()).rejects.toThrow(USER_NOT_FOUND);
     });
   });
 
