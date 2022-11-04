@@ -9,7 +9,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import PasswordFormControl from "./formcontrols/PasswordFormControl";
-import SubmitFormControl from "./formcontrols/SubmitFormControl";
 
 export const LoginForm = (props) => {
   return (
@@ -27,7 +26,16 @@ export const LoginForm = (props) => {
         <Checkbox>Remember Me</Checkbox>
         <Link color="blue.400">Forgot Password?</Link>
       </Stack>
-      <SubmitFormControl title="Sign In" />
+      <Button
+        size="lg"
+        color="white"
+        bg="green.400"
+        _hover={{
+          bg: "green.500",
+        }}
+      >
+        Sign In
+      </Button>
       <Stack pt="5">
         <Text align="center">
           {"Not a user? "}

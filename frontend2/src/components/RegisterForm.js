@@ -1,5 +1,6 @@
 import { Link as RouterLink } from "react-router-dom";
 import {
+  Button,
   FormControl,
   FormLabel,
   HStack,
@@ -9,7 +10,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import PasswordFormControl from "./formcontrols/PasswordFormControl";
-import SubmitFormControl from "./formcontrols/SubmitFormControl";
 
 export const RegisterForm = (props) => {
   return (
@@ -26,7 +26,16 @@ export const RegisterForm = (props) => {
         <PasswordFormControl />
         <PasswordFormControl title="Confirm Password" />
       </HStack>
-      <SubmitFormControl title="Sign Up" />
+      <Button
+        size="lg"
+        color="white"
+        bg="green.400"
+        _hover={{
+          bg: "green.500",
+        }}
+      >
+        Sign Up
+      </Button>
       <Stack pt="5">
         <Text align="center">
           {"Already a user? "}
