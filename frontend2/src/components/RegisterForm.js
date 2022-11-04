@@ -1,5 +1,5 @@
-import { HStack, Stack } from "@chakra-ui/react";
-import AlternativeSubmitFormControl from "./formcontrols/AlternativeSubmitFormControl";
+import { Link as RouterLink } from "react-router-dom";
+import { HStack, Link, Stack, Text } from "@chakra-ui/react";
 import EmailFormControl from "./formcontrols/EmailFormControl";
 import TextFormControl from "./formcontrols/TextFormControl";
 import PasswordFormControl from "./formcontrols/PasswordFormControl";
@@ -16,11 +16,12 @@ export const RegisterForm = (props) => {
       </HStack>
       <SubmitFormControl title="Sign Up" />
       <Stack pt="5">
-        <AlternativeSubmitFormControl
-          caption="Already a user?"
-          title="Sign In"
-          link={props.loginLink}
-        />
+        <Text align="center">
+          {"Already a user? "}
+          <Link color="blue.400" as={RouterLink} to={props.loginLink}>
+            Sign In
+          </Link>
+        </Text>
       </Stack>
     </Stack>
   );
