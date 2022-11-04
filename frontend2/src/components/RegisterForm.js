@@ -8,7 +8,6 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import TextFormControl from "./formcontrols/TextFormControl";
 import PasswordFormControl from "./formcontrols/PasswordFormControl";
 import SubmitFormControl from "./formcontrols/SubmitFormControl";
 
@@ -19,7 +18,10 @@ export const RegisterForm = (props) => {
         <FormLabel>Email Address</FormLabel>
         <Input type="email" />
       </FormControl>
-      <TextFormControl title="Username" />
+      <FormControl isRequired>
+        <FormLabel>Username</FormLabel>
+        <Input type="text" />
+      </FormControl>
       <HStack>
         <PasswordFormControl />
         <PasswordFormControl title="Confirm Password" />
