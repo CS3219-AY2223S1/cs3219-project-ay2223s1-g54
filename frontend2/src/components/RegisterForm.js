@@ -1,6 +1,13 @@
 import { Link as RouterLink } from "react-router-dom";
-import { HStack, Link, Stack, Text } from "@chakra-ui/react";
-import EmailFormControl from "./formcontrols/EmailFormControl";
+import {
+  FormControl,
+  FormLabel,
+  HStack,
+  Input,
+  Link,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import TextFormControl from "./formcontrols/TextFormControl";
 import PasswordFormControl from "./formcontrols/PasswordFormControl";
 import SubmitFormControl from "./formcontrols/SubmitFormControl";
@@ -8,7 +15,10 @@ import SubmitFormControl from "./formcontrols/SubmitFormControl";
 export const RegisterForm = (props) => {
   return (
     <Stack spacing="4">
-      <EmailFormControl />
+      <FormControl isRequired>
+        <FormLabel>Email Address</FormLabel>
+        <Input type="email" />
+      </FormControl>
       <TextFormControl title="Username" />
       <HStack>
         <PasswordFormControl />
