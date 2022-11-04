@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Button,
@@ -5,13 +6,26 @@ import {
   FormLabel,
   HStack,
   Input,
+  InputGroup,
+  InputRightElement,
   Link,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import PasswordFormControl from "./formcontrols/PasswordFormControl";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 export const RegisterForm = (props) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword((showPassword) => !showPassword);
+  };
+
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword((showConfirmPassword) => !showConfirmPassword);
+  };
+
   return (
     <Stack spacing="4">
       <FormControl isRequired>
@@ -23,8 +37,28 @@ export const RegisterForm = (props) => {
         <Input type="text" />
       </FormControl>
       <HStack>
-        <PasswordFormControl />
-        <PasswordFormControl title="Confirm Password" />
+        <FormControl isRequired>
+          <FormLabel>Password</FormLabel>
+          <InputGroup>
+            <Input type={showPassword ? "text" : "password"} />
+            <InputRightElement h="full">
+              <Button variant="ghost" onClick={toggleShowPassword}>
+                {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
+        <FormControl isRequired>
+          <FormLabel>Confirm Password</FormLabel>
+          <InputGroup>
+            <Input type={showConfirmPassword ? "text" : "password"} />
+            <InputRightElement h="full">
+              <Button variant="ghost" onClick={toggleShowConfirmPassword}>
+                {showConfirmPassword ? <ViewIcon /> : <ViewOffIcon />}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
       </HStack>
       <Button
         size="lg"
