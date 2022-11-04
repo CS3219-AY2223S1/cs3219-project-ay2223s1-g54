@@ -10,9 +10,9 @@ import {
   TabPanels,
 } from "@chakra-ui/react";
 import { ReflexContainer, ReflexSplitter, ReflexElement } from "react-reflex";
-import DevEnvironment from "../components/DevEnvironment";
-import QuestionPane from "../components/QuestionPane";
-import BaseLayout from "../components/layouts/BaseLayout";
+import DevEnvironment from "../DevEnvironment";
+import QuestionPane from "../QuestionPane";
+import BaseLayout from "../layouts/BaseLayout";
 import "react-reflex/styles.css";
 
 const CollaborationPage = () => {

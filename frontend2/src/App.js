@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";
-import CollaborationPage from "./pages/CollaborationPage";
-import DashboardPage from "./pages/DashboardPage";
-import RegisterPage from "./pages/RegisterPage";
+import LandingPage from "./components/pages/LandingPage";
+import LoginPage from "./components/pages/LoginPage";
+import CollaborationPage from "./components/pages/CollaborationPage";
+import DashboardPage from "./components/pages/DashboardPage";
+import RegisterPage from "./components/pages/RegisterPage";
 import "./App.css";
 
 function App() {

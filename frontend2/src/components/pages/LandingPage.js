@@ -1,5 +1,5 @@
-import Landing from "../components/Landing";
-import BasicLayout from "../components/layouts/BasicLayout";
+import Landing from "../Landing";
+import BasicLayout from "../layouts/BasicLayout";
 
 const LandingPage = () => {
   return (
