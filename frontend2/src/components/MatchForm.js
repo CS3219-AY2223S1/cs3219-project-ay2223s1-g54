@@ -1,21 +1,45 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Select, Stack } from "@chakra-ui/react";
+import { useToast, Button, Select, Stack } from "@chakra-ui/react";
+import MatchTimer from "./MatchTimer";
+import useAuth from "../hooks/useAuth";
 
 const MatchForm = () => {
   const [isMatching, setIsMatching] = useState(false);
   const difficultyFieldRef = useRef();
   const matchBtnRef = useRef();
   const navigate = useNavigate();
+  const toast = useToast();
+  const { auth } = useAuth();
+  const { userId, username, socket } = auth;
+
+  useEffect(() => {
+    socket.on("readyForCollab", (collabData) => {
+      navigate("/collaboration", { state: { collabData } });
+    });
+  }, []);
 
   const handleMatch = () => {
     setIsMatching(true);
-    // const difficulty = difficultyFieldRef.current.value;
-    // navigate("/matching", { state: { difficulty } });
+    const difficulty = difficultyFieldRef.current.value;
+    socket.emit("findMatch", { difficulty, userId, username });
   };
 
   const handleMatchCancel = () => {
     setIsMatching(false);
+  };
+
+  const handleMatchExpired = () => {
+    handleMatchCancel();
+
+    const expiredToastData = {
+      title: "Match Expired",
+      description: "Unable to find any match",
+      status: "info",
+      duration: 3000,
+      isClosable: true,
+    };
+    toast(expiredToastData);
   };
 
   return (
@@ -40,6 +64,7 @@ const MatchForm = () => {
       >
         Match
       </Button>
+      {isMatching && <MatchTimer onMatchExpiry={handleMatchExpired} />}
       <Button
         variant="outline"
         size="lg"

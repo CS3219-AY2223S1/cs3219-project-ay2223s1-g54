@@ -25,6 +25,7 @@
     "react-reflex": "^4.0.9",
     "react-router-dom": "^6.4.2",
     "react-split-views": "^1.0.5",
+    "react-timer-hook": "^3.0.5",
     "socket.io-client": "^4.5.3"
   },
   "devDependencies": {
