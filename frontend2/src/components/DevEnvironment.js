@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionButton,
@@ -15,12 +15,28 @@ import {
 } from "@chakra-ui/react";
 import CodeEditor from "../components/CodeEditor";
 
-const DevEnvironment = () => {
-  const [codeEditorTheme, setCodeEditorTheme] = useState("light");
+const DevEnvironment = (props) => {
+  const [codeEditorTheme, setCodeEditorTheme] = useState("vs-dark");
+  const [code, setCode] = useState("");
+  const { socket, roomId, codeSnippets } = props;
+
+  useEffect(() => {
+    socket.on("receiveCurrentCode", ({ code }) => {
+      setCode(code);
+    });
+
+    return () => {
+      socket.off("receiveCurrentCode");
+    };
+  });
 
   const updateCodeEditorTheme = (event) => {
     const theme = event.target.value;
     setCodeEditorTheme(theme);
+  };
+
+  const updateCode = (code) => {
+    socket.emit("sendCurrentCode", { roomId, code });
   };
 
   return (
@@ -71,7 +87,11 @@ const DevEnvironment = () => {
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
-        <CodeEditor theme={codeEditorTheme} />
+        <CodeEditor
+          theme={codeEditorTheme}
+          value={code}
+          onChange={updateCode}
+        />
       </Flex>
     </Box>
   );

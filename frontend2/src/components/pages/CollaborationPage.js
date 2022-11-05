@@ -90,7 +90,11 @@ const CollaborationPage = () => {
                 </TabList>
                 <TabPanels h="full" minH="full" maxH="full">
                   <TabPanel h="full" minH="full" maxH="full">
-                    <DevEnvironment />
+                    <DevEnvironment
+                      socket={socket}
+                      roomId={roomId}
+                      codeSnippets={questionData.codeSnippets}
+                    />
                   </TabPanel>
                   <TabPanel></TabPanel>
                   <TabPanel></TabPanel>
