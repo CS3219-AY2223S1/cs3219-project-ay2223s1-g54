@@ -1,7 +1,12 @@
-import BaseLayout from "../layouts/BaseLayout";
+import MatchForm from "../MatchForm";
+import BasicLayout from "../layouts/BasicLayout";
 
 const HomePage = () => {
-  return <BaseLayout></BaseLayout>;
+  return (
+    <BasicLayout>
+      <MatchForm />
+    </BasicLayout>
+  );
 };
 
 export default HomePage;
