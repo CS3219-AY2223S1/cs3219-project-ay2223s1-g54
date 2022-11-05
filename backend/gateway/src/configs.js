@@ -17,6 +17,10 @@ export const COLLABORATION_SERVICE_URI =
   process.env.COLLABORATION_SERVICE_URI || "http://localhost:8005";
 export const COMMUNICATION_SERVICE_URI =
   process.env.COOMUNICATION_SERVICE_URI || "http://localhost:8006";
+export const JUDGE_SERVICE_URI =
+  process.env.JUDGE_SERVICE_URI || "http://localhost:2358";
+
+// TODO: add history service uri 
 
 export const ioOptions = {
   cors: {

@@ -1,5 +1,8 @@
-export const EMAIL_SUBJECT = "Please confirm your account for PeerPrep";
-export const generateBodyTemplate = (
+export const EMAIL_SUBJECT_CONFIRMATION =
+  "PeerPrep - Please confirm your account";
+export const EMAIL_SUBJECT_RESET_PASSWORD = "PeerPrep - Password Reset";
+
+export const generateConfirmAccountTemplate = (
   EMAIL_CONFIRMATION_URI,
   name,
   confirmationCode
@@ -11,4 +14,15 @@ export const generateBodyTemplate = (
         <a href=${EMAIL_CONFIRMATION_URI}/${confirmationCode}> Click here</a>
         <p>Happy coding,<br>PeerPrep Team 54</p>
         </div>`;
+};
+
+export const generatePasswordResetTemplate = (name, EMAIL_RESET_URI) => {
+  return `<h1>Reset Your PeepPrep Password</h1>
+  <h2>Hello ${name}</h2>
+  <p>You are receiving this email because we received a password reset request for your account.<p>
+  <p>Please click the link below to reset your password</p>
+  <!-- We need to change this to a dynamic link ... -->
+  <a href=${EMAIL_RESET_URI}> Click here</a>
+  <p>Happy coding,<br>PeerPrep Team 54</p>
+  </div>`;
 };

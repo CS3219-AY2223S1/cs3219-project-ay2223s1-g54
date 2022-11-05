@@ -5,6 +5,7 @@ const registerCommunicationHandlers = async (io, pubClient, subClient) => {
     const { roomId, name, time, messageId, message } = JSON.parse(data);
     await sendMessage(defaultParams, roomId, name, time, messageId, message);
   });
+
 };
 
 const sendMessage = async (
@@ -17,8 +18,9 @@ const sendMessage = async (
 ) => {
   const [io, pubClient, subClient] = defaultParams;
 
-  const messageData = { roomId, name, time, messageId, message };
-  io.sockets.in(roomId).emit("receiveMessage", messageData);
+  const data = { roomId, name, time, messageId, message };
+  io.sockets.in(roomId).emit("receiveMessage", data);
 };
+
 
 export { registerCommunicationHandlers };

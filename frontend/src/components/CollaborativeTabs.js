@@ -8,9 +8,12 @@ import { CollaborativeWhiteBoard } from "./CollaborativeWhiteBoard";
 import { ChatComponent } from "./ChatComponent";
 import { InputWindow } from "./InputWindow";
 import { OutputWindow } from "./OutputWindow";
-import axios from "axios";
+import { VideoChatComponent } from "./VideoChatComponent";
+import * as configs from "../configs";
+import { usePrivateAxios } from "../hooks/useAxios";
 
 const CollaborativeTabs = (props) => {
+  const privateAxios = usePrivateAxios();
   const navigate = useNavigate();
   const [tabIndex, setTabIndex] = useState("0");
   const { userId, socket, collabData } = props;
@@ -52,23 +55,21 @@ const CollaborativeTabs = (props) => {
     const formData = {
       language_id: languageId,
       // encode source code in base64
-      source_code: btoa(code),
-      stdin: btoa(userInput),
+      source_code: code,
+      stdin: userInput,
     };
     const options = {
       method: "POST",
-      url: process.env.REACT_APP_RAPID_API_URL,
-      params: { base64_encoded: "true", fields: "*" },
+      url: configs.URL_JUDGE_SVC_SUBMISSION,
+      params: { base64_encoded: "false", fields: "*" },
       headers: {
         "content-type": "application/json",
         "Content-Type": "application/json",
-        "X-RapidAPI-Host": process.env.REACT_APP_RAPID_API_HOST,
-        "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY,
       },
       data: formData,
     };
 
-    axios
+    privateAxios
       .request(options)
       .then(function (response) {
         console.log("res.data", response.data);
@@ -76,7 +77,6 @@ const CollaborativeTabs = (props) => {
         checkStatus(token);
       })
       .catch((err) => {
-        console.log(err);
         let error = err.response ? err.response.data : err;
         // get error status
         let status = err.response.status;
@@ -93,15 +93,11 @@ const CollaborativeTabs = (props) => {
   const checkStatus = async (token) => {
     const options = {
       method: "GET",
-      url: process.env.REACT_APP_RAPID_API_URL + "/" + token,
-      params: { base64_encoded: "true", fields: "*" },
-      headers: {
-        "X-RapidAPI-Host": process.env.REACT_APP_RAPID_API_HOST,
-        "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY,
-      },
+      url: configs.URL_JUDGE_SVC_SUBMISSION + "/" + token,
+      params: { base64_encoded: "false", fields: "*" },
     };
     try {
-      let response = await axios.request(options);
+      let response = await privateAxios.request(options);
       let statusId = response.data.status?.id;
 
       // Processed - we have a result
@@ -112,9 +108,9 @@ const CollaborativeTabs = (props) => {
         }, 2000)
         return
       } else {
-        setProcessing(false)
-        setOutputDetails(response.data)
-        console.log('response.data', response.data)
+        setProcessing(false);
+        console.log('response.data', response.data);
+        setOutputDetails(response.data);
         return
       }
     } catch (err) {
@@ -124,7 +120,7 @@ const CollaborativeTabs = (props) => {
   };
 
   const showSubmitButton = () => {
-    return (userId == userId1 && submits == 0) || (userId == userId2 && submits == 1);
+    return (userId === userId1 && submits === 0) || (userId === userId2 && submits === 1);
   }
 
   return (
@@ -145,6 +141,7 @@ const CollaborativeTabs = (props) => {
         <Tab value="0" label="Code Editor" />
         <Tab value="1" label="White Board" />
         <Tab value="2" label="Chat" />
+        <Tab value="3" label="Video Chat" />
       </Tabs>
 
       <CollaborativeCodeEditor
@@ -161,6 +158,11 @@ const CollaborativeTabs = (props) => {
       />
       <ChatComponent
         hidden={tabIndex === "2" ? true : false}
+        socket={socket}
+        collabData={collabData}
+      />
+      <VideoChatComponent
+        hidden={tabIndex === "3" ? true : false}
         socket={socket}
         collabData={collabData}
       />

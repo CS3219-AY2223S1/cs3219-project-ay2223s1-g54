@@ -1,59 +1,34 @@
 import {
   Box,
   Button,
+  TextField,
+  Typography,
+  Grid,
+  CssBaseline,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Grid,
-  TextField,
-  Typography,
-  Link,
-  Container,
-  CssBaseline,
 } from "@mui/material";
-import { useState } from "react";
-import axios from "axios";
-import { URL_USER_SVC_CREATE_USER } from "../configs";
-import { Link as LinkRoute } from "react-router-dom";
 
-function SignupPage() {
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+import { useState } from "react";
+import { URL_USER_RESET_PASSWORD } from "../configs";
+import { usePublicAxios } from "../hooks/useAxios";
+import { Link as LinkRoute } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
+function ResetPasswordPage() {
+  const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
-  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
+  const [isResetPasswordSuccess, setIsResetPasswordSuccess] = useState(false);
+  const { userId, token } = useParams();
 
-  const handleSignup = async () => {
-    setIsSignupSuccess(false);
-
-    if (password !== confirmPassword) {
-      setErrorDialog("Validation Error", "Password fields must match");
-      return;
-    }
-    try {
-      await axios.post(URL_USER_SVC_CREATE_USER, {
-        email,
-        username,
-        password,
-      });
-    } catch (err) {
-      if (err?.response?.data?.error) {
-        const { name, message } = err.response.data.error;
-        setErrorDialog(name, message);
-        return;
-      }
-      setErrorDialog("Unknown Error", "Please try again later");
-      return;
-    }
-    setSuccessDialog("Account successfully created! Please check your email");
-
-    setIsSignupSuccess(true);
-  };
+  const axiosPublic = usePublicAxios();
 
   const closeDialog = () => setIsDialogOpen(false);
 
@@ -69,6 +44,33 @@ function SignupPage() {
     setDialogMsg(msg);
   };
 
+  const HandleResetPassword = async () => {
+    if (newPassword !== confirmPassword) {
+      setErrorDialog("Validation Error", "Password fields must match");
+      return;
+    }
+
+    try {
+      const res = await axiosPublic.post(
+        URL_USER_RESET_PASSWORD + `/${userId}/${token}`,
+        {
+          newPassword,
+        }
+      );
+    } catch (err) {
+      if (err?.response?.data?.error) {
+        const { name, message } = err.response.data.error;
+        setErrorDialog(name, message);
+        return;
+      }
+
+      setErrorDialog("Unknown Error", "Please try again later");
+      return;
+    }
+    setSuccessDialog("Your password has been changed.");
+    setIsResetPasswordSuccess(true);
+  };
+
   return (
     <Grid
       container
@@ -81,7 +83,7 @@ function SignupPage() {
       <Box
         sx={{
           width: 500,
-          height: 550,
+          height: 300,
           borderRadius: 3,
           background: "white",
           boxShadow: "0 6px 6px hsl(0deg 0% 0% / 0.3)",
@@ -91,34 +93,13 @@ function SignupPage() {
           <CssBaseline />
           <div>
             <Typography
-              component="h1"
-              variant="h2"
+              component="h4"
+              variant="h4"
               sx={{ mt: 2 }}
               textAlign="center"
             >
-              PeerPrep
+              Password Reset
             </Typography>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              label="email"
-              autoFocus
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              label="Username"
-              autoComplete="username"
-              autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
             <TextField
               variant="outlined"
               margin="normal"
@@ -126,8 +107,8 @@ function SignupPage() {
               fullWidth
               label="Password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
             />
             <TextField
               variant="outlined"
@@ -145,22 +126,10 @@ function SignupPage() {
               variant="contained"
               color="primary"
               sx={{ mt: 2 }}
-              onClick={handleSignup}
+              onClick={HandleResetPassword}
             >
-              Sign Up
+              Reset My Password
             </Button>
-            <Grid container sx={{ mt: 1 }}>
-              <Grid item xs>
-                <Link href="/requestResetPassword" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/login" variant="body2">
-                  {"Already have an account? Sign In"}
-                </Link>
-              </Grid>
-            </Grid>
           </div>
         </Container>
       </Box>
@@ -170,8 +139,8 @@ function SignupPage() {
           <DialogContentText>{dialogMsg}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          {isSignupSuccess ? (
-            <Button component={LinkRoute} to="/login">
+          {isResetPasswordSuccess ? (
+            <Button component={LinkRoute} to="/">
               Log in
             </Button>
           ) : (
@@ -183,4 +152,4 @@ function SignupPage() {
   );
 }
 
-export default SignupPage;
+export default ResetPasswordPage;
