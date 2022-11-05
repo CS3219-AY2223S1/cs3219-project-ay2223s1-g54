@@ -1,22 +1,30 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import PersistLogin from "./components/PersistLogin";
+import RequireAuth from "./components/RequireAuth";
+import CollaborationPage from "./components/pages/CollaborationPage";
+import HomePage from "./components/pages/HomePage";
+import InvalidPage from "./components/pages/InvalidPage";
 import LandingPage from "./components/pages/LandingPage";
 import LoginPage from "./components/pages/LoginPage";
-import CollaborationPage from "./components/pages/CollaborationPage";
-import DashboardPage from "./components/pages/DashboardPage";
 import RegisterPage from "./components/pages/RegisterPage";
 import "./App.css";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/collaboration" element={<CollaborationPage />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route exact path="/" element={<LandingPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/login" element={<LoginPage />} />
+
+      <Route element={<PersistLogin />}>
+        <Route element={<RequireAuth />}>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/collaboration" element={<CollaborationPage />} />
+        </Route>
+      </Route>
+
+      <Route path="/*" element={<InvalidPage />} />
+    </Routes>
   );
 }
 

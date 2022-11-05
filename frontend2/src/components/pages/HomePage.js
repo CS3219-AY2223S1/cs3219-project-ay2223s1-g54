@@ -1,7 +1,7 @@
 import BaseLayout from "../layouts/BaseLayout";
 
-const DashboardPage = () => {
+const HomePage = () => {
   return <BaseLayout></BaseLayout>;
 };
 
-export default DashboardPage;
+export default HomePage;

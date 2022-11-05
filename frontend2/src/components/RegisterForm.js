@@ -79,18 +79,18 @@ export const RegisterForm = (props) => {
     const validationResult = validateFields();
     if (!validationResult) return;
 
-    const registrationData = {
-      email: emailFieldRef.current.value,
-      username: usernameFieldRef.current.value,
-      password: passwordFieldRef.current.value,
-    };
-
     const toastData = {
       title: "",
       description: "",
       status: "",
       duration: 3000,
       isClosable: true,
+    };
+
+    const registrationData = {
+      email: emailFieldRef.current.value,
+      username: usernameFieldRef.current.value,
+      password: passwordFieldRef.current.value,
     };
 
     try {
