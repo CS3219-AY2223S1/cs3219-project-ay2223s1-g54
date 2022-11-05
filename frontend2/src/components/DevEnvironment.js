@@ -17,22 +17,83 @@ import CodeEditor from "../components/CodeEditor";
 
 const DevEnvironment = (props) => {
   const [codeEditorTheme, setCodeEditorTheme] = useState("vs-dark");
+  const [languageMap, setLanguageMap] = useState({});
+  const [languageSlug, setLanguageSlug] = useState("");
   const [code, setCode] = useState("");
   const { socket, roomId, codeSnippets } = props;
 
+  const languageIdMap = new Map();
+  languageIdMap.set("cpp", 76);
+  languageIdMap.set("java", 62);
+  languageIdMap.set("python", 70);
+  languageIdMap.set("python3", 71);
+  languageIdMap.set("c", 75);
+  languageIdMap.set("csharp", 51);
+  languageIdMap.set("javascript", 63);
+  languageIdMap.set("ruby", 72);
+  languageIdMap.set("swift", 83);
+  languageIdMap.set("golang", 60);
+  languageIdMap.set("scala", 81);
+  languageIdMap.set("kotlin", 78);
+  languageIdMap.set("rust", 73);
+  languageIdMap.set("php", 68);
+  languageIdMap.set("typescript", 74);
+  languageIdMap.set("erlang", 58);
+  languageIdMap.set("elixir", 57);
+
   useEffect(() => {
-    socket.on("receiveCurrentCode", ({ code }) => {
-      setCode(code);
+    socket.on("receiveLanguage", ({ language }) => {
+      updateCode(languageMap[language].code);
+      setLanguageSlug(language);
+      props.onSetLanguageId(languageIdMap.get(language));
     });
 
+    socket.on("receiveCurrentCode", ({ code }) => {
+      setCode(code);
+      props.setCode(code);
+    });
+
+    initDevEnvironmentOptions();
+
     return () => {
+      socket.off("receiveLanguage");
       socket.off("receiveCurrentCode");
     };
   });
 
+  const initLanguageMap = () => {
+    const languageMap = {};
+    for (const codeSnippet of codeSnippets) {
+      const { slug, name, code } = codeSnippet;
+      const languageObj = {
+        name,
+        code,
+      };
+      languageMap[slug] = languageObj;
+    }
+    return languageMap;
+  };
+
+  const initDevEnvironmentOptions = () => {
+    // initialise state if it does not exist
+    if (Object.keys(languageMap).length === 0) {
+      const languageMap = initLanguageMap();
+      const firstSlug = Object.keys(languageMap)[0];
+      setLanguageMap(languageMap);
+      setLanguageSlug(firstSlug);
+      props.onSetLanguageId(languageIdMap.get(firstSlug));
+      setCode(languageMap[firstSlug].code);
+    }
+  };
+
   const updateCodeEditorTheme = (event) => {
     const theme = event.target.value;
     setCodeEditorTheme(theme);
+  };
+
+  const updateLanguage = (event) => {
+    const language = event.target.value;
+    socket.emit("sendLanguage", { roomId, language });
   };
 
   const updateCode = (code) => {
@@ -60,10 +121,17 @@ const DevEnvironment = (props) => {
                   <option value="light">Light</option>
                   <option value="vs-dark">Dark</option>
                 </Select>
-                <Select variant="filled" ml="2">
-                  <option value="testLanguage1">Language 1</option>
-                  <option value="testLanguage2">Language 2</option>
-                  <option value="testLanguage3">Language 3</option>
+                <Select
+                  variant="filled"
+                  ml="2"
+                  value={languageSlug}
+                  onChange={updateLanguage}
+                >
+                  {Object.keys(languageMap).map((slug) => {
+                    return (
+                      <option value={slug}>{languageMap[slug].name}</option>
+                    );
+                  })}
                 </Select>
               </Flex>
             </AccordionPanel>
@@ -89,6 +157,7 @@ const DevEnvironment = (props) => {
         </Accordion>
         <CodeEditor
           theme={codeEditorTheme}
+          language={languageSlug}
           value={code}
           onChange={updateCode}
         />

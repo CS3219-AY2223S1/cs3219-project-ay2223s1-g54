@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   useToast,
@@ -20,6 +20,8 @@ import useAuth from "../../hooks/useAuth";
 import "react-reflex/styles.css";
 
 const CollaborationPage = () => {
+  const [languageId, setLanguageId] = useState(null);
+  const [code, setCode] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const toast = useToast();
@@ -94,6 +96,8 @@ const CollaborationPage = () => {
                       socket={socket}
                       roomId={roomId}
                       codeSnippets={questionData.codeSnippets}
+                      onSetLanguageId={setLanguageId}
+                      onSetCode={setCode}
                     />
                   </TabPanel>
                   <TabPanel></TabPanel>
