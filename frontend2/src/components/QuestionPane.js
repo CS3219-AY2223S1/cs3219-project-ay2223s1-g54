@@ -1,22 +1,38 @@
 import { Box, Flex, Heading, Stack, Tag } from "@chakra-ui/react";
 
-const QuestionPane = () => {
+const QuestionPane = ({ questionData }) => {
+  const difficultyTagColorScheme = {
+    colorScheme: "white",
+  };
+
+  if (questionData.difficulty == "Easy") {
+    difficultyTagColorScheme.colorScheme = "green";
+  } else if (questionData.difficulty == "Medium") {
+    difficultyTagColorScheme.colorScheme = "yellow";
+  } else if (questionData.difficulty == "Hard") {
+    difficultyTagColorScheme.colorScheme = "red";
+  }
+
   return (
     <Box w="full" h="full" minH="full" maxH="full" bg="#ffffff">
       <Stack w="full" h="full" minH="full" maxH="full" p="5">
-        <Heading size="lg">Test Title</Heading>
+        <Heading size="lg">{questionData.title}</Heading>
         <Flex>
-          <Tag size="sm" key="sm" variant="solid" colorScheme="green">
-            Test Difficulty
+          <Tag size="sm" key="sm" variant="solid" {...difficultyTagColorScheme}>
+            {questionData.difficulty}
           </Tag>
         </Flex>
         <Flex>
-          <Tag size="sm" key="sm" variant="solid" colorScheme="teal">
-            Test Category
-          </Tag>
+          {questionData.topicTags.map(({ name }) => {
+            return (
+              <Tag size="sm" key="sm" variant="solid" colorScheme="teal" mr="2">
+                {name}
+              </Tag>
+            );
+          })}
         </Flex>
         <Flex w="full" h="full" minH="full" maxH="full" pb="144">
-          <Flex
+          <Box
             w="full"
             h="full"
             minH="full"
@@ -24,44 +40,8 @@ const QuestionPane = () => {
             p="2"
             border="1px solid black"
             overflow="scroll"
-          >
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-            lorem ipsum <br />
-          </Flex>
+            dangerouslySetInnerHTML={{ __html: questionData.content }}
+          ></Box>
         </Flex>
       </Stack>
     </Box>

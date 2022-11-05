@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import {
   Box,
   Button,
@@ -16,6 +17,10 @@ import BaseLayout from "../layouts/BaseLayout";
 import "react-reflex/styles.css";
 
 const CollaborationPage = () => {
+  const location = useLocation();
+  const collabData = location.state.collabData;
+  const questionData = collabData.questionSet[0];
+
   return (
     <BaseLayout>
       <Stack w="full" h="full" minH="full" maxH="full">
@@ -31,7 +36,7 @@ const CollaborationPage = () => {
           <ReflexContainer orientation="vertical">
             <ReflexElement style={{ overflow: "hidden" }}>
               <Box w="100%" h="full" minH="full" maxH="full">
-                <QuestionPane />
+                <QuestionPane questionData={questionData} />
               </Box>
             </ReflexElement>
             <ReflexSplitter
