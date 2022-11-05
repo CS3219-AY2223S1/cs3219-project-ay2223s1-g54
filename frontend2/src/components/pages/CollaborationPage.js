@@ -1,5 +1,7 @@
-import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
+  useToast,
   Box,
   Button,
   Flex,
@@ -14,12 +16,40 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from "react-reflex";
 import DevEnvironment from "../DevEnvironment";
 import QuestionPane from "../QuestionPane";
 import BaseLayout from "../layouts/BaseLayout";
+import useAuth from "../../hooks/useAuth";
 import "react-reflex/styles.css";
 
 const CollaborationPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const toast = useToast();
+  const { auth } = useAuth();
+  const { socket } = auth;
   const collabData = location.state.collabData;
-  const questionData = collabData.questionSet[0];
+  const { roomId, questionSet } = collabData;
+  const questionData = questionSet[0];
+
+  useEffect(() => {
+    socket.on("receiveLeaveRoom", () => {
+      const toastData = {
+        title: "Collaborative Session",
+        description: "The session will now end",
+        status: "info",
+        duration: 3000,
+        isClosable: true,
+      };
+      toast(toastData);
+      navigate("/home");
+    });
+
+    return () => {
+      socket.off("receiveLeaveRoom");
+    };
+  }, []);
+
+  const handleLeaveRoom = () => {
+    socket.emit("sendLeaveRoom", { roomId });
+  };
 
   return (
     <BaseLayout>
@@ -28,7 +58,7 @@ const CollaborationPage = () => {
           <Button mr="2" colorScheme="blue">
             Submit
           </Button>
-          <Button mr="2" colorScheme="red">
+          <Button mr="2" colorScheme="red" onClick={handleLeaveRoom}>
             Leave Room
           </Button>
         </Flex>
