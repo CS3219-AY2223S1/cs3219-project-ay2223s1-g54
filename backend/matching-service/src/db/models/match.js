@@ -6,6 +6,7 @@ let MatchSchema = new Schema({
     type: Number,
     required: true,
   },
+  categories: [String],
   userId1: {
     type: String,
     required: true,

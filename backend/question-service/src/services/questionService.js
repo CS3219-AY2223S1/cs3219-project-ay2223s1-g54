@@ -3,7 +3,7 @@ import { difficultyEnum } from "../constants/difficultyEnum.js";
 import { QuestionModel } from "../db/models/question.js";
 import { NoQuestionEntries } from "../exceptions/NoQuestionEntries.js";
 
-export const getRandomQuestion = async (index) => {
+export const getRandomQuestion = async (index, categories) => {
   const isEasy = index === difficultyEnum.Easy;
   const isMedium = index === difficultyEnum.Medium;
   const isHard = index === difficultyEnum.Hard;
@@ -16,8 +16,9 @@ export const getRandomQuestion = async (index) => {
   }
 
   const searchCondition = {};
-  if (difficulty) {
+  if (difficulty && categories) {
     searchCondition.difficulty = difficulty;
+    searchCondition.categories = categories;
   }
 
   const questionCount = await QuestionModel.count(searchCondition);
@@ -31,4 +32,16 @@ export const getRandomQuestion = async (index) => {
   );
 
   return question;
+};
+
+export const getCategories = async () => {
+  const categories = new Set();
+  const questions = await QuestionModel.find({});
+  for (const question of questions) {
+    const topicTags = question.topicTags;
+    for (const topicTag of topicTags) {
+      categories.add(topicTag.name);
+    }
+  }
+  return Array.from(categories);
 };
