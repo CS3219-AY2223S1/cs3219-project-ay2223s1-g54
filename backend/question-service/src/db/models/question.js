@@ -48,5 +48,12 @@ const QuestionSchema = new Schema({
   ],
 });
 
+QuestionSchema.index({
+  id:"text",
+  title:"text",
+  difficulty:"text", 
+  "topicTags.name":"text"
+});
+
 const QuestionModel = mongoose.model("QuestionModel", QuestionSchema);
 export { QuestionModel };
