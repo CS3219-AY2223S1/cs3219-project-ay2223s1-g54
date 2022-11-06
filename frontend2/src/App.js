@@ -2,11 +2,13 @@ import { Route, Routes } from "react-router-dom";
 import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import CollaborationPage from "./components/pages/CollaborationPage";
+import ForgetPasswordPage from "./components/pages/ForgetPasswordPage";
 import HomePage from "./components/pages/HomePage";
 import InvalidPage from "./components/pages/InvalidPage";
 import LandingPage from "./components/pages/LandingPage";
 import LoginPage from "./components/pages/LoginPage";
 import RegisterPage from "./components/pages/RegisterPage";
+import ResetPasswordPage from "./components/pages/ResetPasswordPage";
 import "./App.css";
 
 function App() {
@@ -15,6 +17,11 @@ function App() {
       <Route exact path="/" element={<LandingPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forgetPassword" element={<ForgetPasswordPage />} />
+      <Route
+        path="/resetPassword/:userId/:token"
+        element={<ResetPasswordPage />}
+      />
 
       <Route element={<PersistLogin />}>
         <Route element={<RequireAuth />}>

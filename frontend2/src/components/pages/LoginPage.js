@@ -5,7 +5,12 @@ export const LoginPage = () => {
   return (
     <FormLayout
       title="Login Portal"
-      form={<LoginForm registerLink="/register" />}
+      form={
+        <LoginForm
+          registerLink="/register"
+          forgetPasswordLink="/forgetPassword"
+        />
+      }
     />
   );
 };

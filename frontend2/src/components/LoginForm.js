@@ -109,7 +109,9 @@ export const LoginForm = (props) => {
         <Checkbox isChecked={persist} onChange={togglePersist}>
           Remember Me
         </Checkbox>
-        <Link color="blue.400">Forgot Password?</Link>
+        <Link color="blue.400" as={RouterLink} to={props.forgetPasswordLink}>
+          Forgot Password?
+        </Link>
       </Stack>
       <Button
         size="lg"

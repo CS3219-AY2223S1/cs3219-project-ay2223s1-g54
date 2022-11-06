@@ -22,8 +22,6 @@ import useAuth from "../../hooks/useAuth";
 import "react-reflex/styles.css";
 
 const CollaborationPage = () => {
-  // TODO: delete?
-  // const [languageId, setLanguageId] = useState(null);
   const [code, setCode] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
@@ -99,8 +97,6 @@ const CollaborationPage = () => {
                     <DevEnvironment
                       roomId={roomId}
                       codeSnippets={questionData.codeSnippets}
-                      // TODO: delete?
-                      // onSetLanguageId={setLanguageId}
                       onSetCode={setCode}
                     />
                   </TabPanel>
