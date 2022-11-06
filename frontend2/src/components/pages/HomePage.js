@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import {
+  useToast,
   Box,
   Button,
   Container,
@@ -11,11 +13,31 @@ import {
 import MatchForm from "../MatchForm";
 import Navbar from "../Navbar";
 import BaseLayout from "../layouts/BaseLayout";
+import { URL_AUTH_SVC_LOGOUT_USER } from "../../configs";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const HomePage = () => {
-  const { auth } = useAuth();
+  const navigate = useNavigate();
+  const toast = useToast();
+  const { auth, setAuth } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
   const { username } = auth;
+
+  const handleLogout = async () => {
+    const toastData = {
+      title: "Logout Success",
+      description: "User logged out successfully",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    };
+
+    await axiosPrivate.post(URL_AUTH_SVC_LOGOUT_USER);
+    setAuth({});
+    navigate("/login");
+    toast(toastData);
+  };
 
   return (
     <BaseLayout>
@@ -34,7 +56,7 @@ const HomePage = () => {
             <MenuItem>Item1</MenuItem>
             <MenuItem>Item2</MenuItem>
             <MenuDivider />
-            <MenuItem>Item3</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </MenuList>
         </Menu>
       </Navbar>
