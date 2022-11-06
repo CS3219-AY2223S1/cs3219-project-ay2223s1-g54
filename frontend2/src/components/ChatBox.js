@@ -68,6 +68,7 @@ const ChatBox = ({ roomId, userId1, userId2, username1, username2 }) => {
           onChange={handleMessageChange}
         />
         <Button
+          colorScheme="teal"
           isDisabled={message === "" ? true : false}
           onClick={sendMessage}
         >
