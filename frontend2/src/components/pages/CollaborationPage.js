@@ -15,12 +15,14 @@ import {
 import { ReflexContainer, ReflexSplitter, ReflexElement } from "react-reflex";
 import DevEnvironment from "../DevEnvironment";
 import QuestionPane from "../QuestionPane";
+import WhiteBoard from "../WhiteBoard";
 import BaseLayout from "../layouts/BaseLayout";
 import useAuth from "../../hooks/useAuth";
 import "react-reflex/styles.css";
 
 const CollaborationPage = () => {
-  const [languageId, setLanguageId] = useState(null);
+  // TODO: delete?
+  // const [languageId, setLanguageId] = useState(null);
   const [code, setCode] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
@@ -96,11 +98,14 @@ const CollaborationPage = () => {
                       socket={socket}
                       roomId={roomId}
                       codeSnippets={questionData.codeSnippets}
-                      onSetLanguageId={setLanguageId}
+                      // TODO: delete?
+                      // onSetLanguageId={setLanguageId}
                       onSetCode={setCode}
                     />
                   </TabPanel>
-                  <TabPanel></TabPanel>
+                  <TabPanel h="full" minH="full" maxH="full">
+                    <WhiteBoard socket={socket} roomId={roomId} />
+                  </TabPanel>
                   <TabPanel></TabPanel>
                 </TabPanels>
               </Tabs>

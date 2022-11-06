@@ -45,7 +45,8 @@ const DevEnvironment = (props) => {
     socket.on("receiveLanguage", ({ language }) => {
       updateCode(languageMap[language].code);
       setLanguageSlug(language);
-      props.onSetLanguageId(languageIdMap.get(language));
+      // TODO: delete?
+      // props.onSetLanguageId(languageIdMap.get(language));
     });
 
     socket.on("receiveCurrentCode", ({ code }) => {
@@ -81,7 +82,8 @@ const DevEnvironment = (props) => {
       const firstSlug = Object.keys(languageMap)[0];
       setLanguageMap(languageMap);
       setLanguageSlug(firstSlug);
-      props.onSetLanguageId(languageIdMap.get(firstSlug));
+      // TODO: delete?
+      // props.onSetLanguageId(languageIdMap.get(firstSlug));
       setCode(languageMap[firstSlug].code);
     }
   };
@@ -116,6 +118,7 @@ const DevEnvironment = (props) => {
                 <Select
                   variant="filled"
                   mr="2"
+                  value={codeEditorTheme}
                   onChange={updateCodeEditorTheme}
                 >
                   <option value="light">Light</option>
@@ -129,7 +132,9 @@ const DevEnvironment = (props) => {
                 >
                   {Object.keys(languageMap).map((slug) => {
                     return (
-                      <option value={slug}>{languageMap[slug].name}</option>
+                      <option key={slug} value={slug}>
+                        {languageMap[slug].name}
+                      </option>
                     );
                   })}
                 </Select>
