@@ -97,7 +97,6 @@ const CollaborationPage = () => {
                 <TabPanels h="full" minH="full" maxH="full">
                   <TabPanel h="full" minH="full" maxH="full">
                     <DevEnvironment
-                      socket={socket}
                       roomId={roomId}
                       codeSnippets={questionData.codeSnippets}
                       // TODO: delete?
@@ -106,7 +105,7 @@ const CollaborationPage = () => {
                     />
                   </TabPanel>
                   <TabPanel h="full" minH="full" maxH="full">
-                    <WhiteBoard socket={socket} roomId={roomId} />
+                    <WhiteBoard roomId={roomId} />
                   </TabPanel>
                   <TabPanel h="full" minH="full" maxH="full">
                     <ChatBox

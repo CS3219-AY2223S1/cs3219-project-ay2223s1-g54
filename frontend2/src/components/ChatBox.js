@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, Flex, Input, Stack } from "@chakra-ui/react";
+import { Button, Flex, Input, Stack } from "@chakra-ui/react";
 import moment from "moment";
 import useAuth from "../hooks/useAuth";
 import MessageComponent from "./MessageComponent.js";

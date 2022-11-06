@@ -12,12 +12,15 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
+import useAuth from "../hooks/useAuth";
 
-const WhiteBoard = ({ socket, roomId }) => {
-  const canvasRef = useRef();
+const WhiteBoard = ({ roomId }) => {
   const [strokeWidth, setStrokeWidth] = useState(4);
   const [strokeColor, setStrokeColor] = useState("#000000");
   const [isEraser, setIsEraser] = useState(false);
+  const canvasRef = useRef();
+  const { auth } = useAuth();
+  const { socket } = auth;
 
   useEffect(() => {
     socket.on("receiveDrawing", ({ strokeData }) => {

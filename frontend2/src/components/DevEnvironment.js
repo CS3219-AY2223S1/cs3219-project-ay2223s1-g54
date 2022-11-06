@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { URL_JUDGE_SVC_SUBMISSION } from "../configs";
 import CodeEditor from "../components/CodeEditor";
+import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const DevEnvironment = (props) => {
@@ -26,8 +27,10 @@ const DevEnvironment = (props) => {
   const [programOutput, setProgramOutput] = useState("");
   const [isCompiling, setIsCompiling] = useState(false);
   const [code, setCode] = useState("");
+  const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const { socket, roomId, codeSnippets } = props;
+  const { socket } = auth;
+  const { roomId, codeSnippets } = props;
 
   const languageIdMap = new Map();
   languageIdMap.set("cpp", 76);
@@ -66,7 +69,7 @@ const DevEnvironment = (props) => {
       socket.off("receiveLanguage");
       socket.off("receiveCurrentCode");
     };
-  }, []);
+  });
 
   const initLanguageMap = () => {
     const languageMap = {};
