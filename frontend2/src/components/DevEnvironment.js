@@ -51,7 +51,7 @@ const DevEnvironment = (props) => {
 
     socket.on("receiveCurrentCode", ({ code }) => {
       setCode(code);
-      props.setCode(code);
+      props.onSetCode(code);
     });
 
     initDevEnvironmentOptions();
