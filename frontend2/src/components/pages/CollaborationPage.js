@@ -13,6 +13,7 @@ import {
   TabPanels,
 } from "@chakra-ui/react";
 import { ReflexContainer, ReflexSplitter, ReflexElement } from "react-reflex";
+import ChatBox from "../ChatBox";
 import DevEnvironment from "../DevEnvironment";
 import QuestionPane from "../QuestionPane";
 import WhiteBoard from "../WhiteBoard";
@@ -30,7 +31,8 @@ const CollaborationPage = () => {
   const { auth } = useAuth();
   const { socket } = auth;
   const collabData = location.state.collabData;
-  const { roomId, questionSet } = collabData;
+  const { roomId, questionSet, userId1, userId2, username1, username2 } =
+    collabData;
   const questionData = questionSet[0];
 
   useEffect(() => {
@@ -106,7 +108,15 @@ const CollaborationPage = () => {
                   <TabPanel h="full" minH="full" maxH="full">
                     <WhiteBoard socket={socket} roomId={roomId} />
                   </TabPanel>
-                  <TabPanel></TabPanel>
+                  <TabPanel h="full" minH="full" maxH="full">
+                    <ChatBox
+                      roomId={roomId}
+                      userId1={userId1}
+                      userId2={userId2}
+                      username1={username1}
+                      username2={username2}
+                    />
+                  </TabPanel>
                 </TabPanels>
               </Tabs>
             </ReflexElement>
