@@ -60,7 +60,7 @@ const DevEnvironment = (props) => {
       socket.off("receiveLanguage");
       socket.off("receiveCurrentCode");
     };
-  });
+  }, []);
 
   const initLanguageMap = () => {
     const languageMap = {};
@@ -165,6 +165,7 @@ const DevEnvironment = (props) => {
           language={languageSlug}
           value={code}
           onChange={updateCode}
+          saveViewState
         />
       </Flex>
     </Box>
