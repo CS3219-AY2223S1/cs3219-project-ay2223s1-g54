@@ -59,7 +59,7 @@ const ChatBox = ({ roomId, userId1, userId2, username1, username2 }) => {
           );
         })}
       </Flex>
-      <Flex pb="90">
+      <Flex pb="102">
         <Input
           mr="2"
           type="text"

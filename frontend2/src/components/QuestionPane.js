@@ -42,7 +42,7 @@ const QuestionPane = ({ questionData }) => {
             );
           })}
         </Flex>
-        <Flex w="full" h="full" minH="full" maxH="full" pb="144">
+        <Flex w="full" h="full" minH="full" maxH="full" pb="155">
           <Box
             w="full"
             h="full"

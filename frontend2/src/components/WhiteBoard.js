@@ -106,7 +106,7 @@ const WhiteBoard = ({ roomId }) => {
           Clear
         </Button>
       </Flex>
-      <Box h="full" minH="full" maxH="full" pb="137">
+      <Box h="full" minH="full" maxH="full" pb="149">
         <ReactSketchCanvas
           ref={canvasRef}
           height="100%"

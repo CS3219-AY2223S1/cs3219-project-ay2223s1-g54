@@ -16,6 +16,7 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from "react-reflex";
 import ChatBox from "../ChatBox";
 import DevEnvironment from "../DevEnvironment";
 import QuestionPane from "../QuestionPane";
+import Navbar from "../Navbar";
 import WhiteBoard from "../WhiteBoard";
 import BaseLayout from "../layouts/BaseLayout";
 import useAuth from "../../hooks/useAuth";
@@ -57,15 +58,15 @@ const CollaborationPage = () => {
 
   return (
     <BaseLayout>
+      <Navbar>
+        <Button mr="2" colorScheme="blue">
+          Submit
+        </Button>
+        <Button mr="2" colorScheme="red" onClick={handleLeaveRoom}>
+          Leave Room
+        </Button>
+      </Navbar>
       <Stack w="full" h="full" minH="full" maxH="full">
-        <Flex pt="2" pr="2" justify="flex-end">
-          <Button mr="2" colorScheme="blue">
-            Submit
-          </Button>
-          <Button mr="2" colorScheme="red" onClick={handleLeaveRoom}>
-            Leave Room
-          </Button>
-        </Flex>
         <Flex w="full" h="full" minH="full" maxH="full">
           <ReflexContainer orientation="vertical">
             <ReflexElement style={{ overflow: "hidden" }}>
