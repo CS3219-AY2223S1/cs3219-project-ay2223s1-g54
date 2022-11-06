@@ -22,6 +22,8 @@ function VideoChatComponent(props) {
   const [mic, setMic] = useState(true);
   const [cam, setCam] = useState(true);
 
+  let peer;
+
   useEffect(() => {
     // Get current username
     if (userId === userId1) {
@@ -32,15 +34,20 @@ function VideoChatComponent(props) {
       partnerNameRef.current = username1;
     }
 
-    const peer = new Peer(userId);
+    peer = new Peer(userId);
 
+    return () => {
+      peer.destroy();
+    };
+  }, []);
+
+  useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: cam, audio: mic })
       .then((stream) => {
         setStream(stream);
-        if (stream) {
-          userVideo.current.srcObject = stream;
-        }
+        window.localStream = stream;
+        userVideo.current.srcObject = stream;
         if (userId !== userId1) {
           const call = peer.call(userId1, stream);
 
@@ -58,14 +65,17 @@ function VideoChatComponent(props) {
       })
       .catch(console.log);
 
-
     return () => {
-      peer.destroy();
+      if (cam) {
+        window.localStream.getVideoTracks()[0].stop();
+      }
+      if (mic) {
+        window.localStream.getAudioTracks()[0].stop();
+      }
       
-      // Can't get stream to work
-      // stream.getTracks().forEach((track) => track.stop());
+      
     };
-  }, []);
+}, []);
 
   const handleVideoToggle = () => {
     const videoTrack = stream

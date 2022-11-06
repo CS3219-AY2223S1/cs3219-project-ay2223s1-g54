@@ -42,11 +42,11 @@ const createRoomSockets = async (
   const questionSet = [];
   for (let i = 0; i < 2; i++) {
     let question;
-    if (difficulty == 1) {
+    if (difficulty == 0) {
       question = await questionService.getEasyQuestion();
     } else if (difficulty == 1) {
       question = await questionService.getMediumQuestion();
-    } else if (difficulty == 1) {
+    } else if (difficulty == 2) {
       question = await questionService.getHardQuestion();
     } else {
       question = await questionService.getAnyQuestion();
