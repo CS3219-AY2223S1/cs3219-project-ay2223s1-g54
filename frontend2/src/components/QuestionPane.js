@@ -18,14 +18,25 @@ const QuestionPane = ({ questionData }) => {
       <Stack w="full" h="full" minH="full" maxH="full" p="5">
         <Heading size="lg">{questionData.title}</Heading>
         <Flex>
-          <Tag size="sm" key="sm" variant="solid" {...difficultyTagColorScheme}>
+          <Tag
+            size="sm"
+            key={questionData.difficulty}
+            variant="solid"
+            {...difficultyTagColorScheme}
+          >
             {questionData.difficulty}
           </Tag>
         </Flex>
         <Flex>
           {questionData.topicTags.map(({ name }) => {
             return (
-              <Tag size="sm" key="sm" variant="solid" colorScheme="teal" mr="2">
+              <Tag
+                size="sm"
+                key={name}
+                variant="solid"
+                colorScheme="teal"
+                mr="2"
+              >
                 {name}
               </Tag>
             );
