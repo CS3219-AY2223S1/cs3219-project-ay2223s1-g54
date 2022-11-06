@@ -32,3 +32,22 @@ export const getRandomQuestion = async (index) => {
 
   return question;
 };
+
+export const getQuestions = async (searchTerm) => {
+
+  const searchCondition = {
+    $text:
+      {
+        $search: searchTerm
+      }
+  };
+
+  const questionCount = await QuestionModel.count(searchCondition);
+  if (questionCount <= 0) {
+    throw new NoQuestionEntries(responseMessages.NO_DATABASE_ENTRIES);
+  }
+
+  const questions = await QuestionModel.find(searchCondition);
+
+  return questions;
+};
