@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Stack } from "@chakra-ui/react";
+import { MdMicNone, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
 import Peer from "peerjs";
 import useAuth from "../hooks/useAuth";
 
@@ -12,7 +13,6 @@ const VideoAudioChat = ({ userId1, userId2, username1, username2 }) => {
   const partnerNameRef = useRef();
   const { auth } = useAuth();
   const { userId } = auth;
-  let peer;
 
   useEffect(() => {
     // Get current username
@@ -24,105 +24,117 @@ const VideoAudioChat = ({ userId1, userId2, username1, username2 }) => {
       partnerNameRef.current.textContent = username1;
     }
 
-    peer = new Peer(userId);
+    const peer = new Peer(userId);
 
-    return () => {
-      peer.destroy();
-    };
-  }, []);
-
-  useEffect(() => {
-    const constraints = { video: videoToggle, audio: audioToggle };
-
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then((stream) => {
-        if (stream) {
-          window.localStream = stream;
-          userVideoRef.current.srcObject = stream;
-
-          if (userId !== userId1) {
-            const call = peer.call(userId1, stream);
-            call.on("stream", (partnerStream) => {
-              partnerVideoRef.current.srcObject = partnerStream;
-            });
-          } else {
-            setTimeout(() => {
-              peer.on("call", (call) => {
-                call.answer(stream); // Answer the call with an A/V stream.
-                call.on("stream", (partnerStream) => {
-                  partnerVideoRef.current.srcObject = partnerStream;
-                });
-              });
-            }, 2000);
+    let dispose = () => {};
+    if (userId !== userId1) {
+      setTimeout(() => {
+        navigator.getUserMedia(
+          { video: true, audio: true },
+          (stream) => {
+            window.localStream = stream;
+            showVideo(stream, userVideoRef.current, true);
+            dispose = showStream(
+              peer.call(userId1, stream),
+              partnerVideoRef.current
+            );
+          },
+          (error) => {
+            console.log("Failed to get local stream", error);
           }
-        }
-      })
-      .catch(console.log);
+        );
+      }, 3000);
+      return () => {
+        dispose();
+        peer.destroy();
+        window.localStream.getVideoTracks().forEach((track) => track.stop());
+        window.localStream.getAudioTracks().forEach((track) => track.stop());
+      };
+    } else {
+      const handler = (call) => {
+        navigator.getUserMedia(
+          { video: true, audio: true },
+          (stream) => {
+            window.localStream = stream;
+            showVideo(stream, userVideoRef.current, true);
+            call.answer(stream);
+          },
+          (error) => {
+            console.log("Failed to get local stream", error);
+          }
+        );
 
-    return () => {
-      if (videoToggle) window.localStream.getVideoTracks()[0].stop();
-      if (audioToggle) window.localStream.getAudioTracks()[0].stop();
-    };
+        dispose = showStream(call, partnerVideoRef.current);
+      };
+
+      peer.on("call", handler);
+
+      return () => {
+        dispose();
+        peer.off("call", handler);
+        peer.destroy();
+        window.localStream.getVideoTracks().forEach((track) => track.stop());
+        window.localStream.getAudioTracks().forEach((track) => track.stop());
+      };
+    }
   }, []);
+
+  const showVideo = (stream, video, muted) => {
+    video.srcObject = stream;
+    video.volume = muted ? 0 : 1;
+    video.onloadedmetadata = () => video.play();
+  };
+
+  const showStream = (call, otherVideo) => {
+    const handler = (remoteStream) => {
+      showVideo(remoteStream, otherVideo, false);
+    };
+    call.on("stream", handler);
+
+    return () => call.off("stream", handler);
+  };
 
   const handleVideoToggle = () => {
-    const videoTrack = window.localStream
-      .getTracks()
-      .find((track) => track.kind === "video");
-    if (videoTrack.enabled) {
-      videoTrack.enabled = false;
-      setVideoToggle(false);
-    } else {
-      videoTrack.enabled = true;
-      setVideoToggle(true);
-    }
+    window.localStream
+      .getVideoTracks()
+      .forEach((track) => (track.enabled = !videoToggle));
+    setVideoToggle(!videoToggle);
   };
 
   const handleAudioToggle = () => {
-    const audioTrack = window.localStream
-      .getTracks()
-      .find((track) => track.kind === "audio");
-    if (audioTrack.enabled) {
-      audioTrack.enabled = false;
-      setAudioToggle(false);
-    } else {
-      audioTrack.enabled = true;
-      setAudioToggle(true);
-    }
+    window.localStream
+      .getAudioTracks()
+      .forEach((track) => (track.enabled = !audioToggle));
+    setAudioToggle(!audioToggle);
   };
 
   return (
     <Stack h="full" minH="full" maxH="full">
-      <Flex h="full" direction="column" overflow="scroll">
-        <Box>
-          <video
-            style={{ width: "100%" }}
-            playsInline
-            autoPlay
-            muted
-            ref={partnerVideoRef}
-          />
-          <p ref={partnerNameRef}></p>
-        </Box>
-        <Box>
-          <video
-            style={{ width: "100%" }}
-            playsInline
-            autoPlay
-            muted
-            ref={userVideoRef}
-          />
-        </Box>
+      <Flex h="full" direction="column" alignItems="center" overflow="scroll">
+        <video style={{ width: "100%", height: "30%" }} ref={partnerVideoRef} />
+        <p ref={partnerNameRef}></p>
+        <video style={{ width: "100%", height: "30%" }} ref={userVideoRef} />
         <p ref={userNameRef}></p>
-      </Flex>
-      <Flex pb="102">
-        <Button colorScheme="teal" onClick={handleVideoToggle}>
-          Toggle Video
-        </Button>
-        <Button colorScheme="teal" onClick={handleAudioToggle}>
-          Toggle Audio
-        </Button>
+        <Flex>
+          <Button
+            size="lg"
+            colorScheme="teal"
+            mt="5"
+            mr="5"
+            onClick={handleVideoToggle}
+          >
+            {videoToggle ? <MdVideocam /> : <MdVideocamOff />}
+          </Button>
+          <Button
+            size="lg"
+            colorScheme="teal"
+            mt="5"
+            ml="5"
+            onClick={handleAudioToggle}
+          >
+            {audioToggle ? <MdMicNone /> : <MdMicOff />}
+          </Button>
+        </Flex>
       </Flex>
     </Stack>
   );
