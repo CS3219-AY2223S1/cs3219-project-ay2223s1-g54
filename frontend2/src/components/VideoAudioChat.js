@@ -31,19 +31,21 @@ const VideoAudioChat = ({ userId1, userId2, username1, username2 }) => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         window.localStream = stream;
-        userVideoRef.current.srcObject = stream;
+        if (userVideoRef.current) userVideoRef.current.srcObject = stream;
 
         if (userId !== userId1) {
           const call = peer.call(userId1, stream);
           call.on("stream", (partnerStream) => {
-            partnerVideoRef.current.srcObject = partnerStream;
+            if (partnerVideoRef.current)
+              partnerVideoRef.current.srcObject = partnerStream;
           });
         } else {
           setTimeout(() => {
             peer.on("call", (call) => {
               call.answer(stream); // Answer the call with an A/V stream.
               call.on("stream", (partnerStream) => {
-                partnerVideoRef.current.srcObject = partnerStream;
+                if (partnerVideoRef.current)
+                  partnerVideoRef.current.srcObject = partnerStream;
               });
             });
           }, 2000);
@@ -62,7 +64,7 @@ const VideoAudioChat = ({ userId1, userId2, username1, username2 }) => {
       if (videoToggle) window.localStream.getVideoTracks()[0].stop();
       if (audioToggle) window.localStream.getAudioTracks()[0].stop();
     };
-  }, []);
+  });
 
   const handleVideoToggle = () => {
     const videoTrack = window.localStream
