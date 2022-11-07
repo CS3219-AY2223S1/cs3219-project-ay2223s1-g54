@@ -95,24 +95,23 @@ export const RegisterForm = (props) => {
 
     try {
       await axiosPublic.post(URL_USER_SVC_CREATE_USER, registrationData);
-      toastData.name = "Success";
+      toastData.status = "success";
+      toastData.title = "Success";
       toastData.description =
         "Account successfully created! Please check your email";
-      toastData.status = "success";
-      toast(toastData);
     } catch (err) {
       toastData.status = "error";
       if (err?.response?.data?.error) {
         const { name, message } = err.response.data.error;
         toastData.title = name;
         toastData.description = message;
-        toast(toastData);
-        return;
+      } else {
+        toastData.title = "Unknown Error";
+        toastData.description = "Please try again later";
       }
-      toastData.title = "Unknown Error";
-      toastData.description = "Please try again later";
-      return;
     }
+
+    toast(toastData);
   };
 
   return (

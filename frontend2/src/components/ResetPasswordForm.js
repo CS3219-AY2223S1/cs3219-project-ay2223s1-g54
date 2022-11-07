@@ -70,7 +70,10 @@ const ResetPasswordForm = (props) => {
     setIsResettingPassword(true);
 
     const validationResult = validateFields();
-    if (!validationResult) return;
+    if (!validationResult) {
+      setIsResettingPassword(false);
+      return;
+    }
 
     const toastData = {
       title: "",
@@ -84,24 +87,22 @@ const ResetPasswordForm = (props) => {
       const resetUrl = `${URL_USER_RESET_PASSWORD}/${userId}/${token}`;
       const newPassword = passwordFieldRef.current.value;
       await axiosPublic.post(resetUrl, { newPassword });
-      toastData.name = "Success";
-      toastData.description = "Your password has been changed";
       toastData.status = "success";
-      toast(toastData);
+      toastData.title = "Success";
+      toastData.description = "Your password has been changed";
     } catch (err) {
       toastData.status = "error";
       if (err?.response?.data?.error) {
         const { name, message } = err.response.data.error;
         toastData.title = name;
         toastData.description = message;
-        toast(toastData);
-        return;
+      } else {
+        toastData.title = "Unknown Error";
+        toastData.description = "Please try again later";
       }
-      toastData.title = "Unknown Error";
-      toastData.description = "Please try again later";
-      return;
     }
 
+    toast(toastData);
     setIsResettingPassword(false);
   };
 

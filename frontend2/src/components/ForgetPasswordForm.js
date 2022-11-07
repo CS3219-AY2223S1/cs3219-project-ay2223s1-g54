@@ -33,24 +33,22 @@ const ForgetPasswordForm = (props) => {
     try {
       const email = emailFieldRef.current.value;
       await axiosPublic.post(URL_USER_RESET_PASSWORD, { email });
-      toastData.name = "Success";
-      toastData.description = "We have sent an e-mail to reset your password";
       toastData.status = "success";
-      toast(toastData);
+      toastData.title = "Success";
+      toastData.description = "We have sent an e-mail to reset your password";
     } catch (err) {
       toastData.status = "error";
       if (err?.response?.data?.error) {
         const { name, message } = err.response.data.error;
         toastData.title = name;
         toastData.description = message;
-        toast(toastData);
-        return;
+      } else {
+        toastData.title = "Unknown Error";
+        toastData.description = "Please try again later";
       }
-      toastData.title = "Unknown Error";
-      toastData.description = "Please try again later";
-      return;
     }
 
+    toast(toastData);
     setIsSendingEmail(false);
   };
 

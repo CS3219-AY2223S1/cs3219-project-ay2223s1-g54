@@ -72,12 +72,11 @@ export const LoginForm = (props) => {
         const { name, message } = err.response.data.error;
         toastData.title = name;
         toastData.description = message;
-        toast(toastData);
-        return;
+      } else {
+        toastData.title = "Unknown Error";
+        toastData.description = "Please try again later";
       }
-      toastData.title = "Unknown Error";
-      toastData.description = "Please try again later";
-      return;
+      toast(toastData);
     }
   };
 
