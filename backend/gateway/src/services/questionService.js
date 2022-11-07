@@ -30,3 +30,15 @@ export const getHardQuestion = async () => {
   const { question } = resQuestion.data;
   return question;
 };
+
+export const getSearchQuestions = async (searchTerm) => {
+  const resQuestions = await axiosDecorator(questionAxios.get)(
+    "/search",
+    {
+      params: { searchTerm },
+    }
+  );
+
+  const { questions } = resQuestions.data;
+  return questions;
+};
