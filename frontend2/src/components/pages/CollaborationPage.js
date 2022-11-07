@@ -24,18 +24,38 @@ import useAuth from "../../hooks/useAuth";
 import "react-reflex/styles.css";
 
 const CollaborationPage = () => {
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [code, setCode] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const toast = useToast();
   const { auth } = useAuth();
-  const { socket } = auth;
+  const { userId, socket } = auth;
   const collabData = location.state.collabData;
   const { roomId, questionSet, userId1, userId2, username1, username2 } =
     collabData;
-  const questionData = questionSet[0];
+
+  const [questionObject, setQuestionObject] = useState(
+    questionSet[questionIndex]
+  );
 
   useEffect(() => {
+    socket.on("receiveSubmitCode", () => {
+      if (questionIndex == 1) {
+        const toastData = {
+          title: "Collaborative Session",
+          description: "The interview session is now completed",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        };
+        toast(toastData);
+        navigate("/home");
+        return;
+      }
+      setQuestionIndex(questionIndex + 1);
+    });
+
     socket.on("receiveLeaveRoom", () => {
       const toastData = {
         title: "Collaborative Session",
@@ -48,10 +68,36 @@ const CollaborationPage = () => {
       navigate("/home");
     });
 
+    setQuestionObject(questionSet[questionIndex]);
+
+    const toastData = {
+      title: "Collaborative Session",
+      status: "info",
+      duration: 3000,
+      isClosable: true,
+    };
+
+    if (
+      (userId === userId1 && questionIndex === 0) ||
+      (userId === userId2 && questionIndex === 1)
+    )
+      toastData.description = "Your role is the interviewee";
+    else if (
+      (userId === userId1 && questionIndex === 1) ||
+      (userId === userId2 && questionIndex === 0)
+    )
+      toastData.description = "Your role is the interviewer";
+    toast(toastData);
+
     return () => {
+      socket.off("receiveSubmitCode");
       socket.off("receiveLeaveRoom");
     };
-  }, []);
+  }, [questionIndex]);
+
+  const handleSubmitCode = () => {
+    socket.emit("sendSubmitCode", { roomId });
+  };
 
   const handleLeaveRoom = () => {
     socket.emit("sendLeaveRoom", { roomId });
@@ -60,9 +106,12 @@ const CollaborationPage = () => {
   return (
     <BaseLayout>
       <Navbar>
-        <Button mr="2" colorScheme="blue">
-          Submit
-        </Button>
+        {((userId === userId1 && questionIndex === 0) ||
+          (userId === userId2 && questionIndex === 1)) && (
+          <Button mr="2" colorScheme="blue" onClick={handleSubmitCode}>
+            Submit
+          </Button>
+        )}
         <Button mr="2" colorScheme="red" onClick={handleLeaveRoom}>
           Leave Room
         </Button>
@@ -72,7 +121,7 @@ const CollaborationPage = () => {
           <ReflexContainer orientation="vertical">
             <ReflexElement style={{ overflow: "hidden" }}>
               <Box w="100%" h="full" minH="full" maxH="full">
-                <QuestionPane questionData={questionData} />
+                <QuestionPane questionData={questionObject} />
               </Box>
             </ReflexElement>
             <ReflexSplitter
@@ -99,7 +148,7 @@ const CollaborationPage = () => {
                   <TabPanel h="full" minH="full" maxH="full">
                     <DevEnvironment
                       roomId={roomId}
-                      codeSnippets={questionData.codeSnippets}
+                      codeSnippets={questionObject.codeSnippets}
                       onSetCode={setCode}
                     />
                   </TabPanel>

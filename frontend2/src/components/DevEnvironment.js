@@ -52,6 +52,22 @@ const DevEnvironment = (props) => {
   languageIdMap.set("elixir", 57);
 
   useEffect(() => {
+    const languageMap = {};
+    for (const codeSnippet of codeSnippets) {
+      const { slug, name, code } = codeSnippet;
+      const languageObj = {
+        name,
+        code,
+      };
+      languageMap[slug] = languageObj;
+    }
+
+    const firstSlug = Object.keys(languageMap)[0];
+    setLanguageMap(languageMap);
+    setLanguageSlug(firstSlug);
+    setLanguageId(languageIdMap.get(firstSlug));
+    setCode(languageMap[firstSlug].code);
+
     socket.on("receiveLanguage", ({ language }) => {
       updateCode(languageMap[language].code);
       setLanguageSlug(language);
@@ -63,38 +79,11 @@ const DevEnvironment = (props) => {
       props.onSetCode(code);
     });
 
-    initDevEnvironmentOptions();
-
     return () => {
       socket.off("receiveLanguage");
       socket.off("receiveCurrentCode");
     };
-  });
-
-  const initLanguageMap = () => {
-    const languageMap = {};
-    for (const codeSnippet of codeSnippets) {
-      const { slug, name, code } = codeSnippet;
-      const languageObj = {
-        name,
-        code,
-      };
-      languageMap[slug] = languageObj;
-    }
-    return languageMap;
-  };
-
-  const initDevEnvironmentOptions = () => {
-    // initialise state if it does not exist
-    if (Object.keys(languageMap).length === 0) {
-      const languageMap = initLanguageMap();
-      const firstSlug = Object.keys(languageMap)[0];
-      setLanguageMap(languageMap);
-      setLanguageSlug(firstSlug);
-      setLanguageId(languageIdMap.get(firstSlug));
-      setCode(languageMap[firstSlug].code);
-    }
-  };
+  }, [codeSnippets]); // codeSnippets update when role swap
 
   const updateCodeEditorTheme = (event) => {
     const theme = event.target.value;
@@ -159,10 +148,6 @@ const DevEnvironment = (props) => {
       }
       console.log("catch block...", error);
     }
-
-    // // swap
-    // // socket.emit("sendSubmitCode", { roomId });
-    // setIsCompiling(false);
   };
 
   const getCompilationResults = async (token) => {
