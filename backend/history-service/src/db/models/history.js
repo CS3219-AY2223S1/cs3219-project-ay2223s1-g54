@@ -5,7 +5,10 @@ let HistorySchema = new Schema({
   userId: {
     type: String,
     required: true,
-    unique: true,
+  },
+  questiondId: {
+    type: String,
+    required: true,
   },
   code: {
     type: String,
