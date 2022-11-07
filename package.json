@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start:dev" : "concurrently \"npm:start:frontend\" \"npm:start:auth-service\" \"npm:start:collaboration-service\" \"npm:start:communication-service\" \"npm:start:gateway\" \"npm:start:matching-service\" \"npm:start:question-service\" \"npm:start:user-service\"",
+    "start:dev" : "concurrently \"npm:start:frontend\" \"npm:start:auth-service\" \"npm:start:collaboration-service\" \"npm:start:communication-service\" \"npm:start:gateway\" \"npm:start:matching-service\" \"npm:start:question-service\" \"npm:start:user-service\" \"npm:start:history-service\"",
     "start:frontend": "cd frontend && npm start",
     "start:auth-service": "cd backend/auth-service && npm run dev",
     "start:collaboration-service": "cd backend/collaboration-service && npm run dev",
@@ -8,7 +8,8 @@
     "start:gateway": "cd backend/gateway && npm run dev",
     "start:matching-service": "cd backend/matching-service && npm run dev",
     "start:question-service": "cd backend/question-service && npm run dev",
-    "start:user-service": "cd backend/user-service && npm run dev"
+    "start:user-service": "cd backend/user-service && npm run dev",
+    "start:history-service": "cd backend/history-service && npm run dev"
   },
   "devDependencies": {
     "concurrently": "^7.5.0"
