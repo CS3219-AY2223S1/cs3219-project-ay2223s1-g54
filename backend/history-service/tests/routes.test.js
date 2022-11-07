@@ -15,7 +15,7 @@ describe("History Service", () => {
   describe("Create submission", () => {
     it("Should create submission successfully", async () => {
       const res = await supertest(app)
-        .post(`/submission/${userId}/${questionId}`)
+        .post(`/submissions/${userId}/${questionId}`)
         .send({ code });
       expect(res.statusCode).toBe(200);
     })

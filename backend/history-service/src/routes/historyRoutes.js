@@ -8,7 +8,7 @@ import { MalformedRequest } from "../exceptions/MalformedRequest.js";
 const historyRoutes = express.Router();
 
 historyRoutes.post(
-  "/submission/:userId/:questionId",
+  "/submissions/:userId/:questionId",
   asyncHandler(async (req, res) => {
     const userId = req.params.userId;
     const questionId = req.params.questionId;
@@ -24,7 +24,7 @@ historyRoutes.post(
 )
 
 historyRoutes.get(
-  "/submission/:userId/:questionId/:number",
+  "/submissions/:userId/:questionId/:number",
   asyncHandler(async (req, res) => {
     const userId = req.params.userId;
     const questionId = req.params.questionId;
