@@ -24,6 +24,10 @@ const HomePage = () => {
   const axiosPrivate = useAxiosPrivate();
   const { username } = auth;
 
+  const handleAccountSettings = async () => {
+    navigate("/accountSettings");
+  };
+
   const handleLogout = async () => {
     const toastData = {
       title: "Logout Success",
@@ -53,8 +57,9 @@ const HomePage = () => {
             {username}
           </MenuButton>
           <MenuList alignItems="center">
-            <MenuItem>Item1</MenuItem>
-            <MenuItem>Item2</MenuItem>
+            <MenuItem onClick={handleAccountSettings}>
+              Account Settings
+            </MenuItem>
             <MenuDivider />
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </MenuList>

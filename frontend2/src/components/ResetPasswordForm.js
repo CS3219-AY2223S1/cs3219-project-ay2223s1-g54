@@ -17,7 +17,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { URL_USER_RESET_PASSWORD } from "../configs";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 
-const ResetPasswordPage = (props) => {
+const ResetPasswordForm = (props) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isResettingPassowrd, setIsResettingPassword] = useState(false);
@@ -160,4 +160,4 @@ const ResetPasswordPage = (props) => {
   );
 };
 
-export default ResetPasswordPage;
+export default ResetPasswordForm;

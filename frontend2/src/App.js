@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
+import AccountSettingsPage from "./components/pages/AccountSettingsPage";
 import CollaborationPage from "./components/pages/CollaborationPage";
 import ForgetPasswordPage from "./components/pages/ForgetPasswordPage";
 import HomePage from "./components/pages/HomePage";
@@ -26,6 +27,7 @@ function App() {
       <Route element={<PersistLogin />}>
         <Route element={<RequireAuth />}>
           <Route path="/home" element={<HomePage />} />
+          <Route path="/accountSettings" element={<AccountSettingsPage />} />
           <Route path="/collaboration" element={<CollaborationPage />} />
         </Route>
       </Route>
