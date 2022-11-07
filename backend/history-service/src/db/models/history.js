@@ -6,7 +6,7 @@ let HistorySchema = new Schema({
     type: String,
     required: true,
   },
-  questiondId: {
+  questionId: {
     type: String,
     required: true,
   },
