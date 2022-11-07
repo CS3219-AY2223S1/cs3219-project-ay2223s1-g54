@@ -17,6 +17,7 @@ import ChatBox from "../ChatBox";
 import DevEnvironment from "../DevEnvironment";
 import QuestionPane from "../QuestionPane";
 import Navbar from "../Navbar";
+import VideoAudioChat from "../VideoAudioChat";
 import WhiteBoard from "../WhiteBoard";
 import BaseLayout from "../layouts/BaseLayout";
 import useAuth from "../../hooks/useAuth";
@@ -91,7 +92,8 @@ const CollaborationPage = () => {
                 <TabList>
                   <Tab>Code Editor</Tab>
                   <Tab>White Board</Tab>
-                  <Tab>Communication</Tab>
+                  <Tab>Chat Box</Tab>
+                  <Tab>Video / Audio</Tab>
                 </TabList>
                 <TabPanels h="full" minH="full" maxH="full">
                   <TabPanel h="full" minH="full" maxH="full">
@@ -107,6 +109,14 @@ const CollaborationPage = () => {
                   <TabPanel h="full" minH="full" maxH="full">
                     <ChatBox
                       roomId={roomId}
+                      userId1={userId1}
+                      userId2={userId2}
+                      username1={username1}
+                      username2={username2}
+                    />
+                  </TabPanel>
+                  <TabPanel h="full" minH="full" maxH="full">
+                    <VideoAudioChat
                       userId1={userId1}
                       userId2={userId2}
                       username1={username1}
