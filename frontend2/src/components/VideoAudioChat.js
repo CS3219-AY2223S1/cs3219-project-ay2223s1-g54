@@ -12,6 +12,7 @@ const VideoAudioChat = ({ userId1, userId2, username1, username2 }) => {
   const partnerNameRef = useRef();
   const { auth } = useAuth();
   const { userId } = auth;
+  let peer;
 
   useEffect(() => {
     // Get current username
@@ -23,48 +24,47 @@ const VideoAudioChat = ({ userId1, userId2, username1, username2 }) => {
       partnerNameRef.current.textContent = username1;
     }
 
-    const peer = new Peer(userId);
-
-    const initVideoAudio = async () => {
-      const constraints = { video: videoToggle, audio: audioToggle };
-
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        window.localStream = stream;
-        if (userVideoRef.current) userVideoRef.current.srcObject = stream;
-
-        if (userId !== userId1) {
-          const call = peer.call(userId1, stream);
-          call.on("stream", (partnerStream) => {
-            if (partnerVideoRef.current)
-              partnerVideoRef.current.srcObject = partnerStream;
-          });
-        } else {
-          setTimeout(() => {
-            peer.on("call", (call) => {
-              call.answer(stream); // Answer the call with an A/V stream.
-              call.on("stream", (partnerStream) => {
-                if (partnerVideoRef.current)
-                  partnerVideoRef.current.srcObject = partnerStream;
-              });
-            });
-          }, 2000);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    setTimeout(() => {
-      initVideoAudio();
-    }, 2000);
+    peer = new Peer(userId);
 
     return () => {
       peer.destroy();
+    };
+  }, []);
+
+  useEffect(() => {
+    const constraints = { video: videoToggle, audio: audioToggle };
+
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then((stream) => {
+        if (stream) {
+          window.localStream = stream;
+          userVideoRef.current.srcObject = stream;
+
+          if (userId !== userId1) {
+            const call = peer.call(userId1, stream);
+            call.on("stream", (partnerStream) => {
+              partnerVideoRef.current.srcObject = partnerStream;
+            });
+          } else {
+            setTimeout(() => {
+              peer.on("call", (call) => {
+                call.answer(stream); // Answer the call with an A/V stream.
+                call.on("stream", (partnerStream) => {
+                  partnerVideoRef.current.srcObject = partnerStream;
+                });
+              });
+            }, 2000);
+          }
+        }
+      })
+      .catch(console.log);
+
+    return () => {
       if (videoToggle) window.localStream.getVideoTracks()[0].stop();
       if (audioToggle) window.localStream.getAudioTracks()[0].stop();
     };
-  });
+  }, []);
 
   const handleVideoToggle = () => {
     const videoTrack = window.localStream
