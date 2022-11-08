@@ -18,5 +18,5 @@ export const EXPIRED_ACCESS_TOKEN_HEADER =
 export const MISSING_DIFFICULTY_FIELD = "The difficulty field is missing";
 export const OUT_OF_RANGE_DIFFICULTY =
   "The difficulty specified is not within the supported range";
-
 export const INVALID_CREDENTIALS = "The credentials supplied were incorrect";
+export const MISSING_QUERY_PARAM_NUMBER = "The number query parameter is missing";

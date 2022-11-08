@@ -1,6 +1,8 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
+import * as responseMessages from "../constants/responseMessages.js";
 import * as statusCodes from "../constants/statusCodes.js";
+import { MalformedRequest } from "../exceptions/MalformedRequest.js";
 import { verifyAccessToken } from "../middlewares/verifyAccessToken.js";
 import {
   createSubmission,
@@ -21,12 +23,17 @@ historyRoutes.post(
 );
 
 historyRoutes.get(
-  "/submissions/:userId/:questionId/:number",
+  "/submissions/:userId/:questionId",
   asyncHandler(verifyAccessToken),
   asyncHandler(async (req, res) => {
     const userId = req.params.userId;
     const questionId = req.params.questionId;
-    const number = req.params.number;
+    const number = req.query.number;
+
+    if(!number) {
+      throw new MalformedRequest(responseMessages.MISSING_QUERY_PARAM_NUMBER);
+    }
+
     const submissionHistory = await getSubmissionHistory(
       userId,
       questionId,
@@ -41,7 +48,13 @@ historyRoutes.get(
   asyncHandler(verifyAccessToken),
   asyncHandler(async (req, res) => {
     const userId = req.params.userId;
-    const userSubmissionHistory = await getUserSubmissionHistory(userId);
+    const number = req.query.number;
+
+    if (!number) {
+      throw new MalformedRequest(responseMessages.MISSING_QUERY_PARAM_NUMBER);
+    }
+
+    const userSubmissionHistory = await getUserSubmissionHistory(userId, number);
     res.status(statusCodes.OK).json(userSubmissionHistory);
   })
 );

@@ -12,8 +12,9 @@ export const getSubmissionHistory = async (userId, questionId, number) => {
   return submissionHistory;
 }
 
-export const getUserSubmissionHistory = async (userId) => {
+export const getUserSubmissionHistory = async (userId, number) => {
   const userSubmissionHistory = await HistoryModel.find({ userId: userId })
                                                   .sort({ createdAt: -1 })
+                                                  .limit(number)
   return userSubmissionHistory;
 }
