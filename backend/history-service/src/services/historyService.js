@@ -10,7 +10,7 @@ export const getSubmissionHistory = async (userId, questionId, number) => {
   return submissionHistory;
 }
 
-export const getUserSubmissionHistory = async (userId) => {
-  const userSubmissionHistory = await historyRepo.getUserSubmissionHistory(userId);
+export const getUserSubmissionHistory = async (userId, number) => {
+  const userSubmissionHistory = await historyRepo.getUserSubmissionHistory(userId, number);
   return userSubmissionHistory;
 }

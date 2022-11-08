@@ -45,7 +45,7 @@ const CollaborationPage = () => {
 
   useEffect(() => {
     socket.on("receiveSubmitCode", () => {
-      if (questionIndex == 1) {
+      if (questionIndex === 1) {
         const toastData = {
           title: "Collaborative Session",
           description: "The interview session is now completed",

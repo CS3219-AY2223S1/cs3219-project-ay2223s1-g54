@@ -21,6 +21,7 @@ import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const HistoryPane = () => {
+  const [isLoadingSubmissions, setIsLoadingSubmissions] = useState(true);
   const [userSubmissions, setUserSubmissions] = useState([]);
   const navigate = useNavigate();
   const { auth } = useAuth();
@@ -30,7 +31,7 @@ const HistoryPane = () => {
   useEffect(() => {
     const getUserSubmissions = async () => {
       const submissionHistoryResponse = await axiosPrivate.get(
-        `${URL_HISTORY_SVC_USER_SUBMISSIONS}/${userId}`
+        `${URL_HISTORY_SVC_USER_SUBMISSIONS}/${userId}?number=10`
       );
       const { userSubmissionHistory } = submissionHistoryResponse.data;
 
@@ -45,6 +46,7 @@ const HistoryPane = () => {
       }
 
       setUserSubmissions(userSubmissionHistory);
+      setIsLoadingSubmissions(false);
     };
 
     getUserSubmissions();
@@ -72,7 +74,7 @@ const HistoryPane = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {userSubmissions.length === 0 ? (
+            {isLoadingSubmissions ? (
               <Tr>
                 <Td>
                   <Progress size="xs" isIndeterminate />
@@ -84,22 +86,29 @@ const HistoryPane = () => {
                   <Progress size="xs" isIndeterminate />
                 </Td>
               </Tr>
+            ) : userSubmissions.length === 0 ? (
+              <Tr>
+                <Td>NIL</Td>
+                <Td>NIL</Td>
+                <Td>NIL</Td>
+              </Tr>
             ) : (
-              <></>
+              userSubmissions.map((submission) => {
+                return (
+                  <Tr key={submission.id}>
+                    <Td>{submission.questionId}</Td>
+                    <Td>
+                      <Link
+                        onClick={() => handleNavigateSubmission(submission)}
+                      >
+                        {submission.title}
+                      </Link>
+                    </Td>
+                    <Td>{moment(submission.createdAt).fromNow()}</Td>
+                  </Tr>
+                );
+              })
             )}
-            {userSubmissions.map((submission) => {
-              return (
-                <Tr key={submission.id}>
-                  <Td>{submission.questionId}</Td>
-                  <Td>
-                    <Link onClick={() => handleNavigateSubmission(submission)}>
-                      {submission.title}
-                    </Link>
-                  </Td>
-                  <Td>{moment(submission.createdAt).fromNow()}</Td>
-                </Tr>
-              );
-            })}
           </Tbody>
         </Table>
       </TableContainer>
