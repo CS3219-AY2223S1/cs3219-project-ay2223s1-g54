@@ -23,11 +23,11 @@ questionRoutes.get(
     }
 
     let question;
-    if (difficultyIdx == 1) {
+    if (difficultyIdx == 0) {
       question = await questionService.getEasyQuestion();
     } else if (difficultyIdx == 1) {
       question = await questionService.getMediumQuestion();
-    } else if (difficultyIdx == 1) {
+    } else if (difficultyIdx == 2) {
       question = await questionService.getHardQuestion();
     } else {
       question = await questionService.getAnyQuestion();
