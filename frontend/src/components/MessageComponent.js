@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Text } from "@chakra-ui/react";
 
 function MessageComponent({ data }) {
   const name = data.name;
@@ -7,14 +7,11 @@ function MessageComponent({ data }) {
 
   return (
     <Box
-      sx={{
-        bgcolor: "grey.100",
-        color: "grey.800",
-        border: "1px solid",
-        borderColor: "grey.300",
-        m: 1,
-        p: 0.5,
-      }}
+      p="2"
+      mb="1"
+      backgroundColor="gray.300"
+      border="1px solid"
+      borderColor="gray.500"
     >
       <Box
         sx={{
@@ -22,13 +19,13 @@ function MessageComponent({ data }) {
           justifyContent: "space-between",
         }}
       >
-        <Typography>
+        <Text>
           <strong>{name}</strong>
-        </Typography>
-        <Typography>{time}</Typography>
+        </Text>
+        <Text>{time}</Text>
       </Box>
       <Box>
-        <Typography>{message}</Typography>
+        <Text>{message}</Text>
       </Box>
     </Box>
   );

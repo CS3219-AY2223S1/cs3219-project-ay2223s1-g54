@@ -1,23 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, TextField } from "@mui/material";
+import { Button, Flex, Input, Stack } from "@chakra-ui/react";
 import moment from "moment";
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 import MessageComponent from "./MessageComponent.js";
 
-function ChatComponent(props) {
-  const { auth } = useAuth();
+const ChatBox = ({ roomId, userId1, userId2, username1, username2 }) => {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
   const chatboxRef = useRef();
   const usernameRef = useRef();
+  const { auth } = useAuth();
   const { userId, socket } = auth;
-  const collabData = props.collabData;
-  const { roomId, userId1, username1, username2 } = collabData;
 
   useEffect(() => {
     // Get current username
     if (userId === userId1) usernameRef.current = username1;
-    else usernameRef.current = username2;
+    else if (userId === userId2) usernameRef.current = username2;
 
     socket.on("receiveMessage", (message) => {
       updateMessageList(message);
@@ -53,55 +51,32 @@ function ChatComponent(props) {
   };
 
   return (
-    <Box
-      height={props.hidden === true ? "100%" : "0"}
-      visibility={props.hidden === true ? "none" : "hidden"}
-      display="flex"
-      flexDirection="column"
-      maxHeight="100%"
-      border="1px solid"
-      borderColor="grey.300"
-      borderRadius="3"
-      justifyContent="center"
-      overflow="scroll"
-      background="white"
-    >
-      <Box
-        ref={chatboxRef}
-        display="flex"
-        flexDirection="column"
-        flex="1"
-        overflow="scroll"
-      >
+    <Stack h="full" minH="full" maxH="full">
+      <Flex h="full" direction="column" overflow="scroll" ref={chatboxRef}>
         {messageList.map((messageData) => {
           return (
             <MessageComponent key={messageData.messageId} data={messageData} />
           );
         })}
-      </Box>
-      <Box>
-        <Box sx={{ padding: "10px" }}>
-          <TextField
-            label="Type Message"
-            variant="standard"
-            value={message}
-            onChange={handleMessageChange}
-            fullWidth
-          />
-          <br />
-          <br />
-          <Button
-            variant="contained"
-            onClick={sendMessage}
-            disabled={message === "" ? true : false}
-            fullWidth
-          >
-            Send
-          </Button>
-        </Box>
-      </Box>
-    </Box>
+      </Flex>
+      <Flex pb="102">
+        <Input
+          mr="2"
+          type="text"
+          placeholder="Enter your message"
+          value={message}
+          onChange={handleMessageChange}
+        />
+        <Button
+          colorScheme="teal"
+          isDisabled={message === "" ? true : false}
+          onClick={sendMessage}
+        >
+          Send
+        </Button>
+      </Flex>
+    </Stack>
   );
-}
+};
 
-export { ChatComponent };
+export default ChatBox;

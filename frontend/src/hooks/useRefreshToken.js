@@ -1,11 +1,11 @@
-import { decodeToken } from "react-jwt";
 import axios from "axios";
+import { decodeToken } from "react-jwt";
 import { io } from "socket.io-client";
-import { useAuth } from "./useAuth";
+import useAuth from "./useAuth";
 import { URI_GATEWAY, URL_AUTH_SVC_REFRESH_USER } from "../configs";
 
 const useRefreshToken = () => {
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
 
   const refresh = async () => {
     // Refresh endpoint need to check

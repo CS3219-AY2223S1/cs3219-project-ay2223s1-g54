@@ -1,14 +1,26 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  Flex,
+  Input,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  Stack,
+} from "@chakra-ui/react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
+import useAuth from "../hooks/useAuth";
 
-const CollaborativeWhiteBoard = (props) => {
-  const canvasRef = useRef();
+const WhiteBoard = ({ roomId }) => {
   const [strokeWidth, setStrokeWidth] = useState(4);
   const [strokeColor, setStrokeColor] = useState("#000000");
   const [isEraser, setIsEraser] = useState(false);
-  const { socket, collabData } = props;
-  const { roomId } = collabData;
+  const canvasRef = useRef();
+  const { auth } = useAuth();
+  const { socket } = auth;
 
   useEffect(() => {
     socket.on("receiveDrawing", ({ strokeData }) => {
@@ -35,8 +47,8 @@ const CollaborativeWhiteBoard = (props) => {
     };
   }, []);
 
-  const handleStrokeWidthChange = (event) => {
-    setStrokeWidth(event.target.value);
+  const handleStrokeWidthChange = (width) => {
+    setStrokeWidth(width);
   };
 
   const handleStrokeColorChange = (event) => {
@@ -65,36 +77,47 @@ const CollaborativeWhiteBoard = (props) => {
   };
 
   return (
-    <Stack
-      height={props.hidden === true ? "100%" : "0"}
-      visibility={props.hidden === true ? "none" : "hidden"}
-      maxHeight="100%"
-    >
-      <Box display="flex" flexDirection="row">
-        <input
-          type="number"
+    <Stack h="full" minH="full" maxH="full">
+      <Flex>
+        <NumberInput
+          mr="2"
           min="1"
           max="24"
           value={strokeWidth}
           onChange={handleStrokeWidthChange}
-        />
-        <input type="color" onChange={handleStrokeColorChange} />
-        <button onClick={handleEraserToggle}>
+        >
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+        <Input type="color" mr="2" onChange={handleStrokeColorChange} />
+        <Button mr="2" colorScheme="teal" onClick={handleEraserToggle}>
           {isEraser ? "Pen" : "Eraser"}
-        </button>
-        <button onClick={handleCanvasUndo}>Undo</button>
-        <button onClick={handleCanvasRedo}>Redo</button>
-        <button onClick={handleCanvasClear}>Clear</button>
+        </Button>
+        <Button mr="2" colorScheme="teal" onClick={handleCanvasUndo}>
+          Undo
+        </Button>
+        <Button mr="2" colorScheme="teal" onClick={handleCanvasRedo}>
+          Redo
+        </Button>
+        <Button colorScheme="teal" onClick={handleCanvasClear}>
+          Clear
+        </Button>
+      </Flex>
+      <Box h="full" minH="full" maxH="full" pb="149">
+        <ReactSketchCanvas
+          ref={canvasRef}
+          height="100%"
+          strokeColor={strokeColor}
+          strokeWidth={strokeWidth}
+          eraserWidth={strokeWidth}
+          onStroke={handleCanvasStroke}
+        />
       </Box>
-      <ReactSketchCanvas
-        ref={canvasRef}
-        strokeColor={strokeColor}
-        strokeWidth={strokeWidth}
-        eraserWidth={strokeWidth}
-        onStroke={handleCanvasStroke}
-      />
     </Stack>
   );
 };
 
-export { CollaborativeWhiteBoard };
+export default WhiteBoard;

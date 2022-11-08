@@ -1,38 +1,33 @@
-import { Routes, Route } from "react-router-dom";
-import LandingPage from "./components/LandingPage";
-import SignupPage from "./components/SignupPage";
-import LoginPage from "./components/LoginPage";
-import MainPage from "./components/MainPage";
-import WaitingPage from "./components/WaitingPage";
-import CollaborationPage from "./components/CollaborationPage";
-import InvalidPage from "./components/InvalidPage";
-import RequireAuth from "./components/RequireAuth";
+import { Route, Routes } from "react-router-dom";
 import PersistLogin from "./components/PersistLogin";
-import AccountVerifiedPage from "./components/AccountVerifiedPage";
-import RequestResetPasswordPage from "./components/RequestResetPasswordPage";
-import ResetPasswordPage from "./components/ResetPasswordPage";
-const App = () => {
+import RequireAuth from "./components/RequireAuth";
+import AccountSettingsPage from "./components/pages/AccountSettingsPage";
+import CollaborationPage from "./components/pages/CollaborationPage";
+import ForgetPasswordPage from "./components/pages/ForgetPasswordPage";
+import HomePage from "./components/pages/HomePage";
+import InvalidPage from "./components/pages/InvalidPage";
+import LandingPage from "./components/pages/LandingPage";
+import LoginPage from "./components/pages/LoginPage";
+import RegisterPage from "./components/pages/RegisterPage";
+import ResetPasswordPage from "./components/pages/ResetPasswordPage";
+import "./App.css";
+
+function App() {
   return (
     <Routes>
       <Route exact path="/" element={<LandingPage />} />
-      <Route path="/signup" element={<SignupPage />} />
-      <Route
-        path="/confirm/:confirmationCode"
-        element={<AccountVerifiedPage />}
-      />
+      <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route
-        path="/requestResetPassword"
-        element={<RequestResetPasswordPage />}
-      />
+      <Route path="/forgetPassword" element={<ForgetPasswordPage />} />
       <Route
         path="/resetPassword/:userId/:token"
         element={<ResetPasswordPage />}
       />
+
       <Route element={<PersistLogin />}>
         <Route element={<RequireAuth />}>
-          <Route path="/matching" element={<MainPage />} />
-          <Route path="/waiting" element={<WaitingPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/accountSettings" element={<AccountSettingsPage />} />
           <Route path="/collaboration" element={<CollaborationPage />} />
         </Route>
       </Route>
@@ -40,6 +35,6 @@ const App = () => {
       <Route path="/*" element={<InvalidPage />} />
     </Routes>
   );
-};
+}
 
 export default App;

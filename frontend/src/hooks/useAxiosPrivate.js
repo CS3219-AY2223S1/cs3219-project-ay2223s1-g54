@@ -1,13 +1,6 @@
 import axios from "axios";
-import { useAuth } from "./useAuth";
+import useAuth from "./useAuth";
 import useRefreshToken from "./useRefreshToken";
-
-const usePublicAxios = () => {
-  return axios.create({
-    withCredentials: true,
-    headers: { "Content-Type": "application/json" },
-  });
-};
 
 const usePrivateAxios = () => {
   const { auth } = useAuth();
@@ -46,4 +39,4 @@ const usePrivateAxios = () => {
   return axiosPrivate;
 };
 
-export { usePublicAxios, usePrivateAxios };
+export default usePrivateAxios;
