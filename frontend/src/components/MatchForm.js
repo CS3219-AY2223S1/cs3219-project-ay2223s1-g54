@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast, Button, Select, Stack } from "@chakra-ui/react";
+import { useToast, Button, Flex, Select, Stack } from "@chakra-ui/react";
 import MatchTimer from "./MatchTimer";
 import useAuth from "../hooks/useAuth";
 
@@ -50,29 +50,33 @@ const MatchForm = () => {
         <option value="2">Hard</option>
         <option value="3">Random</option>
       </Select>
-      <Button
-        size="lg"
-        color="white"
-        bg="green.400"
-        _hover={{
-          bg: "green.500",
-        }}
-        isLoading={isMatching}
-        loadingText="Looking for a match"
-        onClick={handleMatch}
-        ref={matchBtnRef}
-      >
-        Match
-      </Button>
       {isMatching && <MatchTimer onMatchExpiry={handleMatchExpired} />}
-      <Button
-        variant="outline"
-        size="lg"
-        isDisabled={!isMatching}
-        onClick={handleMatchCancel}
-      >
-        Cancel
-      </Button>
+      <Flex>
+        <Button
+          w="100%"
+          mr="5"
+          color="white"
+          bg="green.400"
+          _hover={{
+            bg: "green.500",
+          }}
+          isLoading={isMatching}
+          loadingText="Looking for a match"
+          onClick={handleMatch}
+          ref={matchBtnRef}
+        >
+          Match
+        </Button>
+        <Button
+          w="100%"
+          mr="5"
+          variant="outline"
+          isDisabled={!isMatching}
+          onClick={handleMatchCancel}
+        >
+          Cancel
+        </Button>
+      </Flex>
     </Stack>
   );
 };
