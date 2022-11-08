@@ -60,7 +60,6 @@ export const getQuestionById = async (id) => {
     throw new NoQuestionEntries(responseMessages.NO_DATABASE_ENTRIES);
   }
 
-  const questions = await QuestionModel.findOne(searchCondition);
-
-  return questions;
+  const question = await QuestionModel.findOne(searchCondition);
+  return question;
 };

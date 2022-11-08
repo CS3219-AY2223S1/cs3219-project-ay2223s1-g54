@@ -2,7 +2,11 @@ import express from "express";
 import asyncHandler from "express-async-handler";
 import * as statusCodes from "../constants/statusCodes.js";
 import { difficultyEnum } from "../constants/difficultyEnum.js";
-import { getRandomQuestion, getQuestions } from "../services/questionService.js";
+import {
+  getRandomQuestion,
+  getQuestions,
+  getQuestionById,
+} from "../services/questionService.js";
 
 const questionRoutes = express.Router();
 
@@ -49,8 +53,8 @@ questionRoutes.get(
 questionRoutes.get(
   "/id",
   asyncHandler(async (req, res) => {
-    const questions = await getQuestions(req.query.id);
-    return res.status(statusCodes.OK).json({ questions });
+    const question = await getQuestionById(req.query.id);
+    return res.status(statusCodes.OK).json({ question });
   })
 );
 

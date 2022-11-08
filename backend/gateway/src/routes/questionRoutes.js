@@ -41,8 +41,7 @@ questionRoutes.get(
   asyncHandler(verifyAccessToken),
   asyncHandler(async (req, res) => {
     const { searchTerm } = req.query;
-    let questions;
-    questions = await questionService.getSearchQuestions(searchTerm);
+    const questions = await questionService.getSearchQuestions(searchTerm);
     return res.status(statusCodes.OK).json({ questions });
   })
 );
@@ -52,8 +51,7 @@ questionRoutes.get(
   asyncHandler(verifyAccessToken),
   asyncHandler(async (req, res) => {
     const { id } = req.query;
-    let question;
-    question = await questionService.getSearchQuestions(id);
+    const question = await questionService.getSearchQuestionById(id);
     return res.status(statusCodes.OK).json({ question });
   })
 );
