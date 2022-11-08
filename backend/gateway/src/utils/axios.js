@@ -1,5 +1,5 @@
 import axios from "axios";
-import { MicroServiceError } from "../exceptions/MicroserviceError.js";
+import { MicroServiceError } from "../exceptions/MicroServiceError.js";
 import { UnknownError } from "../exceptions/UnknownError.js";
 
 export const getAxios = async (url) => {

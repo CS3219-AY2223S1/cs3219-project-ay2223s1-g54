@@ -1,14 +1,14 @@
 branch-defaults:
   default:
-    environment: Peerprepuserserviceenv-env
+    environment: Peerprep54frontend-env
 environment-defaults:
-  Peerprepuserserviceenv-env:
+  Peerprep54frontend-env:
     branch: null
     repository: null
 global:
-  application_name: Peerprepuserservice-env
+  application_name: Peerprep54Frontend
   default_ec2_keyname: null
-  default_platform: Node.js 16 running on 64bit Amazon Linux 2
+  default_platform: Docker running on 64bit Amazon Linux 2
   default_region: ap-southeast-1
   include_git_submodules: true
   instance_profile: null

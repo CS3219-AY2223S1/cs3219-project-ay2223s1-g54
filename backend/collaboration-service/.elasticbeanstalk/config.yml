@@ -1,12 +1,12 @@
 branch-defaults:
   default:
-    environment: Peerprepuserserviceenv-env
+    environment: Peerprepcollaborationserviceenv-env
 environment-defaults:
-  Peerprepuserserviceenv-env:
+  Peerprepcollaborationserviceenv-env:
     branch: null
     repository: null
 global:
-  application_name: Peerprepuserservice-env
+  application_name: Peerprepcollaborationservice-env
   default_ec2_keyname: null
   default_platform: Node.js 16 running on 64bit Amazon Linux 2
   default_region: ap-southeast-1

@@ -1,0 +1,27 @@
+name: Communication Service CD
+
+on:
+  push:
+    branches: [prod]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install EB CLI using pip
+        run: |
+          python -m pip install --upgrade pip
+          pip install awsebcli
+      - name: Deploy to Elastic Beanstalk
+        working-directory: ./backend/communication-service
+        run: |
+          eb deploy
