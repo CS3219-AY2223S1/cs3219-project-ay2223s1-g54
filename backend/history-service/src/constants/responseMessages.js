@@ -1,0 +1,1 @@
+export const MISSING_CODE_FIELD = "The code field is missing";
