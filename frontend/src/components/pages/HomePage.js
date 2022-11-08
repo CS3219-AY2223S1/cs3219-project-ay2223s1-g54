@@ -4,12 +4,14 @@ import {
   Box,
   Button,
   Container,
+  Heading,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
+import HistoryPane from "../HistoryPane";
 import MatchForm from "../MatchForm";
 import Navbar from "../Navbar";
 import BaseLayout from "../layouts/BaseLayout";
@@ -65,10 +67,20 @@ const HomePage = () => {
           </MenuList>
         </Menu>
       </Navbar>
-
-      <Container pt="100">
+      <Container minW="60%" maxW="60%" pt="2">
         <Box p="8" bg="#ffffff" rounded="lg" boxShadow="lg">
+          <Heading textAlign="center" mb="5">
+            Matching
+          </Heading>
           <MatchForm />
+        </Box>
+      </Container>
+      <Container minW="60%" maxW="60%" pt="2">
+        <Box p="8" bg="#ffffff" rounded="lg" boxShadow="lg">
+          <Heading textAlign="center" mb="5">
+            Latest Submissions
+          </Heading>
+          <HistoryPane />
         </Box>
       </Container>
     </BaseLayout>

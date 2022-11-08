@@ -67,6 +67,7 @@ const DevEnvironment = (props) => {
     setLanguageSlug(firstSlug);
     setLanguageId(languageIdMap.get(firstSlug));
     setCode(languageMap[firstSlug].code);
+    props.onSetCode(languageMap[firstSlug].code);
 
     socket.on("receiveLanguage", ({ language }) => {
       updateCode(languageMap[language].code);
