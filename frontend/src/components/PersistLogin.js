@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { LinearProgress } from "@mui/material";
-import { useAuth } from "../hooks/useAuth";
+import { Progress } from "@chakra-ui/react";
+import useAuth from "../hooks/useAuth";
 import useRefreshToken from "../hooks/useRefreshToken";
 
 const PersistLogin = () => {
@@ -25,7 +25,13 @@ const PersistLogin = () => {
 
   return (
     <React.Fragment>
-      {!persist ? <Outlet /> : isLoading ? <LinearProgress /> : <Outlet />}
+      {!persist ? (
+        <Outlet />
+      ) : isLoading ? (
+        <Progress size="xs" isIndeterminate />
+      ) : (
+        <Outlet />
+      )}
     </React.Fragment>
   );
 };
