@@ -35,4 +35,14 @@ historyRoutes.get(
   })
 )
 
+historyRoutes.get(
+  "/submissions/:userId",
+  asyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+
+    const userSubmissionHistory = await historyService.getUserSubmissionHistory(userId);
+    return res.status(statusCodes.OK).json({ userSubmissionHistory });
+  })
+)
+
 export { historyRoutes };
