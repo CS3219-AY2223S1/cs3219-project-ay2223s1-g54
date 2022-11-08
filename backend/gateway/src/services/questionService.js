@@ -11,7 +11,6 @@ export const getAnyQuestion = async () => {
 };
 
 export const getEasyQuestion = async (categories) => {
-  console.log(categories)
   const resQuestion = await axiosDecorator(questionAxios.get)("/easy", {
     params: { categories },
   });

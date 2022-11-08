@@ -5,8 +5,6 @@ const registerMatchHandlers = async (io, pubClient, subClient) => {
 
   subClient.subscribe("findMatch", async (data) => {
     const { difficulty, userId, username, categories } = JSON.parse(data);
-    console.log("from gateway to matching");
-    console.log(categories);
     await findMatchEvent(defaultParams, difficulty, userId, username, categories);
   });
 };
@@ -16,12 +14,10 @@ const findMatchEvent = async (defaultParams, difficulty, userId, username, userC
 
   const matchEntry = await findMatch(difficulty, userId, username, userCategories);
   if (!matchEntry) {
-    console.log(userCategories);
     return; // need to wait for next person to join
   }
 
   const { userId1, userId2, username1, username2, categories } = matchEntry;
-  console.log(categories);
 
   const data = JSON.stringify({
     difficulty,

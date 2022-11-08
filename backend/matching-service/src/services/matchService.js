@@ -12,8 +12,6 @@ export const findMatch = async (difficulty, userId, username, categories) => {
   matchEntry.userId2 = userId;
   matchEntry.username2 = username;
   const newCatergories = matchEntry.categories.filter(value => categories.includes(value));
-  console.log("new cat");
-  console.log(newCatergories);
   matchEntry.categories = newCatergories;
 
   await matchEntry.save();

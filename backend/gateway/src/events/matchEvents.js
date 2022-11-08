@@ -29,8 +29,6 @@ const createRoomSockets = async (
 ) => {
   const [io, pubClient, subClient] = defaultParams;
 
-  console.log(categories);
-
   // get socketIDs of both userIDs from redis map
   const socketId1 = await pubClient.hGet("userSocketMap", userId1);
   const socketId2 = await pubClient.hGet("userSocketMap", userId2);

@@ -89,8 +89,6 @@ const clientDisconnectedEvent = async (defaultParams, userId) => {
 
 const findMatchEvent = async (defaultParams, difficulty, userId, username, categories) => {
   const [io, pubClient, subClient] = defaultParams;
-  console.log("gateway event line 92")
-  console.log(categories);
   const data = JSON.stringify({ difficulty, userId, username, categories });
   await pubClient.publish("findMatch", data);
 };

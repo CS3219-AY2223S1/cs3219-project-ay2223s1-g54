@@ -6,7 +6,6 @@ export const createMatch = async (
   username1,
   categories
 ) => {
-  console.log(categories);
   const createdMatch = await MatchModel.create({
     difficulty,
     userId1,

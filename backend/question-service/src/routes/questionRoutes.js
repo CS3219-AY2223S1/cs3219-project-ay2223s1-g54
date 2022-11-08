@@ -42,7 +42,6 @@ questionRoutes.get(
 questionRoutes.get(
   "/hard",
   asyncHandler(async (req, res) => {
-    console.log(req.query);
     const data = req.query;
     const categories = data.categories;
     const question = await getRandomCatergoryQuestion(difficultyEnum.Hard, categories);
@@ -53,7 +52,6 @@ questionRoutes.get(
 questionRoutes.get(
   "/search",
   asyncHandler(async (req, res) => {
-    console.log(req);
     const questions = await getQuestions(req.query.searchTerm);
     return res.status(statusCodes.OK).json({ questions });
   })

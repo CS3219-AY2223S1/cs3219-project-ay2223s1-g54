@@ -10,15 +10,12 @@ const questionRoutes = express.Router();
 
 questionRoutes.get(
   "/random",
-  //asyncHandler(verifyAccessToken),
+  asyncHandler(verifyAccessToken),
   asyncHandler(async (req, res) => {
-    console.log(req.query);
     const { difficulty, categories } = req.query;
     const difficultyIdx = parseInt(difficulty);
     const categoriesArray = String(categories).split(",");
-    console.log(categoriesArray);
-    console.log(categories);
-
+    
     // 0 = easy, 1 = medium, 2 = hard, 3 = any
     if (!difficultyIdx) {
       throw new MalformedRequest(responseMessages.MISSING_DIFFICULTY_FIELD);
