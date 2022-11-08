@@ -9,6 +9,7 @@ import HomePage from "./components/pages/HomePage";
 import InvalidPage from "./components/pages/InvalidPage";
 import LandingPage from "./components/pages/LandingPage";
 import LoginPage from "./components/pages/LoginPage";
+import QuestionBankPage from "./components/pages/QuestionBankPage";
 import RegisterPage from "./components/pages/RegisterPage";
 import ResetPasswordPage from "./components/pages/ResetPasswordPage";
 import SubmissionViewerPage from "./components/pages/SubmissionViewerPage";
@@ -33,6 +34,7 @@ function App() {
       <Route element={<PersistLogin />}>
         <Route element={<RequireAuth />}>
           <Route path="/home" element={<HomePage />} />
+          <Route path="/questionBank" element={<QuestionBankPage />} />
           <Route path="/accountSettings" element={<AccountSettingsPage />} />
           <Route path="/submissionViewer" element={<SubmissionViewerPage />} />
           <Route path="/collaboration" element={<CollaborationPage />} />
