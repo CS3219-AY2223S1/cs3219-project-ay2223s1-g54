@@ -21,7 +21,7 @@ historyRoutes.post(
     await historyService.createSubmission(userId, questionId, code);
     return res.sendStatus(statusCodes.OK);
   })
-)
+);
 
 historyRoutes.get(
   "/submissions/:userId/:questionId/:number",
@@ -30,9 +30,25 @@ historyRoutes.get(
     const questionId = req.params.questionId;
     const number = req.params.number;
 
-    const submissionHistory = await historyService.getSubmissionHistory(userId, questionId, number);
+    const submissionHistory = await historyService.getSubmissionHistory(
+      userId,
+      questionId,
+      number
+    );
     return res.status(statusCodes.OK).json({ submissionHistory });
   })
-)
+);
+
+historyRoutes.get(
+  "/submissions/:userId",
+  asyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+
+    const userSubmissionHistory = await historyService.getUserSubmissionHistory(
+      userId
+    );
+    return res.status(statusCodes.OK).json({ userSubmissionHistory });
+  })
+);
 
 export { historyRoutes };

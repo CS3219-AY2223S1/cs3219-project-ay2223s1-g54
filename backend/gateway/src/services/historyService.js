@@ -11,3 +11,8 @@ export const getSubmissionHistory = async (userId, questionId, number) => {
   const res = await axiosDecorator(judgeAxios.get)(`/submissions/${userId}/${questionId}/${number}`);
   return res.data;
 };
+
+export const getUserSubmissionHistory = async (userId) => {
+  const res = await axiosDecorator(judgeAxios.get)(`/submissions/${userId}`);
+  return res.data;
+}
