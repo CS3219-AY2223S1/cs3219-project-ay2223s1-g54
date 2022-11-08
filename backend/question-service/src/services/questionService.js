@@ -50,6 +50,11 @@ export const getQuestions = async (searchTerm) => {
   return questions;
 };
 
+export const getAllQuestions = async () => {
+  const questions = await QuestionModel.find({});
+  return questions;
+};
+
 export const getQuestionById = async (id) => {
   const searchCondition = {
     id: id,

@@ -47,6 +47,15 @@ questionRoutes.get(
 );
 
 questionRoutes.get(
+  "/all",
+  asyncHandler(verifyAccessToken),
+  asyncHandler(async (req, res) => {
+    const questions = await questionService.getAllQuestions();
+    return res.status(statusCodes.OK).json({ questions });
+  })
+);
+
+questionRoutes.get(
   "/id",
   asyncHandler(verifyAccessToken),
   asyncHandler(async (req, res) => {

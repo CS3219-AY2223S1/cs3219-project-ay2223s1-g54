@@ -26,7 +26,11 @@ const HomePage = () => {
   const axiosPrivate = useAxiosPrivate();
   const { username } = auth;
 
-  const handleAccountSettings = async () => {
+  const handleQuestionBank = () => {
+    navigate("/questionBank");
+  };
+
+  const handleAccountSettings = () => {
     navigate("/accountSettings");
   };
 
@@ -59,6 +63,7 @@ const HomePage = () => {
             {username}
           </MenuButton>
           <MenuList alignItems="center">
+            <MenuItem onClick={handleQuestionBank}>Question Bank</MenuItem>
             <MenuItem onClick={handleAccountSettings}>
               Account Settings
             </MenuItem>
