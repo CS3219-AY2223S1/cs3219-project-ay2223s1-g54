@@ -3,6 +3,7 @@ import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import AccountSettingsPage from "./components/pages/AccountSettingsPage";
 import CollaborationPage from "./components/pages/CollaborationPage";
+import ConfirmAccountPage from "./components/pages/ConfirmAccountPage";
 import ForgetPasswordPage from "./components/pages/ForgetPasswordPage";
 import HomePage from "./components/pages/HomePage";
 import InvalidPage from "./components/pages/InvalidPage";
@@ -18,6 +19,10 @@ function App() {
       <Route exact path="/" element={<LandingPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/confirm/:confirmationCode"
+        element={<ConfirmAccountPage />}
+      />
       <Route path="/forgetPassword" element={<ForgetPasswordPage />} />
       <Route
         path="/resetPassword/:userId/:token"

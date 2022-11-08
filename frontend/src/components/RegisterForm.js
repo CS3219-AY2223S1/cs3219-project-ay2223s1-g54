@@ -20,6 +20,7 @@ import useAxiosPublic from "../hooks/useAxiosPublic";
 export const RegisterForm = (props) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
   const emailFieldRef = useRef();
   const usernameFieldRef = useRef();
   const passwordFieldRef = useRef();
@@ -76,8 +77,13 @@ export const RegisterForm = (props) => {
   };
 
   const handleRegistration = async () => {
+    setIsRegistering(true);
+
     const validationResult = validateFields();
-    if (!validationResult) return;
+    if (!validationResult) {
+      setIsRegistering(false);
+      return;
+    }
 
     const toastData = {
       title: "",
@@ -112,6 +118,7 @@ export const RegisterForm = (props) => {
     }
 
     toast(toastData);
+    setIsRegistering(false);
   };
 
   return (
@@ -161,6 +168,7 @@ export const RegisterForm = (props) => {
         _hover={{
           bg: "green.500",
         }}
+        isLoading={isRegistering}
         onClick={handleRegistration}
       >
         Sign Up
