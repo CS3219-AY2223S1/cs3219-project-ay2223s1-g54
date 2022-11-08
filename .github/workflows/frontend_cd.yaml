@@ -12,8 +12,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       CI: false
-      REACT_APP_URI_USER_SVC: ${{ secrets.REACT_APP_URI_USER_SVC }}
-      REACT_APP_URI_MATCHING_SVC: ${{ secrets.REACT_APP_URI_MATCHING_SVC }}
+      REACT_APP_URI_GATEWAY: ${{ secrets.REACT_APP_URI_GATEWAY }}
     steps:
       - uses: actions/checkout@v2
       - name: Install Python 3.9
