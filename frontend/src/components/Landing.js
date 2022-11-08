@@ -22,9 +22,9 @@ const Landing = () => {
 
   return (
     <Stack bg="white" p="5">
-      <Heading>PeerPrep</Heading>
+      <Heading textAlign="center">PeerPrep</Heading>
       <Image src="assets/LandingPage.png" />
-      <Text>
+      <Text textAlign="justify">
         PeerPrep is the best interview preparation platform and a peer matching
         system where everyone such as yourself can find peers to practice
         whiteboard-style interview coding questions together. Sign up now to

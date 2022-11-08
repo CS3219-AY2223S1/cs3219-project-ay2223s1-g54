@@ -13,7 +13,7 @@ const Navbar = (props) => {
   return (
     <Box px="4" bg={useColorModeValue("gray.100", "gray.900")}>
       <Flex h="16" alignItems="center" justifyContent="space-between">
-        <Box>PeerPrep</Box>
+        <Box>𝒫𝑒𝑒𝓇𝒫𝓇𝑒𝓅</Box>
         <Flex direction="row" alignItems="center" justifyContent="center">
           {props.children}
         </Flex>
