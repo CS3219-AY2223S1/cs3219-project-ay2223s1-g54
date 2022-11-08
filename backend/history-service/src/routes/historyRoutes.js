@@ -24,11 +24,15 @@ historyRoutes.post(
 );
 
 historyRoutes.get(
-  "/submissions/:userId/:questionId/:number",
+  "/submissions/:userId/:questionId",
   asyncHandler(async (req, res) => {
     const userId = req.params.userId;
     const questionId = req.params.questionId;
-    const number = req.params.number;
+    const number = req.query.number;
+
+    if (!number) {
+      throw new MalformedRequest(responseMessages.MISSING_QUERY_PARAM_NUMBER);
+    }
 
     const submissionHistory = await historyService.getSubmissionHistory(
       userId,
@@ -43,9 +47,14 @@ historyRoutes.get(
   "/submissions/:userId",
   asyncHandler(async (req, res) => {
     const userId = req.params.userId;
+    const number = req.query.number;
+
+    if (!number) {
+      throw new MalformedRequest(responseMessages.MISSING_QUERY_PARAM_NUMBER);
+    }
 
     const userSubmissionHistory = await historyService.getUserSubmissionHistory(
-      userId
+      userId, number
     );
     return res.status(statusCodes.OK).json({ userSubmissionHistory });
   })
