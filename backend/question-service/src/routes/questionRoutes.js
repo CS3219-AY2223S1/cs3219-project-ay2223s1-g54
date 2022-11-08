@@ -46,4 +46,12 @@ questionRoutes.get(
   })
 );
 
+questionRoutes.get(
+  "/id",
+  asyncHandler(async (req, res) => {
+    const questions = await getQuestions(req.query.id);
+    return res.status(statusCodes.OK).json({ questions });
+  })
+);
+
 export { questionRoutes };
