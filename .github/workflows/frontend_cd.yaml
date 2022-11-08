@@ -28,4 +28,4 @@ jobs:
         run: |
           npm install
           npm run build
-          eb deploy --timeout 30
+          eb deploy

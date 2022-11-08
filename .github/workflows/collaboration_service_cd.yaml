@@ -24,6 +24,4 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         working-directory: ./backend/collaboration-service
         run: |
-          npm install
-          npm run build
-          eb deploy --timeout 30
+          eb deploy
