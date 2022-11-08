@@ -16,7 +16,7 @@ historyRoutes.post(
     const userId = req.params.userId;
     const questionId = req.params.questionId;
     await createSubmission(userId, questionId, req.body);
-    res.status(statusCodes.OK);
+    res.sendStatus(statusCodes.OK);
   })
 );
 

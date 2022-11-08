@@ -38,11 +38,21 @@ questionRoutes.get(
 
 questionRoutes.get(
   "/search",
+  asyncHandler(verifyAccessToken),
   asyncHandler(async (req, res) => {
     const { searchTerm } = req.query;
-    let questions;
-    questions = await questionService.getSearchQuestions(searchTerm);
+    const questions = await questionService.getSearchQuestions(searchTerm);
     return res.status(statusCodes.OK).json({ questions });
+  })
+);
+
+questionRoutes.get(
+  "/id",
+  asyncHandler(verifyAccessToken),
+  asyncHandler(async (req, res) => {
+    const { id } = req.query;
+    const question = await questionService.getSearchQuestionById(id);
+    return res.status(statusCodes.OK).json({ question });
   })
 );
 

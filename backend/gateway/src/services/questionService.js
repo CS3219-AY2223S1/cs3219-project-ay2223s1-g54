@@ -32,13 +32,19 @@ export const getHardQuestion = async () => {
 };
 
 export const getSearchQuestions = async (searchTerm) => {
-  const resQuestions = await axiosDecorator(questionAxios.get)(
-    "/search",
-    {
-      params: { searchTerm },
-    }
-  );
+  const resQuestions = await axiosDecorator(questionAxios.get)("/search", {
+    params: { searchTerm },
+  });
 
   const { questions } = resQuestions.data;
   return questions;
+};
+
+export const getSearchQuestionById = async (id) => {
+  const resQuestions = await axiosDecorator(questionAxios.get)("/id", {
+    params: { id },
+  });
+
+  const { question } = resQuestions.data;
+  return question;
 };

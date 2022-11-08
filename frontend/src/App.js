@@ -11,6 +11,7 @@ import LandingPage from "./components/pages/LandingPage";
 import LoginPage from "./components/pages/LoginPage";
 import RegisterPage from "./components/pages/RegisterPage";
 import ResetPasswordPage from "./components/pages/ResetPasswordPage";
+import SubmissionViewerPage from "./components/pages/SubmissionViewerPage";
 import "./App.css";
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="/home" element={<HomePage />} />
           <Route path="/accountSettings" element={<AccountSettingsPage />} />
+          <Route path="/submissionViewer" element={<SubmissionViewerPage />} />
           <Route path="/collaboration" element={<CollaborationPage />} />
         </Route>
       </Route>

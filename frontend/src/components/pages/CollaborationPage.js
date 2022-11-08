@@ -20,16 +20,20 @@ import Navbar from "../Navbar";
 import VideoAudioChat from "../VideoAudioChat";
 import WhiteBoard from "../WhiteBoard";
 import BaseLayout from "../layouts/BaseLayout";
+import { URL_HISTORY_SVC_USER_SUBMISSIONS } from "../../configs";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import "react-reflex/styles.css";
 
 const CollaborationPage = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [code, setCode] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const toast = useToast();
   const { auth } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
   const { userId, socket } = auth;
   const collabData = location.state.collabData;
   const { roomId, questionSet, userId1, userId2, username1, username2 } =
@@ -95,7 +99,37 @@ const CollaborationPage = () => {
     };
   }, [questionIndex]);
 
-  const handleSubmitCode = () => {
+  const handleSubmitCode = async () => {
+    setIsSubmitting(true);
+
+    const toastData = {
+      title: "",
+      description: "",
+      status: "",
+      duration: 3000,
+      isClosable: true,
+    };
+
+    try {
+      const codeSubmissionUrl = `${URL_HISTORY_SVC_USER_SUBMISSIONS}/${userId}/${questionObject.id}`;
+      await axiosPrivate.post(codeSubmissionUrl, { code: code });
+      toastData.status = "success";
+      toastData.title = "Success";
+      toastData.description = "Code successfully submitted";
+    } catch (err) {
+      toastData.status = "error";
+      if (err?.response?.data?.error) {
+        const { name, message } = err.response.data.error;
+        toastData.title = name;
+        toastData.description = message;
+      } else {
+        toastData.title = "Unknown Error";
+        toastData.description = "Please try again later";
+      }
+    }
+
+    toast(toastData);
+    setIsSubmitting(false);
     socket.emit("sendSubmitCode", { roomId });
   };
 
@@ -108,7 +142,13 @@ const CollaborationPage = () => {
       <Navbar>
         {((userId === userId1 && questionIndex === 0) ||
           (userId === userId2 && questionIndex === 1)) && (
-          <Button mr="2" colorScheme="blue" onClick={handleSubmitCode}>
+          <Button
+            mr="2"
+            colorScheme="blue"
+            isLoading={isSubmitting}
+            loadingText="Submitting"
+            onClick={handleSubmitCode}
+          >
             Submit
           </Button>
         )}
