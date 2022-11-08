@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, Flex, Stack } from "@chakra-ui/react";
+import { Button, Flex, Stack } from "@chakra-ui/react";
 import { MdMicNone, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
 import Peer from "peerjs";
 import useAuth from "../hooks/useAuth";
@@ -47,8 +47,10 @@ const VideoAudioChat = ({ userId1, userId2, username1, username2 }) => {
       return () => {
         dispose();
         peer.destroy();
-        window.localStream.getVideoTracks().forEach((track) => track.stop());
-        window.localStream.getAudioTracks().forEach((track) => track.stop());
+        if (window.localStream) {
+          window.localStream.getVideoTracks().forEach((track) => track.stop());
+          window.localStream.getAudioTracks().forEach((track) => track.stop());
+        }
       };
     } else {
       const handler = (call) => {
@@ -73,8 +75,10 @@ const VideoAudioChat = ({ userId1, userId2, username1, username2 }) => {
         dispose();
         peer.off("call", handler);
         peer.destroy();
-        window.localStream.getVideoTracks().forEach((track) => track.stop());
-        window.localStream.getAudioTracks().forEach((track) => track.stop());
+        if (window.localStream) {
+          window.localStream.getVideoTracks().forEach((track) => track.stop());
+          window.localStream.getAudioTracks().forEach((track) => track.stop());
+        }
       };
     }
   }, []);
