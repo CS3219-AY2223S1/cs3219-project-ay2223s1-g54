@@ -10,10 +10,14 @@ const questionRoutes = express.Router();
 
 questionRoutes.get(
   "/random",
-  asyncHandler(verifyAccessToken),
+  //asyncHandler(verifyAccessToken),
   asyncHandler(async (req, res) => {
-    const { difficulty } = req.query;
+    console.log(req.query);
+    const { difficulty, categories } = req.query;
     const difficultyIdx = parseInt(difficulty);
+    const categoriesArray = String(categories).split(",");
+    console.log(categoriesArray);
+    console.log(categories);
 
     // 0 = easy, 1 = medium, 2 = hard, 3 = any
     if (!difficultyIdx) {
@@ -22,13 +26,15 @@ questionRoutes.get(
       throw new MalformedRequest(responseMessages.OUT_OF_RANGE_DIFFICULTY);
     }
 
+    //TODO throw error is category is empty
+
     let question;
     if (difficultyIdx == 1) {
-      question = await questionService.getEasyQuestion();
-    } else if (difficultyIdx == 1) {
-      question = await questionService.getMediumQuestion();
-    } else if (difficultyIdx == 1) {
-      question = await questionService.getHardQuestion();
+      question = await questionService.getEasyQuestion(categoriesArray);
+    } else if (difficultyIdx == 2) {
+      question = await questionService.getMediumQuestion(categoriesArray);
+    } else if (difficultyIdx == 3) {
+      question = await questionService.getHardQuestion(categoriesArray);
     } else {
       question = await questionService.getAnyQuestion();
     }

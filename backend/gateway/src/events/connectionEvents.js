@@ -15,8 +15,8 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
 
     socket.on(
       "findMatch",
-      async ({ difficulty, userId, username }) =>
-        await findMatchEvent(defaultParams, difficulty, userId, username)
+      async ({ difficulty, userId, username, categories }) =>
+        await findMatchEvent(defaultParams, difficulty, userId, username, categories)
     );
 
     socket.on(
@@ -87,9 +87,11 @@ const clientDisconnectedEvent = async (defaultParams, userId) => {
   await pubClient.hDel("userSocketMap", userId);
 };
 
-const findMatchEvent = async (defaultParams, difficulty, userId, username) => {
+const findMatchEvent = async (defaultParams, difficulty, userId, username, categories) => {
   const [io, pubClient, subClient] = defaultParams;
-  const data = JSON.stringify({ difficulty, userId, username });
+  console.log("gateway event line 92")
+  console.log(categories);
+  const data = JSON.stringify({ difficulty, userId, username, categories });
   await pubClient.publish("findMatch", data);
 };
 

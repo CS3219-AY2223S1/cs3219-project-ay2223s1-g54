@@ -4,7 +4,7 @@ const registerMatchHandlers = async (io, pubClient, subClient) => {
   const defaultParams = [io, pubClient, subClient];
 
   subClient.subscribe("createSocketRoom", async (data) => {
-    const { difficulty, userId1, userId2, username1, username2 } =
+    const { difficulty, userId1, userId2, username1, username2, categories } =
       JSON.parse(data);
     await createRoomSockets(
       defaultParams,
@@ -12,7 +12,8 @@ const registerMatchHandlers = async (io, pubClient, subClient) => {
       userId1,
       userId2,
       username1,
-      username2
+      username2,
+      categories
     );
   });
 };
@@ -23,9 +24,12 @@ const createRoomSockets = async (
   userId1,
   userId2,
   username1,
-  username2
+  username2,
+  categories
 ) => {
   const [io, pubClient, subClient] = defaultParams;
+
+  console.log(categories);
 
   // get socketIDs of both userIDs from redis map
   const socketId1 = await pubClient.hGet("userSocketMap", userId1);
@@ -43,11 +47,11 @@ const createRoomSockets = async (
   for (let i = 0; i < 2; i++) {
     let question;
     if (difficulty == 0) {
-      question = await questionService.getEasyQuestion();
+      question = await questionService.getEasyQuestion(categories);
     } else if (difficulty == 1) {
-      question = await questionService.getMediumQuestion();
+      question = await questionService.getMediumQuestion(categories);
     } else if (difficulty == 2) {
-      question = await questionService.getHardQuestion();
+      question = await questionService.getHardQuestion(categories);
     } else {
       question = await questionService.getAnyQuestion();
     }

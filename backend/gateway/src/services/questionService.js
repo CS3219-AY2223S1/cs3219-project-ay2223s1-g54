@@ -10,34 +10,38 @@ export const getAnyQuestion = async () => {
   return question;
 };
 
-export const getEasyQuestion = async () => {
-  const resQuestion = await axiosDecorator(questionAxios.get)("/easy");
+export const getEasyQuestion = async (categories) => {
+  console.log(categories)
+  const resQuestion = await axiosDecorator(questionAxios.get)("/easy", {
+    params: { categories },
+  });
 
   const { question } = resQuestion.data;
   return question;
 };
 
-export const getMediumQuestion = async () => {
-  const resQuestion = await axiosDecorator(questionAxios.get)("/medium");
+export const getMediumQuestion = async (categories) => {
+  const resQuestion = await axiosDecorator(questionAxios.get)("/medium", {
+    params: { categories },
+  });
 
   const { question } = resQuestion.data;
   return question;
 };
 
-export const getHardQuestion = async () => {
-  const resQuestion = await axiosDecorator(questionAxios.get)("/hard");
+export const getHardQuestion = async (categories) => {
+  const resQuestion = await axiosDecorator(questionAxios.get)("/hard", {
+    params: { categories },
+  });
 
   const { question } = resQuestion.data;
   return question;
 };
 
 export const getSearchQuestions = async (searchTerm) => {
-  const resQuestions = await axiosDecorator(questionAxios.get)(
-    "/search",
-    {
-      params: { searchTerm },
-    }
-  );
+  const resQuestions = await axiosDecorator(questionAxios.get)("/search", {
+    params: { searchTerm },
+  });
 
   const { questions } = resQuestions.data;
   return questions;

@@ -1,15 +1,22 @@
 import { MatchModel } from "../models/match.js";
 
-export const createMatch = async (difficulty, userId1, username1) => {
+export const createMatch = async (
+  difficulty,
+  userId1,
+  username1,
+  categories
+) => {
+  console.log(categories);
   const createdMatch = await MatchModel.create({
     difficulty,
     userId1,
     username1,
+    categories,
   });
   return createdMatch;
 };
 
-export const getNextAvailableMatch = async (difficulty, userId) => {
+export const getNextAvailableMatch = async (difficulty, userId, categories) => {
   const currDateTime = new Date().getTime();
   const earliestDateTime = new Date(currDateTime - 30000).getTime();
 
@@ -27,6 +34,8 @@ export const getNextAvailableMatch = async (difficulty, userId) => {
     userId1: { $ne: userId },
     createdAt: { $gte: earliestDateTime },
     userId2: { $eq: null },
+    categories: { $elemMatch: { $in: categories } },
   });
+
   return match;
 };

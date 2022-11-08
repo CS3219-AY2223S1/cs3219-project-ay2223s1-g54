@@ -21,8 +21,21 @@ const MatchForm = () => {
 
   const handleMatch = () => {
     setIsMatching(true);
+
     const difficulty = difficultyFieldRef.current.value;
-    socket.emit("findMatch", { difficulty, userId, username });
+    if (username === "wejiro6564") {
+      const categories = [
+        "Array",
+        "Backtracking",
+        "Binary Search Tree",
+        "Binary Search",
+        "Binary Tree",
+      ];
+      socket.emit("findMatch", { difficulty, userId, username, categories });
+    } else {
+      const categories = ["Backtracking", "Binary Search Tree", "Bitmask", "Brainteaser", "Breadth-First Search"];
+      socket.emit("findMatch", { difficulty, userId, username, categories });
+    }
   };
 
   const handleMatchCancel = () => {

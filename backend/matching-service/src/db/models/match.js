@@ -29,6 +29,11 @@ let MatchSchema = new Schema({
     type: Date,
     default: () => Date.now(),
   },
+  categories: [
+    {
+        type: String,
+      }
+  ],
 });
 
 const MatchModel = mongoose.model("MatchModel", MatchSchema);

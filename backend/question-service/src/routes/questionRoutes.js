@@ -2,7 +2,12 @@ import express from "express";
 import asyncHandler from "express-async-handler";
 import * as statusCodes from "../constants/statusCodes.js";
 import { difficultyEnum } from "../constants/difficultyEnum.js";
-import { getRandomQuestion, getQuestions } from "../services/questionService.js";
+import {
+  getCategories,
+  getRandomCatergoryQuestion,
+  getRandomQuestion,
+  getQuestions,
+} from "../services/questionService.js";
 
 const questionRoutes = express.Router();
 
@@ -17,7 +22,9 @@ questionRoutes.get(
 questionRoutes.get(
   "/easy",
   asyncHandler(async (req, res) => {
-    const question = await getRandomQuestion(difficultyEnum.Easy);
+    const data = req.query;
+    const categories = data.categories;
+    const question = await getRandomCatergoryQuestion(difficultyEnum.Easy, categories);
     return res.status(statusCodes.OK).json({ question });
   })
 );
@@ -25,7 +32,9 @@ questionRoutes.get(
 questionRoutes.get(
   "/medium",
   asyncHandler(async (req, res) => {
-    const question = await getRandomQuestion(difficultyEnum.Medium);
+    const data = req.query;
+    const categories = data.categories;
+    const question = await getRandomCatergoryQuestion(difficultyEnum.Medium, categories);
     return res.status(statusCodes.OK).json({ question });
   })
 );
@@ -33,7 +42,10 @@ questionRoutes.get(
 questionRoutes.get(
   "/hard",
   asyncHandler(async (req, res) => {
-    const question = await getRandomQuestion(difficultyEnum.Hard);
+    console.log(req.query);
+    const data = req.query;
+    const categories = data.categories;
+    const question = await getRandomCatergoryQuestion(difficultyEnum.Hard, categories);
     return res.status(statusCodes.OK).json({ question });
   })
 );
@@ -41,8 +53,33 @@ questionRoutes.get(
 questionRoutes.get(
   "/search",
   asyncHandler(async (req, res) => {
+    console.log(req);
     const questions = await getQuestions(req.query.searchTerm);
     return res.status(statusCodes.OK).json({ questions });
+  })
+);
+
+questionRoutes.get(
+  "/easy/category",
+  asyncHandler(async (req, res) => {
+    const categories = await getCategories(difficultyEnum.Easy);
+    return res.status(statusCodes.OK).json({ categories });
+  })
+);
+
+questionRoutes.get(
+  "/medium/category",
+  asyncHandler(async (req, res) => {
+    const categories = await getCategories(difficultyEnum.Medium);
+    return res.status(statusCodes.OK).json({ categories });
+  })
+);
+
+questionRoutes.get(
+  "/hard/category",
+  asyncHandler(async (req, res) => {
+    const categories = await getCategories(difficultyEnum.Hard);
+    return res.status(statusCodes.OK).json({ categories });
   })
 );
 
