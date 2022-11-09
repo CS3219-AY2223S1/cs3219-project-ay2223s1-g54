@@ -9,6 +9,11 @@ export const createMatch = async (difficulty, userId1, username1) => {
   return createdMatch;
 };
 
+export const deleteMatch = async (roomId) => {
+  const deletedMatch = await MatchModel.findByIdAndDelete(roomId);
+  return deletedMatch;
+};
+
 export const getNextAvailableMatch = async (difficulty, userId) => {
   const currDateTime = new Date().getTime();
   const earliestDateTime = new Date(currDateTime - 30000).getTime();
