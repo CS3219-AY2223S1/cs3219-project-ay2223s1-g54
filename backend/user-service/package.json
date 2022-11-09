@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "nodemon",
     "start": "node src/index.js",
-    "test": "jest --verbose --runInBand"
+    "test": "jest --testTimeout=20000 --runInBand"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
