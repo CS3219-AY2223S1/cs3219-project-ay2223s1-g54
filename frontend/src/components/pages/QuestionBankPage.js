@@ -42,8 +42,10 @@ const QuestionBankPage = () => {
   useEffect(() => {
     const searchResult = questionBank.filter((question) => {
       return (
-        question.title.includes(questionSearchQuery) ||
-        question.id.includes(questionSearchQuery)
+        question.title
+          .toLowerCase()
+          .includes(questionSearchQuery.toLowerCase()) ||
+        question.id.toLowerCase().includes(questionSearchQuery.toLowerCase())
       );
     });
     setQuestionSearchResult(searchResult);
@@ -100,26 +102,30 @@ const QuestionBankPage = () => {
                 minH="full"
                 maxH="full"
                 p="10"
-                pb="100"
+                pb="85"
               >
                 <Input
                   mb="5"
                   placeholder="Enter question details"
                   onChange={handleQuestionSearch}
                 ></Input>
-                <Box overflow="scroll">
+                <Box overflowY="scroll">
                   <UnorderedList>
-                    {questionSearchResult.map((questionObject) => {
-                      return (
-                        <ListItem key={questionObject.id}>
-                          <Link
-                            onClick={() => setQuestionObject(questionObject)}
-                          >
-                            {questionObject.title} [{questionObject.id}]
-                          </Link>
-                        </ListItem>
-                      );
-                    })}
+                    {questionSearchResult.length === 0 ? (
+                      <Text>No results found</Text>
+                    ) : (
+                      questionSearchResult.map((questionObject) => {
+                        return (
+                          <ListItem key={questionObject.id}>
+                            <Link
+                              onClick={() => setQuestionObject(questionObject)}
+                            >
+                              {questionObject.title} [{questionObject.id}]
+                            </Link>
+                          </ListItem>
+                        );
+                      })
+                    )}
                   </UnorderedList>
                 </Box>
               </Flex>
