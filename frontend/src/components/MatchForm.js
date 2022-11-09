@@ -6,6 +6,7 @@ import useAuth from "../hooks/useAuth";
 
 const MatchForm = () => {
   const [isMatching, setIsMatching] = useState(false);
+  const [roomId, setRoomId] = useState("");
   const difficultyFieldRef = useRef();
   const matchBtnRef = useRef();
   const navigate = useNavigate();
@@ -17,6 +18,15 @@ const MatchForm = () => {
     socket.on("readyForCollab", (collabData) => {
       navigate("/collaboration", { state: { collabData } });
     });
+
+    socket.on("userPendingMatch", ({ roomId }) => {
+      setRoomId(roomId);
+    });
+
+    return () => {
+      socket.off("readyForCollab");
+      socket.off("userPendingMatch");
+    };
   }, []);
 
   const handleMatch = () => {
@@ -26,6 +36,7 @@ const MatchForm = () => {
   };
 
   const handleMatchCancel = () => {
+    socket.emit("cancelMatch", { roomId });
     setIsMatching(false);
   };
 
