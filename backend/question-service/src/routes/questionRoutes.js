@@ -5,6 +5,7 @@ import { difficultyEnum } from "../constants/difficultyEnum.js";
 import {
   getRandomQuestion,
   getQuestions,
+  getAllQuestions,
   getQuestionById,
 } from "../services/questionService.js";
 
@@ -46,6 +47,14 @@ questionRoutes.get(
   "/search",
   asyncHandler(async (req, res) => {
     const questions = await getQuestions(req.query.searchTerm);
+    return res.status(statusCodes.OK).json({ questions });
+  })
+);
+
+questionRoutes.get(
+  "/all",
+  asyncHandler(async (req, res) => {
+    const questions = await getAllQuestions();
     return res.status(statusCodes.OK).json({ questions });
   })
 );

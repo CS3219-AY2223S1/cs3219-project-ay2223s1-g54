@@ -21,14 +21,17 @@ const Landing = () => {
   };
 
   return (
-    <Stack bg="white" p="5">
+    <Stack bg="white" alignItems="center">
       <Heading>PeerPrep</Heading>
-      <Image src="assets/LandingPage.png" />
+      <Image boxSize="150px" src="assets/LandingPage.png" />
+      <Text textAlign="justify">
+        <em>PeerPrep</em> is the best interview preparation platform and a peer
+        matching system where everyone such as yourself can find peers to
+        practice whiteboard-style interview coding questions together.
+      </Text>
       <Text>
-        PeerPrep is the best interview preparation platform and a peer matching
-        system where everyone such as yourself can find peers to practice
-        whiteboard-style interview coding questions together. Sign up now to
-        expand your algorithm knowledge and prepare for technical interviews.
+        Sign up now to expand your algorithm knowledge and prepare for technical
+        interviews.
       </Text>
       <Stack pt="5">
         <Box align="center" justify="center">

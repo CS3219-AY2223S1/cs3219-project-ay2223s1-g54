@@ -19,6 +19,10 @@ const registerConnectionHandlers = async (io, pubClient, subClient) => {
         await findMatchEvent(defaultParams, difficulty, userId, username)
     );
 
+    socket.on("cancelMatch", async ({ roomId }) => {
+      await cancelMatchEvent(defaultParams, roomId);
+    });
+
     socket.on(
       "sendLanguage",
       async ({ roomId, language }) =>
@@ -91,6 +95,14 @@ const findMatchEvent = async (defaultParams, difficulty, userId, username) => {
   const [io, pubClient, subClient] = defaultParams;
   const data = JSON.stringify({ difficulty, userId, username });
   await pubClient.publish("findMatch", data);
+};
+
+const cancelMatchEvent = async (defaultParams, roomId) => {
+  const [io, pubClient, subClient] = defaultParams;
+
+  io.in(roomId).socketsLeave(roomId);
+  const data = JSON.stringify({ roomId });
+  await pubClient.publish("cancelMatch", data);
 };
 
 const sendLanguage = async (defaultParams, roomId, language) => {

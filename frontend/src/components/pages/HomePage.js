@@ -11,6 +11,7 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import HistoryPane from "../HistoryPane";
 import MatchForm from "../MatchForm";
 import Navbar from "../Navbar";
@@ -26,7 +27,11 @@ const HomePage = () => {
   const axiosPrivate = useAxiosPrivate();
   const { username } = auth;
 
-  const handleAccountSettings = async () => {
+  const handleQuestionBank = () => {
+    navigate("/questionBank");
+  };
+
+  const handleAccountSettings = () => {
     navigate("/accountSettings");
   };
 
@@ -50,20 +55,35 @@ const HomePage = () => {
       <Navbar>
         <Menu>
           <MenuButton
-            minW="0"
-            variant="link"
-            rounded="full"
-            cursor="pointer"
+            colorScheme="gray.800"
             as={Button}
+            _hover={{ bg: "gray.600" }}
           >
             {username}
           </MenuButton>
-          <MenuList alignItems="center">
-            <MenuItem onClick={handleAccountSettings}>
+          <MenuList bg="gray.800" borderColor="gray.900" alignItems="center">
+            <MenuItem
+              _focus={{ bg: "gray.600" }}
+              _hover={{ bg: "gray.600" }}
+              onClick={handleQuestionBank}
+            >
+              Question Bank
+            </MenuItem>
+            <MenuItem
+              _focus={{ bg: "gray.600" }}
+              _hover={{ bg: "gray.600" }}
+              onClick={handleAccountSettings}
+            >
               Account Settings
             </MenuItem>
             <MenuDivider />
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem
+              _focus={{ bg: "gray.600" }}
+              _hover={{ bg: "gray.600" }}
+              onClick={handleLogout}
+            >
+              Logout
+            </MenuItem>
           </MenuList>
         </Menu>
       </Navbar>

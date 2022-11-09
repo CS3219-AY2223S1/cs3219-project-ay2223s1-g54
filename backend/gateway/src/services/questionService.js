@@ -40,6 +40,13 @@ export const getSearchQuestions = async (searchTerm) => {
   return questions;
 };
 
+export const getAllQuestions = async () => {
+  const resQuestions = await axiosDecorator(questionAxios.get)("/all");
+
+  const { questions } = resQuestions.data;
+  return questions;
+};
+
 export const getSearchQuestionById = async (id) => {
   const resQuestions = await axiosDecorator(questionAxios.get)("/id", {
     params: { id },

@@ -3,11 +3,17 @@ import * as questionService from "../services/questionService.js";
 const registerMatchHandlers = async (io, pubClient, subClient) => {
   const defaultParams = [io, pubClient, subClient];
 
+  subClient.subscribe("pendingMatch", async (data) => {
+    const { id, userId1 } = JSON.parse(data);
+    await pendingMatch(defaultParams, id, userId1);
+  });
+
   subClient.subscribe("createSocketRoom", async (data) => {
-    const { difficulty, userId1, userId2, username1, username2 } =
+    const { id, difficulty, userId1, userId2, username1, username2 } =
       JSON.parse(data);
     await createRoomSockets(
       defaultParams,
+      id,
       difficulty,
       userId1,
       userId2,
@@ -17,8 +23,23 @@ const registerMatchHandlers = async (io, pubClient, subClient) => {
   });
 };
 
+const pendingMatch = async (defaultParams, id, userId1) => {
+  const [io, pubClient, subClient] = defaultParams;
+
+  // get socketID of userID2 from redis map
+  const socketId1 = await pubClient.hGet("userSocketMap", userId1);
+  const socket1 = io.sockets.sockets.get(socketId1);
+
+  // join room
+  const roomId = id;
+  socket1.join(roomId);
+
+  io.sockets.in(roomId).emit("userPendingMatch", { roomId });
+};
+
 const createRoomSockets = async (
   defaultParams,
+  id,
   difficulty,
   userId1,
   userId2,
@@ -27,15 +48,12 @@ const createRoomSockets = async (
 ) => {
   const [io, pubClient, subClient] = defaultParams;
 
-  // get socketIDs of both userIDs from redis map
-  const socketId1 = await pubClient.hGet("userSocketMap", userId1);
+  // get socketID of userID2 from redis map
   const socketId2 = await pubClient.hGet("userSocketMap", userId2);
-  const socket1 = io.sockets.sockets.get(socketId1);
   const socket2 = io.sockets.sockets.get(socketId2);
 
-  // create a room and group them together
-  const roomId = `${socketId1}${socketId2}`;
-  socket1.join(roomId);
+  // join room
+  const roomId = id;
   socket2.join(roomId);
 
   // prepare 2 questions for both users
